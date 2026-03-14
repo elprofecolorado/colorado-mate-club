@@ -3,270 +3,596 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Colorado Mate Club</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<title>Colorado Mate Club — El Profe Colorado</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Literata:ital,wght@0,400;1,400&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{--red:#e63946;--dark:#0d0d14;--dark2:#16161f;--cream:#f5f0e8;--muted:#9a9490;--gold:#c9a84c;--green:#2d6a4f;--blue:#378add;}
 html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;color:var(--cream);}
-.app{max-width:420px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative;background:var(--dark);}
+.app{max-width:420px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:var(--dark);}
+.page{display:none;flex:1;flex-direction:column;min-height:100vh;}
+.page.active{display:flex;}
 
+/* ── LANDING ── */
+.landing{overflow-y:auto;}
+.l-hero{position:relative;min-height:480px;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 40px;overflow:hidden;background:var(--dark2);}
+.l-grain{position:absolute;inset:0;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;}
+.l-glow{position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:360px;height:360px;background:radial-gradient(ellipse,rgba(230,57,70,.18) 0%,transparent 70%);pointer-events:none;}
+.l-tape{position:absolute;top:0;left:0;right:0;height:4px;background:repeating-linear-gradient(90deg,var(--red) 0,var(--red) 40px,transparent 40px,transparent 60px);opacity:.7;}
+.l-nav{position:absolute;top:0;left:0;right:0;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;z-index:10;}
+.l-logo{display:flex;align-items:center;gap:8px;}
+.l-logo-g{width:30px;height:30px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.l-logo-t{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;}
+.l-nav-btn{background:var(--red);color:white;border:none;padding:8px 18px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
+.l-content{position:relative;z-index:2;padding:0 24px;}
+.l-eyebrow{font-size:10px;font-weight:500;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:12px;animation:fadeUp .6s .1s both;}
+.l-title{font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:.95;letter-spacing:2px;margin-bottom:8px;animation:fadeUp .6s .2s both;}
+.l-title .acc{color:var(--red);}
+.l-sub{font-family:'Literata',serif;font-style:italic;font-size:15px;color:var(--muted);margin-bottom:24px;line-height:1.6;max-width:320px;animation:fadeUp .6s .3s both;}
+.l-stats{display:flex;gap:24px;animation:fadeUp .6s .4s both;}
+.l-stat-num{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;}
+.l-stat-lbl{font-size:10px;color:var(--muted);margin-top:2px;}
+.l-divider{height:1px;background:linear-gradient(90deg,var(--red),transparent);margin:0 24px;opacity:.4;}
+.l-story{padding:40px 24px;}
+.l-story-lbl{font-size:10px;font-weight:500;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:20px;}
+.beat{display:grid;grid-template-columns:44px 1fr;gap:0 14px;padding-bottom:28px;opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s;}
+.beat.vis{opacity:1;transform:translateY(0);}
+.beat-line{display:flex;flex-direction:column;align-items:center;}
+.beat-dot{width:11px;height:11px;border-radius:50%;background:var(--red);flex-shrink:0;margin-top:4px;}
+.beat-trail{flex:1;width:1px;background:linear-gradient(to bottom,var(--red),transparent);margin-top:5px;opacity:.3;}
+.beat-title{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:1px;margin-bottom:5px;}
+.beat-txt{font-family:'Literata',serif;font-size:13px;color:var(--muted);line-height:1.7;}
+.beat-txt strong{color:var(--cream);font-weight:500;}
+.l-quote{margin:0 24px 32px;border:1px solid rgba(230,57,70,.25);border-radius:12px;padding:20px;background:rgba(230,57,70,.05);position:relative;overflow:hidden;}
+.l-quote::before{content:'"';position:absolute;top:-8px;left:14px;font-family:'Literata',serif;font-size:72px;color:var(--red);opacity:.2;line-height:1;}
+.l-quote-txt{font-family:'Literata',serif;font-style:italic;font-size:14px;line-height:1.7;margin-bottom:14px;position:relative;z-index:1;}
+.l-cochera-items{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.l-ci{background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.08);border-radius:7px;padding:8px 10px;font-size:11px;color:var(--muted);display:flex;gap:7px;align-items:center;}
+.l-ci-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+.l-mission{margin:0 24px 32px;background:var(--red);border-radius:12px;padding:22px;text-align:center;}
+.l-mission-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:white;margin-bottom:6px;}
+.l-mission-txt{font-family:'Literata',serif;font-style:italic;font-size:13px;color:rgba(255,255,255,.85);line-height:1.6;margin-bottom:16px;}
+.l-mission-btn{background:white;color:var(--red);border:none;padding:12px 28px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;}
+.l-plans{padding:0 24px 40px;}
+.l-plans-lbl{font-size:10px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.l-plans-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.plan-c{border-radius:10px;padding:16px;border:.5px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);cursor:pointer;transition:border-color .2s;}
+.plan-c:hover{border-color:rgba(255,255,255,.18);}
+.plan-c.feat{border:1.5px solid var(--red);background:rgba(230,57,70,.07);}
+.plan-badge{font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:7px;}
+.plan-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;margin-bottom:3px;}
+.plan-price{font-size:12px;color:var(--muted);margin-bottom:10px;}
+.plan-price strong{color:var(--cream);font-size:15px;}
+.plan-feat{font-size:10px;color:var(--muted);line-height:1.9;}
+.plan-feat span{color:var(--cream);}
+.l-footer{border-top:.5px solid rgba(255,255,255,.06);padding:18px 24px;text-align:center;font-size:11px;color:var(--muted);font-family:'Literata',serif;font-style:italic;}
+
+/* ── UPGRADE ── */
+.upgrade{overflow-y:auto;padding-bottom:40px;}
+.up-hero{background:var(--dark2);padding:50px 24px 28px;text-align:center;position:relative;overflow:hidden;}
+.up-glow{position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:280px;height:280px;background:radial-gradient(ellipse,rgba(230,57,70,.15) 0%,transparent 70%);pointer-events:none;}
+.up-ey{font-size:10px;font-weight:500;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:10px;}
+.up-title{font-family:'Bebas Neue',sans-serif;font-size:38px;line-height:1;letter-spacing:2px;margin-bottom:8px;}
+.up-title .acc{color:var(--red);}
+.up-sub{font-family:'Literata',serif;font-style:italic;font-size:13px;color:var(--muted);line-height:1.6;max-width:280px;margin:0 auto;}
+.up-compare{padding:24px 20px;}
+.up-ch{display:grid;grid-template-columns:1fr 110px 110px;gap:8px;margin-bottom:8px;padding:0 4px;}
+.up-cl{font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--muted);text-align:center;}
+.up-cl.r{color:var(--red);}
+.up-row{display:grid;grid-template-columns:1fr 110px 110px;gap:8px;padding:10px 4px;border-bottom:.5px solid rgba(255,255,255,.05);align-items:center;}
+.up-row:last-child{border-bottom:none;}
+.up-fn{font-size:12px;color:var(--cream);}
+.up-fs{font-size:10px;color:var(--muted);margin-top:1px;}
+.up-cell{text-align:center;}
+.ck-y{width:22px;height:22px;border-radius:50%;background:rgba(45,106,79,.2);border:.5px solid rgba(45,106,79,.5);display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#5fbd8a;}
+.ck-n{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.08);display:inline-flex;align-items:center;justify-content:center;font-size:11px;color:rgba(255,255,255,.2);}
+.ck-r{width:22px;height:22px;border-radius:50%;background:rgba(230,57,70,.2);border:.5px solid rgba(230,57,70,.5);display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:var(--red);}
+.up-price-section{padding:0 20px 20px;}
+.up-toggle{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:18px;}
+.up-topt{font-size:12px;color:var(--muted);cursor:pointer;padding:5px 13px;border-radius:20px;transition:all .2s;}
+.up-topt.active{background:rgba(230,57,70,.15);color:var(--cream);border:.5px solid rgba(230,57,70,.3);}
+.save-badge{background:var(--gold);color:#1a1200;font-size:9px;font-weight:500;padding:2px 7px;border-radius:10px;}
+.up-card{border:1.5px solid var(--red);border-radius:14px;padding:22px;background:rgba(230,57,70,.06);position:relative;overflow:hidden;}
+.up-card::after{content:'';position:absolute;top:0;right:0;width:100px;height:100px;background:radial-gradient(ellipse at top right,rgba(230,57,70,.12),transparent 70%);}
+.up-plan-name{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;margin-bottom:3px;}
+.up-plan-desc{font-family:'Literata',serif;font-style:italic;font-size:12px;color:var(--muted);margin-bottom:16px;}
+.up-price-row{display:flex;align-items:baseline;gap:5px;margin-bottom:4px;}
+.up-amount{font-family:'Bebas Neue',sans-serif;font-size:44px;line-height:1;}
+.up-period{font-size:12px;color:var(--muted);}
+.up-note{font-size:10px;color:var(--muted);margin-bottom:18px;}
+.up-note span{color:var(--gold);}
+.up-perks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;}
+.up-perk{background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.07);border-radius:8px;padding:10px 11px;}
+.up-perk-icon{font-size:13px;margin-bottom:3px;}
+.up-perk-title{font-size:11px;font-weight:500;margin-bottom:1px;}
+.up-perk-desc{font-size:10px;color:var(--muted);line-height:1.4;}
+.up-cta{width:100%;padding:14px;background:var(--red);color:white;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;margin-bottom:9px;}
+.up-cta-sec{width:100%;padding:11px;background:none;color:var(--muted);border:.5px solid rgba(255,255,255,.1);border-radius:10px;font-size:12px;cursor:pointer;}
+.up-testi{padding:20px 20px 0;}
+.up-testi-lbl{font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.testi{background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.07);border-radius:10px;padding:13px 15px;margin-bottom:9px;}
+.testi-txt{font-family:'Literata',serif;font-style:italic;font-size:13px;line-height:1.6;margin-bottom:7px;}
+.testi-aut{font-size:10px;color:var(--muted);}
+.testi-aut strong{color:var(--red);font-weight:500;}
+.up-guarantee{margin:16px 20px 0;border:.5px solid rgba(201,168,76,.3);border-radius:10px;padding:14px;background:rgba(201,168,76,.04);display:flex;gap:10px;}
+.up-g-icon{font-size:18px;flex-shrink:0;}
+.up-g-title{font-size:12px;font-weight:500;color:var(--gold);margin-bottom:3px;}
+.up-g-txt{font-size:11px;color:var(--muted);line-height:1.5;}
+
+/* ── APP PRINCIPAL ── */
 .topbar{background:var(--dark2);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid rgba(255,255,255,.06);flex-shrink:0;}
-.logo{display:flex;align-items:center;gap:8px;}
-.logo-g{width:28px;height:28px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;}
-.logo-t{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;}
-.chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.05);padding:5px 12px;border-radius:20px;cursor:pointer;}
-.chip-av{width:22px;height:22px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;}
-.chip-n{font-size:12px;}
+.t-logo{display:flex;align-items:center;gap:8px;}
+.t-logo-g{width:26px;height:26px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;}
+.t-logo-t{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;}
+.chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.05);padding:4px 10px;border-radius:20px;}
+.chip-av{width:20px;height:20px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:500;}
+.chip-n{font-size:11px;}
 .chip-xp{font-size:10px;color:var(--gold);font-family:'Bebas Neue',sans-serif;letter-spacing:1px;}
+.screens{flex:1;position:relative;overflow:hidden;}
+.scr{display:none;position:absolute;inset:0;overflow-y:auto;padding-bottom:68px;}
+.scr.active{display:block;}
 
-.screen{display:none;flex:1;overflow-y:auto;padding-bottom:70px;}
-.screen.active{display:block;}
-
-.profe-bubble{margin:16px 20px;border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;animation:slideIn .4s ease;}
+/* inicio */
+.profe-bubble{margin:14px 18px;border-radius:13px;padding:13px 15px;display:flex;gap:11px;align-items:flex-start;animation:slideIn .4s ease;}
 .profe-bubble.motivar{background:rgba(230,57,70,.08);border:1px solid rgba(230,57,70,.25);}
 .profe-bubble.reganar{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.3);}
 .profe-bubble.urgente{background:rgba(230,57,70,.15);border:1px solid var(--red);}
-.pb-av{width:44px;height:44px;border-radius:50%;background:var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
-.pb-av span:first-child{font-size:16px;}
-.pb-av span:last-child{font-family:'Bebas Neue',sans-serif;font-size:9px;letter-spacing:1px;color:white;}
+.pb-av{width:42px;height:42px;border-radius:50%;background:var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
+.pb-av span:first-child{font-size:15px;}
+.pb-av span:last-child{font-family:'Bebas Neue',sans-serif;font-size:8px;letter-spacing:1px;color:white;}
 .pb-body{flex:1;}
-.pb-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
-.pb-msg{font-size:13px;line-height:1.6;}
-.pb-close{font-size:16px;color:var(--muted);cursor:pointer;padding:0 4px;align-self:flex-start;}
-
-.stats-row{display:flex;gap:10px;padding:0 20px;margin-bottom:16px;}
-.stat-card{flex:1;background:var(--dark2);border-radius:10px;padding:12px 8px;text-align:center;}
-.stat-num{font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1;}
-.stat-num.red{color:var(--red);}
-.stat-num.gold{color:var(--gold);}
-.stat-num.blue{color:var(--blue);}
-.stat-lbl{font-size:9px;color:var(--muted);margin-top:3px;letter-spacing:.5px;}
-
-.xp-card{margin:0 20px 16px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:12px;padding:14px 16px;}
-.xp-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-.xp-lbl{font-size:11px;color:var(--muted);}
-.xp-nivel{font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--red);letter-spacing:1px;}
-.xp-bg{height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;margin-bottom:6px;}
-.xp-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:4px;transition:width .6s ease;}
-.xp-sub{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);}
-
-.racha-wrap{padding:0 20px;margin-bottom:16px;}
-.section-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.pb-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+.pb-msg{font-size:12px;line-height:1.6;}
+.pb-close{font-size:15px;color:var(--muted);cursor:pointer;padding:0 3px;align-self:flex-start;}
+.stats-row{display:flex;gap:9px;padding:0 18px;margin-bottom:14px;}
+.stat-card{flex:1;background:var(--dark2);border-radius:9px;padding:11px 7px;text-align:center;}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:20px;line-height:1;}
+.stat-num.r{color:var(--red);} .stat-num.g{color:var(--gold);} .stat-num.b{color:var(--blue);}
+.stat-lbl{font-size:9px;color:var(--muted);margin-top:2px;}
+.xp-card{margin:0 18px 14px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:11px;padding:13px 15px;}
+.xp-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.xp-lbl{font-size:10px;color:var(--muted);}
+.xp-nivel{font-family:'Bebas Neue',sans-serif;font-size:12px;color:var(--red);letter-spacing:1px;}
+.xp-bg{height:7px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;margin-bottom:5px;}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:4px;}
+.xp-sub{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);}
+.racha-wrap{padding:0 18px;margin-bottom:14px;}
+.sec-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:9px;}
 .racha-grid{display:flex;gap:5px;}
-.racha-day{flex:1;height:38px;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;gap:2px;transition:all .2s;}
-.racha-day.done{background:rgba(45,106,79,.2);border:.5px solid rgba(45,106,79,.5);color:#5fbd8a;}
-.racha-day.hoy{background:var(--red);border:.5px solid var(--red);color:white;}
-.racha-day.pending{background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.07);color:var(--muted);}
-.racha-day .dia-label{font-size:8px;opacity:.7;}
-
-.tema-card{margin:0 20px 16px;background:rgba(230,57,70,.06);border:1px solid rgba(230,57,70,.2);border-radius:12px;padding:16px;cursor:pointer;transition:border-color .2s;}
+.rday{flex:1;height:36px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:8px;gap:1px;transition:all .2s;}
+.rday.done{background:rgba(45,106,79,.2);border:.5px solid rgba(45,106,79,.5);color:#5fbd8a;}
+.rday.hoy{background:var(--red);border:.5px solid var(--red);color:white;}
+.rday.pend{background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.07);color:var(--muted);}
+.rday .dl{font-size:7px;opacity:.7;}
+.tema-card{margin:0 18px 14px;background:rgba(230,57,70,.06);border:1px solid rgba(230,57,70,.2);border-radius:11px;padding:15px;cursor:pointer;transition:border-color .2s;}
 .tema-card:hover{border-color:rgba(230,57,70,.4);}
-.tema-ey{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:6px;}
-.tema-nombre{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;margin-bottom:10px;}
-.tema-rounds{display:flex;gap:6px;margin-bottom:12px;}
-.round-pip{flex:1;height:4px;border-radius:2px;}
-.round-pip.done{background:var(--green);}
-.round-pip.active{background:var(--red);}
-.round-pip.pending{background:rgba(255,255,255,.08);}
-.tema-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-.tema-meta-txt{font-size:11px;color:var(--muted);}
-.tema-btn{width:100%;padding:13px;background:var(--red);color:white;border:none;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;cursor:pointer;transition:opacity .2s;}
-.tema-btn:hover{opacity:.88;}
+.tema-ey{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:5px;}
+.tema-nom{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;margin-bottom:9px;}
+.rnd-pips{display:flex;gap:5px;margin-bottom:10px;}
+.rpip{flex:1;height:4px;border-radius:2px;}
+.rpip.done{background:var(--green);} .rpip.active{background:var(--red);} .rpip.pend{background:rgba(255,255,255,.08);}
+.tema-meta{display:flex;justify-content:space-between;margin-bottom:10px;}
+.tema-mt{font-size:10px;color:var(--muted);}
+.tema-btn{width:100%;padding:12px;background:var(--red);color:white;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;}
 
-.bloque-wrap{margin:0 20px 10px;}
-.bloque-header{padding:13px 15px;display:flex;align-items:center;gap:10px;cursor:pointer;border-radius:10px;transition:background .15s;}
-.bloque-header:hover{background:rgba(255,255,255,.03);}
-.bloque-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:14px;flex-shrink:0;}
-.bloque-info{flex:1;}
-.bloque-nombre{font-size:13px;font-weight:500;}
-.bloque-sub{font-size:10px;color:var(--muted);margin-top:1px;}
-.bloque-arrow{font-size:11px;color:var(--muted);transition:transform .2s;}
-.bloque-arrow.open{transform:rotate(90deg);}
-.bloque-temas{border-radius:10px;overflow:hidden;margin-top:2px;}
-.tema-row{display:flex;align-items:center;gap:10px;padding:11px 15px;border-bottom:.5px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s;}
-.tema-row:last-child{border-bottom:none;}
-.tema-row:hover{background:rgba(255,255,255,.03);}
-.tema-row.locked{opacity:.35;cursor:default;pointer-events:none;}
-.tema-ico{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
-.tema-row-info{flex:1;}
-.tema-row-nombre{font-size:13px;}
-.tema-row-sub{font-size:10px;color:var(--muted);margin-top:1px;}
-.tema-tag{font-size:9px;font-weight:500;padding:2px 8px;border-radius:10px;white-space:nowrap;}
-.tag-done{background:rgba(45,106,79,.2);color:#5fbd8a;border:.5px solid rgba(45,106,79,.4);}
-.tag-active{background:rgba(230,57,70,.15);color:var(--red);border:.5px solid rgba(230,57,70,.3);}
-.tag-lock{background:rgba(255,255,255,.05);color:var(--muted);}
+/* mapa */
+.blq-wrap{margin:0 18px 9px;}
+.blq-hdr{padding:12px 14px;display:flex;align-items:center;gap:9px;cursor:pointer;border-radius:9px;transition:background .15s;}
+.blq-hdr:hover{background:rgba(255,255,255,.03);}
+.blq-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:13px;flex-shrink:0;}
+.blq-info{flex:1;}
+.blq-nom{font-size:12px;font-weight:500;}
+.blq-sub{font-size:9px;color:var(--muted);margin-top:1px;}
+.blq-arr{font-size:10px;color:var(--muted);transition:transform .2s;}
+.blq-arr.open{transform:rotate(90deg);}
+.blq-temas{border-radius:9px;overflow:hidden;margin-top:2px;}
+.t-row{display:flex;align-items:center;gap:9px;padding:10px 14px;border-bottom:.5px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s;}
+.t-row:last-child{border-bottom:none;}
+.t-row:hover{background:rgba(255,255,255,.03);}
+.t-row.lk{opacity:.35;cursor:default;pointer-events:none;}
+.t-ico{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;}
+.t-info{flex:1;}
+.t-nom{font-size:12px;}
+.t-sub{font-size:9px;color:var(--muted);margin-top:1px;}
+.t-tag{font-size:9px;font-weight:500;padding:2px 7px;border-radius:10px;white-space:nowrap;}
+.tag-d{background:rgba(45,106,79,.2);color:#5fbd8a;border:.5px solid rgba(45,106,79,.4);}
+.tag-a{background:rgba(230,57,70,.15);color:var(--red);border:.5px solid rgba(230,57,70,.3);}
+.tag-l{background:rgba(255,255,255,.05);color:var(--muted);}
 
-.rank-card{margin:0 20px 8px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;}
-.rank-card.me{background:rgba(230,57,70,.07);border-color:rgba(230,57,70,.3);}
-.rank-pos{font-family:'Bebas Neue',sans-serif;font-size:18px;width:26px;text-align:center;flex-shrink:0;}
-.rank-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;}
-.rank-info{flex:1;}
-.rank-nombre{font-size:13px;}
-.rank-racha{font-size:10px;color:var(--muted);margin-top:2px;}
-.rank-xp{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--red);}
-.rank-note{margin:10px 20px;background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.07);border-radius:8px;padding:10px 14px;font-size:11px;color:var(--muted);text-align:center;font-style:italic;}
+/* ranking */
+.rk-card{margin:0 18px 8px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:9px;padding:11px 15px;display:flex;align-items:center;gap:11px;}
+.rk-card.me{background:rgba(230,57,70,.07);border-color:rgba(230,57,70,.3);}
+.rk-pos{font-family:'Bebas Neue',sans-serif;font-size:17px;width:24px;text-align:center;flex-shrink:0;}
+.rk-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;}
+.rk-info{flex:1;}
+.rk-nom{font-size:12px;}
+.rk-rch{font-size:9px;color:var(--muted);margin-top:2px;}
+.rk-xp{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--red);}
+.rk-note{margin:8px 18px;background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.07);border-radius:7px;padding:9px 13px;font-size:10px;color:var(--muted);text-align:center;font-style:italic;}
 
-.logros-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px;}
-.logro-card{background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:10px;padding:14px;transition:border-color .2s;}
-.logro-card.locked{opacity:.35;}
-.logro-card:not(.locked):hover{border-color:rgba(255,255,255,.2);}
-.logro-icon{font-size:26px;margin-bottom:7px;}
-.logro-nombre{font-size:12px;font-weight:500;margin-bottom:2px;}
-.logro-desc{font-size:10px;color:var(--muted);line-height:1.4;}
-.logro-badge{display:inline-block;margin-top:7px;font-size:9px;font-weight:500;padding:2px 8px;border-radius:10px;}
-.badge-ok{background:rgba(45,106,79,.2);color:#5fbd8a;border:.5px solid rgba(45,106,79,.4);}
-.badge-lock{background:rgba(255,255,255,.05);color:var(--muted);}
+/* logros */
+.logros-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 18px;}
+.lg-card{background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:9px;padding:13px;}
+.lg-card.lk{opacity:.35;}
+.lg-icon{font-size:24px;margin-bottom:6px;}
+.lg-nom{font-size:11px;font-weight:500;margin-bottom:2px;}
+.lg-desc{font-size:9px;color:var(--muted);line-height:1.4;}
+.lg-badge{display:inline-block;margin-top:6px;font-size:9px;font-weight:500;padding:2px 8px;border-radius:10px;}
+.b-ok{background:rgba(45,106,79,.2);color:#5fbd8a;border:.5px solid rgba(45,106,79,.4);}
+.b-lk{background:rgba(255,255,255,.05);color:var(--muted);}
 
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:var(--dark2);border-top:.5px solid rgba(255,255,255,.08);display:flex;padding:8px 0 6px;z-index:100;}
-.nav-item{flex:1;text-align:center;cursor:pointer;padding:4px 0;}
-.nav-icon{font-size:20px;}
-.nav-lbl{font-size:9px;color:var(--muted);margin-top:2px;letter-spacing:.5px;}
+/* ── TEMA ROUNDS ── */
+.tema-page{overflow-y:auto;padding-bottom:20px;}
+.tp-topbar{background:var(--dark2);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid rgba(255,255,255,.06);}
+.tp-back{font-size:12px;color:var(--muted);background:none;border:.5px solid rgba(255,255,255,.1);padding:5px 11px;border-radius:6px;cursor:pointer;}
+.tp-title{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;}
+.tp-header{padding:16px 18px 0;}
+.tp-ey{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:5px;}
+.tp-nom{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;margin-bottom:3px;}
+.tp-desc{font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:14px;}
+.rounds-strip{display:flex;padding:0 18px;border-bottom:.5px solid rgba(255,255,255,.06);margin-bottom:18px;}
+.rtab{flex:1;text-align:center;padding:9px 3px;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;}
+.rtab.active{border-bottom-color:var(--red);}
+.rtab-num{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-family:'Bebas Neue',sans-serif;}
+.rtab.active .rtab-num{color:var(--red);}
+.rtab.done .rtab-num{color:#5fbd8a;}
+.rtab-name{font-size:10px;color:var(--muted);margin-top:1px;}
+.rtab.active .rtab-name{color:var(--cream);}
+.rtab-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.1);margin:3px auto 0;}
+.rtab.active .rtab-dot{background:var(--red);}
+.rtab.done .rtab-dot{background:#2d6a4f;}
+.rscr{display:none;padding:0 18px 24px;}
+.rscr.active{display:block;}
+.video-wrap{position:relative;border-radius:11px;overflow:hidden;margin-bottom:14px;background:#000;aspect-ratio:9/16;max-height:380px;}
+.vthumb{width:100%;height:100%;background:var(--dark2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;cursor:pointer;position:relative;}
+.tt-badge{position:absolute;top:11px;left:11px;background:#010101;border-radius:5px;padding:3px 9px;display:flex;align-items:center;gap:5px;}
+.tt-dot{width:7px;height:7px;border-radius:50%;background:var(--red);}
+.tt-lbl{font-size:9px;font-weight:500;color:white;letter-spacing:.5px;}
+.views-badge{position:absolute;top:11px;right:11px;background:rgba(0,0,0,.6);border-radius:5px;padding:3px 7px;font-size:9px;color:rgba(255,255,255,.8);}
+.play-ring{width:54px;height:54px;border-radius:50%;border:2px solid var(--red);display:flex;align-items:center;justify-content:center;}
+.vinfo{text-align:center;}
+.vinfo-topic{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;}
+.vinfo-by{font-size:10px;color:var(--muted);margin-top:1px;}
+.vinfo-by span{color:var(--red);}
+.vfoot{position:absolute;bottom:0;left:0;right:0;padding:11px 13px;background:linear-gradient(transparent,rgba(0,0,0,.8));}
+.vf-row{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.6);}
+.vprog-bg{height:2px;background:rgba(255,255,255,.15);border-radius:1px;margin-top:6px;overflow:hidden;}
+.vprog-fill{height:100%;background:var(--red);border-radius:1px;transition:width .1s;width:0%;}
+.coach-bub{background:rgba(230,57,70,.08);border:.5px solid rgba(230,57,70,.2);border-radius:9px;padding:11px 13px;margin-bottom:14px;display:flex;gap:9px;align-items:flex-start;}
+.cb-av{width:30px;height:30px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:white;flex-shrink:0;}
+.cb-txt{font-family:'Literata',serif;font-style:italic;font-size:12px;line-height:1.6;}
+.cb-txt b{font-style:normal;color:var(--red);font-weight:500;}
+.kp-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:9px;}
+.kp-item{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:.5px solid rgba(255,255,255,.05);}
+.kp-item:last-child{border-bottom:none;}
+.kp-num{font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--red);flex-shrink:0;width:14px;}
+.kp-txt{font-size:12px;line-height:1.4;}
+.kp-sub{font-size:10px;color:var(--muted);margin-top:1px;}
+.demo-step{background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.07);border-radius:9px;padding:14px;margin-bottom:7px;}
+.demo-num{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.demo-expr{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:1px;margin-bottom:5px;}
+.demo-exp{font-size:12px;color:var(--muted);line-height:1.5;}
+.demo-arrow{text-align:center;color:var(--red);font-size:15px;margin:3px 0;}
+.ex-q{font-size:14px;line-height:1.6;margin-bottom:12px;}
+.ex-math{display:inline-block;background:rgba(255,255,255,.06);border-radius:7px;padding:7px 14px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;margin-bottom:12px;}
+.ex-opts{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px;}
+.ex-opt{border:.5px solid rgba(255,255,255,.1);border-radius:9px;padding:13px;text-align:center;font-size:15px;font-weight:500;cursor:pointer;color:var(--cream);background:rgba(255,255,255,.03);transition:all .15s;}
+.ex-opt:hover{border-color:var(--red);color:var(--red);}
+.ex-opt.correct{background:rgba(45,106,79,.2);border-color:#2d6a4f;color:#5fbd8a;}
+.ex-opt.wrong{background:rgba(161,35,35,.2);border-color:#a12323;color:#f09595;}
+.ex-fb{border-radius:9px;padding:11px 13px;font-size:12px;line-height:1.5;display:none;margin-bottom:12px;}
+.ex-fb.show{display:block;}
+.ex-fb.ok{background:rgba(45,106,79,.15);color:#5fbd8a;}
+.ex-fb.bad{background:rgba(161,35,35,.15);color:#f09595;}
+.exam-intro{text-align:center;padding:18px 0;}
+.exam-big{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:2px;margin-bottom:5px;}
+.exam-sub{font-size:12px;color:var(--muted);margin-bottom:20px;font-family:'Literata',serif;font-style:italic;}
+.exam-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:20px;}
+.es-card{background:rgba(255,255,255,.04);border-radius:7px;padding:11px;text-align:center;}
+.es-num{font-family:'Bebas Neue',sans-serif;font-size:22px;}
+.es-lbl{font-size:9px;color:var(--muted);margin-top:1px;}
+.rnd-btn{width:100%;padding:13px;background:var(--red);color:white;border:none;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-top:16px;}
+
+/* BOTTOM NAV */
+.bottom-nav{background:var(--dark2);border-top:.5px solid rgba(255,255,255,.08);display:flex;padding:7px 0 5px;flex-shrink:0;}
+.nav-item{flex:1;text-align:center;cursor:pointer;padding:3px 0;}
+.nav-icon{font-size:19px;}
+.nav-lbl{font-size:9px;color:var(--muted);margin-top:1px;letter-spacing:.5px;}
 .nav-item.active .nav-lbl{color:var(--red);}
 
+/* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:flex-end;justify-content:center;}
 .modal-overlay.show{display:flex;animation:fadeIn .2s;}
-.modal{background:var(--dark2);border-radius:18px 18px 0 0;padding:24px;width:100%;max-width:420px;border:.5px solid rgba(255,255,255,.1);}
-.modal-handle{width:36px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin:0 auto 20px;}
-.modal-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;margin-bottom:4px;}
-.modal-sub{font-size:12px;color:var(--muted);margin-bottom:18px;}
-.modal-rounds{display:flex;gap:8px;margin-bottom:20px;}
-.modal-round{flex:1;border-radius:8px;padding:10px 6px;text-align:center;}
-.modal-round-num{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;}
-.modal-round-name{font-size:9px;color:var(--muted);margin-top:2px;}
-.modal-btn{width:100%;padding:14px;color:white;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;margin-bottom:10px;}
-.modal-cancel{width:100%;padding:11px;background:none;color:var(--muted);border:.5px solid rgba(255,255,255,.1);border-radius:10px;font-size:13px;cursor:pointer;}
+.modal{background:var(--dark2);border-radius:17px 17px 0 0;padding:22px;width:100%;max-width:420px;border:.5px solid rgba(255,255,255,.1);}
+.modal-handle{width:34px;height:3px;background:rgba(255,255,255,.15);border-radius:2px;margin:0 auto 18px;}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;margin-bottom:3px;}
+.modal-sub{font-size:11px;color:var(--muted);margin-bottom:16px;}
+.modal-rounds{display:flex;gap:7px;margin-bottom:18px;}
+.modal-round{flex:1;border-radius:7px;padding:9px 5px;text-align:center;}
+.modal-round-num{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:1px;}
+.modal-round-name{font-size:9px;color:var(--muted);margin-top:1px;}
+.modal-btn{width:100%;padding:13px;color:white;border:none;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-bottom:9px;}
+.modal-cancel{width:100%;padding:10px;background:none;color:var(--muted);border:.5px solid rgba(255,255,255,.1);border-radius:9px;font-size:12px;cursor:pointer;}
 
 @keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="topbar">
-    <div class="logo">
-      <div class="logo-g">🥊</div>
-      <span class="logo-t">Colorado Mate Club</span>
-    </div>
-    <div class="chip">
-      <div class="chip-av">CT</div>
-      <span class="chip-n">Carlos</span>
-      <span class="chip-xp">1240 XP</span>
+
+  <!-- ══════════════ LANDING ══════════════ -->
+  <div class="page active" id="page-landing">
+    <div class="landing">
+      <div class="l-hero">
+        <div class="l-grain"></div><div class="l-glow"></div><div class="l-tape"></div>
+        <div class="l-nav">
+          <div class="l-logo"><div class="l-logo-g">🥊</div><span class="l-logo-t">Colorado Mate Club</span></div>
+          <button class="l-nav-btn" onclick="goPage('app')">Entrar gratis</button>
+        </div>
+        <div class="l-content">
+          <div class="l-eyebrow">Guadalajara, Jalisco · Desde la cochera</div>
+          <div class="l-title">MATEMÁTICAS<br>QUE <span class="acc">ABREN</span><br>PUERTAS</div>
+          <div class="l-sub">Preparación para el examen de admisión de la UDG — y para cualquier secundaria de México y LATAM.</div>
+          <div class="l-stats">
+            <div><div class="l-stat-num">100%</div><div class="l-stat-lbl">Gratuito para empezar</div></div>
+            <div><div class="l-stat-num">15</div><div class="l-stat-lbl">Temas del examen</div></div>
+            <div><div class="l-stat-num">21</div><div class="l-stat-lbl">Días al examen UDG</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="l-divider"></div>
+      <div class="l-story">
+        <div class="l-story-lbl">La historia</div>
+        <div class="beat" id="b1"><div class="beat-line"><div class="beat-dot"></div><div class="beat-trail"></div></div><div><div class="beat-title">Empezó en una cochera</div><div class="beat-txt">Un ingeniero en producción, entrenador de box y maestro de matemáticas abrió las puertas de su casa. <strong>Sin cobrar nada.</strong></div></div></div>
+        <div class="beat" id="b2"><div class="beat-line"><div class="beat-dot"></div><div class="beat-trail"></div></div><div><div class="beat-title">Con lo que había</div><div class="beat-txt">Unas mesas donadas. Sillas prestadas. Un pizarrón regalado. <strong>Ningún recurso más que el conocimiento y la voluntad.</strong></div></div></div>
+        <div class="beat" id="b3"><div class="beat-line"><div class="beat-dot"></div><div class="beat-trail"></div></div><div><div class="beat-title">Nació el Colorado Mate Club</div><div class="beat-txt">Un club donde las matemáticas se enseñan <strong>con disciplina de entrenador, precisión de ingeniero y corazón de maestro.</strong></div></div></div>
+        <div class="beat" id="b4"><div class="beat-line"><div class="beat-dot"></div></div><div><div class="beat-title">Ahora llega a todos</div><div class="beat-txt">La cochera no alcanza para todos. La app sí. <strong>El mismo método, para cualquier chavo de México y LATAM.</strong></div></div></div>
+      </div>
+      <div class="l-quote">
+        <div class="l-quote-txt">"La cochera siempre estuvo abierta. Ahora la app también lo está — para cualquier chavo que quiera entrar a la prepa y no sepa por dónde empezar."</div>
+        <div class="l-cochera-items">
+          <div class="l-ci"><div class="l-ci-dot"></div>Mesas donadas</div>
+          <div class="l-ci"><div class="l-ci-dot"></div>Sillas prestadas</div>
+          <div class="l-ci"><div class="l-ci-dot"></div>Pizarrón regalado</div>
+          <div class="l-ci"><div class="l-ci-dot"></div>Corazón propio</div>
+        </div>
+      </div>
+      <div class="l-mission">
+        <div class="l-mission-title">Tu examen, nuestro ring</div>
+        <div class="l-mission-txt">Prepararte para el examen de admisión es una pelea por tu futuro. Nosotros somos tu esquina.</div>
+        <button class="l-mission-btn" onclick="goPage('app')">Empezar gratis →</button>
+      </div>
+      <div class="l-plans">
+        <div class="l-plans-lbl">Elige tu nivel</div>
+        <div class="l-plans-row">
+          <div class="plan-c" onclick="goPage('app')">
+            <div class="plan-badge">Gratuito</div>
+            <div class="plan-name">Cochera</div>
+            <div class="plan-price"><strong>$0</strong> / siempre</div>
+            <div class="plan-feat"><span>3 temas</span> del examen<br><span>5 ejercicios</span> por día<br><span>1 simulacro</span> por semana</div>
+          </div>
+          <div class="plan-c feat" onclick="goPage('upgrade')">
+            <div class="plan-badge">Premium</div>
+            <div class="plan-name">Ring</div>
+            <div class="plan-price"><strong>$99</strong> / mes MXN</div>
+            <div class="plan-feat"><span>Todo</span> desbloqueado<br><span>Coach IA</span> personalizado<br><span>Ruta crítica</span> 21 días</div>
+          </div>
+        </div>
+      </div>
+      <div class="l-footer">Hecho con disciplina de ring y corazón de maestro — Guadalajara, Jalisco.</div>
     </div>
   </div>
 
-  <!-- INICIO -->
-  <div class="screen active" id="s-inicio">
-    <div class="profe-bubble motivar" id="profe-bubble">
-      <div class="pb-av"><span>🥊</span><span>PROFE</span></div>
-      <div class="pb-body">
-        <div class="pb-label">El Profe Colorado dice</div>
-        <div class="pb-msg">¡Órale Carlos! Llevas <strong style="color:var(--red)">5 días seguidos</strong>. Así se gana el examen — con disciplina diaria. ¡No pares!</div>
+  <!-- ══════════════ UPGRADE ══════════════ -->
+  <div class="page" id="page-upgrade">
+    <div class="upgrade">
+      <div style="padding:14px 18px;background:var(--dark2);border-bottom:.5px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between;">
+        <div class="t-logo"><div class="t-logo-g">🥊</div><span class="t-logo-t">Colorado Mate Club</span></div>
+        <button style="font-size:11px;color:var(--muted);background:none;border:.5px solid rgba(255,255,255,.1);padding:5px 11px;border-radius:6px;cursor:pointer;" onclick="goPage('landing')">← Volver</button>
       </div>
-      <span class="pb-close" onclick="document.getElementById('profe-bubble').style.display='none'">✕</span>
-    </div>
-
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-num red">🔥5</div>
-        <div class="stat-lbl">días racha</div>
+      <div class="up-hero">
+        <div class="up-glow"></div>
+        <div class="up-ey">Sube de nivel</div>
+        <div class="up-title">DE LA <span class="acc">COCHERA</span><br>AL RING</div>
+        <div class="up-sub">Todo lo que necesitas para ganar tu lugar en la prepa — sin límites.</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-num gold">N3</div>
-        <div class="stat-lbl">nivel</div>
+      <div class="up-compare">
+        <div class="up-ch"><div></div><div class="up-cl">Cochera</div><div class="up-cl r">Ring ▶</div></div>
+        <div class="up-row"><div><div class="up-fn">Temas del examen</div></div><div class="up-cell"><span class="ck-y">3</span></div><div class="up-cell"><span class="ck-r">∞</span></div></div>
+        <div class="up-row"><div><div class="up-fn">Ejercicios por día</div></div><div class="up-cell"><span class="ck-y">5</span></div><div class="up-cell"><span class="ck-r">∞</span></div></div>
+        <div class="up-row"><div><div class="up-fn">Simulacros tipo UDG</div></div><div class="up-cell"><span class="ck-y">1/sem</span></div><div class="up-cell"><span class="ck-r">∞</span></div></div>
+        <div class="up-row"><div><div class="up-fn">Coach IA personalizado</div><div class="up-fs">Te habla como en el ring</div></div><div class="up-cell"><span class="ck-n">—</span></div><div class="up-cell"><span class="ck-r">✓</span></div></div>
+        <div class="up-row"><div><div class="up-fn">Panel de diagnóstico</div><div class="up-fs">Tu cuello de botella exacto</div></div><div class="up-cell"><span class="ck-n">—</span></div><div class="up-cell"><span class="ck-r">✓</span></div></div>
+        <div class="up-row"><div><div class="up-fn">Ruta crítica 21 días</div><div class="up-fs">Plan personalizado</div></div><div class="up-cell"><span class="ck-n">—</span></div><div class="up-cell"><span class="ck-r">✓</span></div></div>
+        <div class="up-row"><div><div class="up-fn">Reporte de progreso</div><div class="up-fs">Para ti y tus papás</div></div><div class="up-cell"><span class="ck-n">—</span></div><div class="up-cell"><span class="ck-r">✓</span></div></div>
       </div>
-      <div class="stat-card">
-        <div class="stat-num blue">1240</div>
-        <div class="stat-lbl">puntos XP</div>
+      <div class="up-price-section">
+        <div class="up-toggle">
+          <div class="up-topt active" id="btn-mes" onclick="setPriceMode('mes')">Mensual</div>
+          <div class="up-topt" id="btn-ano" onclick="setPriceMode('ano')">Anual &nbsp;<span class="save-badge">-30%</span></div>
+        </div>
+        <div class="up-card">
+          <div class="up-plan-name">Plan Ring</div>
+          <div class="up-plan-desc">El método completo. El coach. El diagnóstico. Todo.</div>
+          <div class="up-price-row"><div class="up-amount" id="up-price-num">$99</div><div class="up-period" id="up-price-per">/ mes MXN</div></div>
+          <div class="up-note" id="up-price-note">Cancela cuando quieras. Sin contratos.</div>
+          <div class="up-perks">
+            <div class="up-perk"><div class="up-perk-icon">🎯</div><div class="up-perk-title">Coach IA</div><div class="up-perk-desc">Te motiva y corrige como en el ring</div></div>
+            <div class="up-perk"><div class="up-perk-icon">📊</div><div class="up-perk-title">Diagnóstico</div><div class="up-perk-desc">Detecta tu cuello de botella exacto</div></div>
+            <div class="up-perk"><div class="up-perk-icon">📅</div><div class="up-perk-title">Ruta 21 días</div><div class="up-perk-desc">Plan personalizado para tu examen</div></div>
+            <div class="up-perk"><div class="up-perk-icon">♾️</div><div class="up-perk-title">Sin límites</div><div class="up-perk-desc">Ejercicios y simulacros ilimitados</div></div>
+          </div>
+          <button class="up-cta" onclick="goPage('app')">ENTRAR AL RING →</button>
+          <button class="up-cta-sec" onclick="goPage('app')">Seguir en Cochera gratis</button>
+        </div>
       </div>
-    </div>
-
-    <div class="xp-card">
-      <div class="xp-row">
-        <span class="xp-lbl">Nivel 3 → Nivel 4</span>
-        <span class="xp-nivel">Campeón en formación</span>
+      <div class="up-testi">
+        <div class="up-testi-lbl">Lo que dicen los alumnos</div>
+        <div class="testi"><div class="testi-txt">"Reprobé el examen el año pasado. Con el Colorado Mate Club entendí en qué fallaba y pasé. El profe te habla diferente, te da confianza."</div><div class="testi-aut"><strong>Karla R.</strong> — Prepa UDG, Guadalajara</div></div>
+        <div class="testi"><div class="testi-txt">"Mi mamá pagó el Ring y valió cada peso. El diagnóstico me mostró que me faltaba álgebra. Estudié solo eso y quedé."</div><div class="testi-aut"><strong>Diego M.</strong> — Preparatoria, Monterrey</div></div>
       </div>
-      <div class="xp-bg"><div class="xp-fill" style="width:83%"></div></div>
-      <div class="xp-sub"><span>1240 XP</span><span>260 para subir de nivel</span></div>
-    </div>
-
-    <div class="racha-wrap">
-      <div class="section-lbl">Racha semanal</div>
-      <div class="racha-grid">
-        <div class="racha-day done"><span>✓</span><span class="dia-label">LUN</span></div>
-        <div class="racha-day done"><span>✓</span><span class="dia-label">MAR</span></div>
-        <div class="racha-day done"><span>✓</span><span class="dia-label">MIÉ</span></div>
-        <div class="racha-day done"><span>✓</span><span class="dia-label">JUE</span></div>
-        <div class="racha-day hoy"><span>🔥</span><span class="dia-label">HOY</span></div>
-        <div class="racha-day pending"><span>—</span><span class="dia-label">SAB</span></div>
-        <div class="racha-day pending"><span>—</span><span class="dia-label">DOM</span></div>
+      <div class="up-guarantee">
+        <div class="up-g-icon">🏆</div>
+        <div><div class="up-g-title">Garantía del profe</div><div class="up-g-txt">Si en 7 días no ves progreso real en tu diagnóstico, te devolvemos tu dinero. Sin preguntas.</div></div>
       </div>
-    </div>
-
-    <div class="tema-card" onclick="showModal('Fracciones y decimales','Bloque 1 · Fundamentos','#e63946')">
-      <div class="tema-ey">continuar donde lo dejaste</div>
-      <div class="tema-nombre">Fracciones y decimales</div>
-      <div class="tema-rounds">
-        <div class="round-pip done"></div>
-        <div class="round-pip active"></div>
-        <div class="round-pip pending"></div>
-        <div class="round-pip pending"></div>
-      </div>
-      <div class="tema-meta">
-        <span class="tema-meta-txt">Round 2 de 4 — Demo</span>
-        <span class="tema-meta-txt">Bloque 1 · Fundamentos</span>
-      </div>
-      <button class="tema-btn">ENTRAR AL ROUND →</button>
+      <div style="text-align:center;padding:18px 24px;font-size:10px;color:rgba(255,255,255,.2);font-family:'Literata',serif;font-style:italic;">"La cochera siempre va a estar abierta. El ring es para los que quieren más." — El Profe Colorado</div>
     </div>
   </div>
 
-  <!-- MAPA -->
-  <div class="screen" id="s-mapa">
-    <div style="padding:20px 20px 12px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px">Ruta crítica</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:2px">15 temas · 4 bloques · 21 días al examen UDG</div>
+  <!-- ══════════════ APP PRINCIPAL ══════════════ -->
+  <div class="page" id="page-app">
+    <div class="topbar">
+      <div class="t-logo"><div class="t-logo-g">🥊</div><span class="t-logo-t">Colorado Mate Club</span></div>
+      <div class="chip"><div class="chip-av">CT</div><span class="chip-n">Carlos</span><span class="chip-xp">1240 XP</span></div>
     </div>
-    <div id="mapa-container"></div>
+    <div class="screens">
+      <!-- INICIO -->
+      <div class="scr active" id="scr-inicio">
+        <div class="profe-bubble motivar" id="profe-bub">
+          <div class="pb-av"><span>🥊</span><span>PROFE</span></div>
+          <div class="pb-body">
+            <div class="pb-label">El Profe Colorado dice</div>
+            <div class="pb-msg">¡Órale Carlos! Llevas <strong style="color:var(--red)">5 días seguidos</strong>. Así se gana el examen — con disciplina diaria. ¡No pares!</div>
+          </div>
+          <span class="pb-close" onclick="document.getElementById('profe-bub').style.display='none'">✕</span>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-num r">🔥5</div><div class="stat-lbl">días racha</div></div>
+          <div class="stat-card"><div class="stat-num g">N3</div><div class="stat-lbl">nivel</div></div>
+          <div class="stat-card"><div class="stat-num b">1240</div><div class="stat-lbl">puntos XP</div></div>
+        </div>
+        <div class="xp-card">
+          <div class="xp-row"><span class="xp-lbl">Nivel 3 → Nivel 4</span><span class="xp-nivel">Campeón en formación</span></div>
+          <div class="xp-bg"><div class="xp-fill" style="width:83%"></div></div>
+          <div class="xp-sub"><span>1240 XP</span><span>260 para subir</span></div>
+        </div>
+        <div class="racha-wrap">
+          <div class="sec-lbl">Racha semanal</div>
+          <div class="racha-grid">
+            <div class="rday done"><span>✓</span><span class="dl">LUN</span></div>
+            <div class="rday done"><span>✓</span><span class="dl">MAR</span></div>
+            <div class="rday done"><span>✓</span><span class="dl">MIÉ</span></div>
+            <div class="rday done"><span>✓</span><span class="dl">JUE</span></div>
+            <div class="rday hoy"><span>🔥</span><span class="dl">HOY</span></div>
+            <div class="rday pend"><span>—</span><span class="dl">SAB</span></div>
+            <div class="rday pend"><span>—</span><span class="dl">DOM</span></div>
+          </div>
+        </div>
+        <div class="tema-card" onclick="goTema('Fracciones y decimales','Representación y cálculo','#e63946')">
+          <div class="tema-ey">continuar donde lo dejaste</div>
+          <div class="tema-nom">Fracciones y decimales</div>
+          <div class="rnd-pips"><div class="rpip done"></div><div class="rpip active"></div><div class="rpip pend"></div><div class="rpip pend"></div></div>
+          <div class="tema-meta"><span class="tema-mt">Round 2 de 4 — Demo</span><span class="tema-mt">Bloque 1 · Fundamentos</span></div>
+          <button class="tema-btn">ENTRAR AL ROUND →</button>
+        </div>
+      </div>
+      <!-- MAPA -->
+      <div class="scr" id="scr-mapa">
+        <div style="padding:18px 18px 10px"><div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px">Ruta crítica</div><div style="font-size:11px;color:var(--muted);margin-top:2px">15 temas · 4 bloques · 21 días al examen UDG</div></div>
+        <div id="mapa-c"></div>
+      </div>
+      <!-- RANKING -->
+      <div class="scr" id="scr-ranking">
+        <div style="padding:18px 18px 10px"><div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px">Ranking semanal</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Se reinicia cada lunes · Tu escuela</div></div>
+        <div id="ranking-c"></div>
+        <div class="rk-note">🔥 ¡Sube antes del domingo para terminar en el top 3!</div>
+      </div>
+      <!-- LOGROS -->
+      <div class="scr" id="scr-logros">
+        <div style="padding:18px 18px 10px"><div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px">Tus logros</div><div style="font-size:11px;color:var(--muted);margin-top:2px">2 de 6 desbloqueados</div></div>
+        <div class="logros-grid" id="logros-c"></div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item active" onclick="goScr('inicio',this)"><div class="nav-icon">🏠</div><div class="nav-lbl">Inicio</div></div>
+      <div class="nav-item" onclick="goScr('mapa',this)"><div class="nav-icon">🗺️</div><div class="nav-lbl">Mapa</div></div>
+      <div class="nav-item" onclick="goScr('ranking',this)"><div class="nav-icon">🏆</div><div class="nav-lbl">Ranking</div></div>
+      <div class="nav-item" onclick="goScr('logros',this)"><div class="nav-icon">⭐</div><div class="nav-lbl">Logros</div></div>
+    </div>
   </div>
 
-  <!-- RANKING -->
-  <div class="screen" id="s-ranking">
-    <div style="padding:20px 20px 12px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px">Ranking semanal</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:2px">Se reinicia cada lunes · Tu escuela</div>
+  <!-- ══════════════ TEMA ROUNDS ══════════════ -->
+  <div class="page" id="page-tema">
+    <div class="tema-page">
+      <div class="tp-topbar">
+        <button class="tp-back" onclick="goPage('app')">← Volver</button>
+        <span class="tp-title" id="tp-title">Fracciones y decimales</span>
+      </div>
+      <div class="tp-header">
+        <div class="tp-ey">Bloque 1 · Fundamentos</div>
+        <div class="tp-nom" id="tp-nom">Fracciones y decimales</div>
+        <div class="tp-desc">Representación, operaciones y conversión entre fracciones y decimales.</div>
+      </div>
+      <div class="rounds-strip">
+        <div class="rtab active" id="rt0" onclick="goRound(0)"><div class="rtab-num">Round 1</div><div class="rtab-name">Video</div><div class="rtab-dot"></div></div>
+        <div class="rtab" id="rt1" onclick="goRound(1)"><div class="rtab-num">Round 2</div><div class="rtab-name">Demo</div><div class="rtab-dot"></div></div>
+        <div class="rtab" id="rt2" onclick="goRound(2)"><div class="rtab-num">Round 3</div><div class="rtab-name">Práctica</div><div class="rtab-dot"></div></div>
+        <div class="rtab" id="rt3" onclick="goRound(3)"><div class="rtab-num">Round 4</div><div class="rtab-name">Examen</div><div class="rtab-dot"></div></div>
+      </div>
+      <!-- R1 VIDEO -->
+      <div class="rscr active" id="rs0">
+        <div class="video-wrap">
+          <div class="vthumb" id="vthumb" onclick="playVid()">
+            <div class="tt-badge"><div class="tt-dot"></div><span class="tt-lbl">@elprofecolorado</span></div>
+            <div class="views-badge">▶ 909</div>
+            <div class="play-ring"><span style="color:var(--red);font-size:18px;margin-left:3px">▶</span></div>
+            <div class="vinfo"><div class="vinfo-topic">Fracciones y decimales</div><div class="vinfo-by">por <span>El Profe Colorado</span></div></div>
+            <div class="vfoot"><div class="vf-row"><span id="vtime">0:00 / 2:14</span><span>TikTok ↗</span></div><div class="vprog-bg"><div class="vprog-fill" id="vbar"></div></div></div>
+          </div>
+        </div>
+        <div class="coach-bub"><div class="cb-av">CO</div><div class="cb-txt">"Antes de practicar, <b>mira cómo lo resuelvo yo.</b> Igual que en la cochera — sin trucos, solo el método."</div></div>
+        <div class="kp-lbl">Lo que vas a aprender</div>
+        <div class="kp-item"><div class="kp-num">1</div><div><div class="kp-txt">Qué es una fracción</div><div class="kp-sub">Numerador, denominador y su significado</div></div></div>
+        <div class="kp-item"><div class="kp-num">2</div><div><div class="kp-txt">Convertir fracción a decimal</div><div class="kp-sub">Dividir numerador entre denominador</div></div></div>
+        <div class="kp-item"><div class="kp-num">3</div><div><div class="kp-txt">Fracciones equivalentes</div><div class="kp-sub">Misma cantidad, diferente representación</div></div></div>
+        <div class="kp-item"><div class="kp-num">4</div><div><div class="kp-txt">Sumar fracciones con mismo denominador</div><div class="kp-sub">El denominador no cambia</div></div></div>
+        <button class="rnd-btn" onclick="goRound(1)">Round 2: Ver la demo →</button>
+      </div>
+      <!-- R2 DEMO -->
+      <div class="rscr" id="rs1">
+        <div class="coach-bub"><div class="cb-av">CO</div><div class="cb-txt">"Ahora lo hacemos <b>paso a paso.</b> Sigue cada movimiento."</div></div>
+        <div class="demo-step"><div class="demo-num">Problema</div><div class="demo-expr">1/4 + 2/4 = ?</div></div>
+        <div class="demo-arrow">↓</div>
+        <div class="demo-step"><div class="demo-num">Paso 1 — Verificar denominadores</div><div class="demo-expr">4 = 4 ✓</div><div class="demo-exp">Mismo denominador — podemos sumar directo</div></div>
+        <div class="demo-arrow">↓</div>
+        <div class="demo-step"><div class="demo-num">Paso 2 — Sumar numeradores</div><div class="demo-expr">1 + 2 = 3</div><div class="demo-exp">El denominador se queda igual: 4</div></div>
+        <div class="demo-arrow">↓</div>
+        <div class="demo-step"><div class="demo-num">Resultado</div><div class="demo-expr" style="color:var(--gold)">= 3/4</div><div class="demo-exp">En decimal: 3 ÷ 4 = 0.75</div></div>
+        <button class="rnd-btn" onclick="goRound(2)">Round 3: Ahora tú →</button>
+      </div>
+      <!-- R3 PRÁCTICA -->
+      <div class="rscr" id="rs2">
+        <div class="coach-bub"><div class="cb-av">CO</div><div class="cb-txt">"Tu turno. <b>Sin prisa.</b> Piensa antes de tocar."</div></div>
+        <div class="ex-q">Resuelve la siguiente suma de fracciones:</div>
+        <div class="ex-math">2/5 + 1/5</div>
+        <div class="ex-opts" id="ex-opts">
+          <div class="ex-opt" onclick="pickOpt(this,false)">2/10</div>
+          <div class="ex-opt" onclick="pickOpt(this,false)">3/10</div>
+          <div class="ex-opt" onclick="pickOpt(this,true)">3/5</div>
+          <div class="ex-opt" onclick="pickOpt(this,false)">2/5</div>
+        </div>
+        <div class="ex-fb" id="ex-fb"></div>
+        <button class="rnd-btn" id="btn-r4" style="display:none" onclick="goRound(3)">Round 4: Al examen →</button>
+      </div>
+      <!-- R4 EXAMEN -->
+      <div class="rscr" id="rs3">
+        <div class="exam-intro">
+          <div class="exam-big">🥊 ROUND 4</div>
+          <div class="exam-sub">"Todo lo que aprendiste — ahora se demuestra."</div>
+          <div class="exam-stats">
+            <div class="es-card"><div class="es-num">10</div><div class="es-lbl">Preguntas</div></div>
+            <div class="es-card"><div class="es-num">12</div><div class="es-lbl">Minutos</div></div>
+            <div class="es-card"><div class="es-num">70%</div><div class="es-lbl">Para pasar</div></div>
+          </div>
+          <div class="coach-bub"><div class="cb-av">CO</div><div class="cb-txt">"Este es el momento de la verdad. <b>Respira, piensa, ejecuta.</b>"</div></div>
+          <button class="rnd-btn" onclick="goPage('app')">Iniciar examen →</button>
+        </div>
+      </div>
     </div>
-    <div id="ranking-list"></div>
-    <div class="rank-note">🔥 ¡Sube antes del domingo para terminar en el top 3!</div>
   </div>
 
-  <!-- LOGROS -->
-  <div class="screen" id="s-logros">
-    <div style="padding:20px 20px 12px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px">Tus logros</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:2px">2 de 6 desbloqueados</div>
-    </div>
-    <div class="logros-grid" id="logros-grid"></div>
-  </div>
-
-  <!-- NAV -->
-  <div class="bottom-nav">
-    <div class="nav-item active" onclick="goTab('inicio',this)">
-      <div class="nav-icon">🏠</div>
-      <div class="nav-lbl">Inicio</div>
-    </div>
-    <div class="nav-item" onclick="goTab('mapa',this)">
-      <div class="nav-icon">🗺️</div>
-      <div class="nav-lbl">Mapa</div>
-    </div>
-    <div class="nav-item" onclick="goTab('ranking',this)">
-      <div class="nav-icon">🏆</div>
-      <div class="nav-lbl">Ranking</div>
-    </div>
-    <div class="nav-item" onclick="goTab('logros',this)">
-      <div class="nav-icon">⭐</div>
-      <div class="nav-lbl">Logros</div>
-    </div>
-  </div>
 </div>
 
 <!-- MODAL -->
@@ -276,42 +602,23 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
     <div class="modal-title" id="modal-title"></div>
     <div class="modal-sub" id="modal-sub"></div>
     <div class="modal-rounds" id="modal-rounds"></div>
-    <button class="modal-btn" id="modal-btn">ENTRAR AL TEMA →</button>
+    <button class="modal-btn" id="modal-btn" onclick="goPage('tema')">ENTRAR AL TEMA →</button>
     <button class="modal-cancel" onclick="document.getElementById('modal').classList.remove('show')">Cerrar</button>
   </div>
 </div>
 
 <script>
+// ── DATA ──
 const bloques=[
   {num:1,nombre:"Fundamentos",sub:"Sin esto, nada más funciona",color:"#e63946",
-   temas:[
-    {id:1,nombre:"Números naturales",sub:"Operaciones básicas",estado:"done"},
-    {id:2,nombre:"Jerarquía de operaciones",sub:"PEMDAS",estado:"done"},
-    {id:3,nombre:"Fracciones y decimales",sub:"Representación y cálculo",estado:"active"},
-    {id:4,nombre:"Porcentajes y proporciones",sub:"Razón y regla de tres",estado:"locked"},
-  ]},
+   temas:[{id:1,nombre:"Números naturales",sub:"Operaciones básicas",est:"done"},{id:2,nombre:"Jerarquía de operaciones",sub:"PEMDAS",est:"done"},{id:3,nombre:"Fracciones y decimales",sub:"Representación y cálculo",est:"active"},{id:4,nombre:"Porcentajes y proporciones",sub:"Razón y regla de tres",est:"locked"}]},
   {num:2,nombre:"Transición al álgebra",sub:"El pensamiento abstracto empieza aquí",color:"#c9a84c",
-   temas:[
-    {id:5,nombre:"Números enteros",sub:"Positivos, negativos y cero",estado:"locked"},
-    {id:6,nombre:"Expresiones algebraicas",sub:"Variables y términos",estado:"locked"},
-    {id:7,nombre:"Ecuaciones de primer grado",sub:"Despeje y solución",estado:"locked"},
-    {id:8,nombre:"Sistemas de ecuaciones",sub:"Dos incógnitas",estado:"locked"},
-  ]},
+   temas:[{id:5,nombre:"Números enteros",sub:"Positivos, negativos y cero",est:"locked"},{id:6,nombre:"Expresiones algebraicas",sub:"Variables y términos",est:"locked"},{id:7,nombre:"Ecuaciones de primer grado",sub:"Despeje y solución",est:"locked"},{id:8,nombre:"Sistemas de ecuaciones",sub:"Dos incógnitas",est:"locked"}]},
   {num:3,nombre:"Geometría y medición",sub:"El espacio y sus propiedades",color:"#1d9e75",
-   temas:[
-    {id:9,nombre:"Perímetro y área",sub:"Figuras planas",estado:"locked"},
-    {id:10,nombre:"Volumen",sub:"Cuerpos geométricos",estado:"locked"},
-    {id:11,nombre:"Teorema de Pitágoras",sub:"Triángulos rectángulos",estado:"locked"},
-    {id:12,nombre:"Ángulos y triángulos",sub:"Clasificación y propiedades",estado:"locked"},
-  ]},
+   temas:[{id:9,nombre:"Perímetro y área",sub:"Figuras planas",est:"locked"},{id:10,nombre:"Volumen",sub:"Cuerpos geométricos",est:"locked"},{id:11,nombre:"Teorema de Pitágoras",sub:"Triángulos rectángulos",est:"locked"},{id:12,nombre:"Ángulos y triángulos",sub:"Clasificación y propiedades",est:"locked"}]},
   {num:4,nombre:"Datos y probabilidad",sub:"Interpretar el mundo con números",color:"#378add",
-   temas:[
-    {id:13,nombre:"Estadística básica",sub:"Media, mediana, moda",estado:"locked"},
-    {id:14,nombre:"Probabilidad",sub:"Eventos y posibilidades",estado:"locked"},
-    {id:15,nombre:"Gráficas e interpretación",sub:"Leer y construir datos",estado:"locked"},
-  ]},
+   temas:[{id:13,nombre:"Estadística básica",sub:"Media, mediana, moda",est:"locked"},{id:14,nombre:"Probabilidad",sub:"Eventos y posibilidades",est:"locked"},{id:15,nombre:"Gráficas e interpretación",sub:"Leer y construir datos",est:"locked"}]},
 ];
-
 const ranking=[
   {pos:1,nombre:"Valeria R.",xp:2100,racha:12,av:"VR",me:false,col:"#c9a84c"},
   {pos:2,nombre:"Diego M.",xp:1890,racha:8,av:"DM",me:false,col:"#9a9490"},
@@ -319,7 +626,6 @@ const ranking=[
   {pos:4,nombre:"Sofía L.",xp:980,racha:3,av:"SL",me:false,col:"rgba(255,255,255,.15)"},
   {pos:5,nombre:"Andrés P.",xp:720,racha:1,av:"AP",me:false,col:"rgba(255,255,255,.15)"},
 ];
-
 const logros=[
   {icon:"🔥",nombre:"Racha de fuego",desc:"5 días seguidos",ok:true},
   {icon:"⚡",nombre:"Relámpago",desc:"Examen en menos de 8 min",ok:true},
@@ -328,104 +634,160 @@ const logros=[
   {icon:"📚",nombre:"Studioso",desc:"30 días de estudio",ok:false},
   {icon:"🏆",nombre:"Campeón UDG",desc:"Simula el examen real",ok:false},
 ];
+const openB=new Set([1]);
 
-const openBloques=new Set([1]);
+// ── NAVEGACIÓN ──
+function goPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function goScr(id,el){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('scr-'+id).classList.add('active');
+  el.classList.add('active');
+}
+function goTema(nombre,sub,color){
+  document.getElementById('tp-title').textContent=nombre;
+  document.getElementById('tp-nom').textContent=nombre;
+  goPage('tema');
+  goRound(0);
+}
 
-function buildMapa(){
-  const c=document.getElementById('mapa-container');
-  c.innerHTML='';
-  bloques.forEach(b=>{
-    const isOpen=openBloques.has(b.num);
-    const doneCount=b.temas.filter(t=>t.estado==='done').length;
-    const wrap=document.createElement('div');
-    wrap.className='bloque-wrap';
-    wrap.innerHTML=`
-      <div class="bloque-header" onclick="toggleBloque(${b.num})">
-        <div class="bloque-num" style="background:${b.color}22;border:1px solid ${b.color}55;color:${b.color}">${b.num}</div>
-        <div class="bloque-info">
-          <div class="bloque-nombre">${b.nombre}</div>
-          <div class="bloque-sub">${b.sub} · ${doneCount}/${b.temas.length}</div>
-        </div>
-        <span class="bloque-arrow${isOpen?' open':''}"id="arrow-${b.num}">▶</span>
-      </div>
-      ${isOpen?`<div class="bloque-temas" style="border:.5px solid ${b.color}22;border-radius:10px">
-        ${b.temas.map(t=>`
-          <div class="tema-row${t.estado==='locked'?' locked':''}" onclick="${t.estado!=='locked'?`showModal('${t.nombre}','Bloque ${b.num} · ${b.nombre}','${b.color}')`:''}" style="background:${t.estado==='active'?b.color+'0d':''}">
-            <div class="tema-ico" style="background:${t.estado==='done'?'rgba(45,106,79,.2)':t.estado==='active'?b.color+'22':'rgba(255,255,255,.05)'};border:1px solid ${t.estado==='done'?'rgba(45,106,79,.5)':t.estado==='active'?b.color+'55':'rgba(255,255,255,.1)'}">
-              ${t.estado==='done'?'✓':t.estado==='active'?'▶':t.id}
-            </div>
-            <div class="tema-row-info">
-              <div class="tema-row-nombre">${t.nombre}</div>
-              <div class="tema-row-sub">${t.sub}</div>
-            </div>
-            <span class="tema-tag ${t.estado==='done'?'tag-done':t.estado==='active'?'tag-active':'tag-lock'}">
-              ${t.estado==='done'?'Listo':t.estado==='active'?'En curso':'🔒'}
-            </span>
-          </div>`).join('')}
-      </div>`:''}
-    `;
-    c.appendChild(wrap);
+// ── ROUNDS ──
+let curRound=0;
+function goRound(n){
+  curRound=n;
+  document.querySelectorAll('.rscr').forEach((s,i)=>s.classList.toggle('active',i===n));
+  document.querySelectorAll('.rtab').forEach((t,i)=>{
+    t.classList.toggle('active',i===n);
+    if(i<n)t.classList.add('done'); else t.classList.remove('done');
   });
 }
 
-function toggleBloque(num){
-  if(openBloques.has(num)) openBloques.delete(num);
-  else openBloques.add(num);
-  buildMapa();
+// ── VIDEO ──
+let playing=false,vpct=0,viv;
+function playVid(){
+  if(playing)return;
+  playing=true;
+  const th=document.getElementById('vthumb');
+  th.onclick=null;
+  th.querySelector('.play-ring').style.display='none';
+  th.querySelector('.vinfo').innerHTML='<div style="color:rgba(255,255,255,.7);font-size:12px">▶ Reproduciendo...</div><div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:3px">@elprofecolorado en TikTok</div>';
+  viv=setInterval(()=>{
+    vpct+=100/134;
+    if(vpct>=100){vpct=100;clearInterval(viv);}
+    document.getElementById('vbar').style.width=vpct+'%';
+    const t=Math.floor((vpct/100)*134);
+    const m=Math.floor(t/60),s=t%60;
+    document.getElementById('vtime').textContent=m+':'+String(s).padStart(2,'0')+' / 2:14';
+  },1000);
 }
 
+// ── PRÁCTICA ──
+function pickOpt(el,ok){
+  document.querySelectorAll('#ex-opts .ex-opt').forEach(o=>o.onclick=null);
+  const fb=document.getElementById('ex-fb');
+  if(ok){
+    el.classList.add('correct');
+    fb.className='ex-fb show ok';
+    fb.textContent='¡Correcto! 2/5 + 1/5 = 3/5. El denominador se queda igual cuando son iguales.';
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('#ex-opts .ex-opt').forEach(o=>{if(o.textContent==='3/5')o.classList.add('correct');});
+    fb.className='ex-fb show bad';
+    fb.textContent='Casi. Cuando los denominadores son iguales, solo sumas los numeradores: 2+1=3, y el denominador sigue siendo 5.';
+  }
+  document.getElementById('btn-r4').style.display='block';
+}
+
+// ── MAPA ──
+function buildMapa(){
+  const c=document.getElementById('mapa-c');c.innerHTML='';
+  bloques.forEach(b=>{
+    const isOpen=openB.has(b.num);
+    const dc=b.temas.filter(t=>t.est==='done').length;
+    const w=document.createElement('div');w.className='blq-wrap';
+    w.innerHTML=`<div class="blq-hdr" onclick="toggleB(${b.num})">
+      <div class="blq-num" style="background:${b.color}22;border:1px solid ${b.color}55;color:${b.color}">${b.num}</div>
+      <div class="blq-info"><div class="blq-nom">${b.nombre}</div><div class="blq-sub">${b.sub} · ${dc}/${b.temas.length}</div></div>
+      <span class="blq-arr${isOpen?' open':''}">▶</span>
+    </div>
+    ${isOpen?`<div class="blq-temas" style="border:.5px solid ${b.color}22;border-radius:9px">${b.temas.map(t=>`
+      <div class="t-row${t.est==='locked'?' lk':''}" onclick="${t.est!=='locked'?`goTema('${t.nombre}','${t.sub}','${b.color}')`:''}" style="background:${t.est==='active'?b.color+'0d':''}">
+        <div class="t-ico" style="background:${t.est==='done'?'rgba(45,106,79,.2)':t.est==='active'?b.color+'22':'rgba(255,255,255,.05)'};border:1px solid ${t.est==='done'?'rgba(45,106,79,.5)':t.est==='active'?b.color+'55':'rgba(255,255,255,.1)'}">
+          ${t.est==='done'?'✓':t.est==='active'?'▶':t.id}
+        </div>
+        <div class="t-info"><div class="t-nom">${t.nombre}</div><div class="t-sub">${t.sub}</div></div>
+        <span class="t-tag ${t.est==='done'?'tag-d':t.est==='active'?'tag-a':'tag-l'}">${t.est==='done'?'Listo':t.est==='active'?'En curso':'🔒'}</span>
+      </div>`).join('')}</div>`:''}`;
+    c.appendChild(w);
+  });
+}
+function toggleB(n){if(openB.has(n))openB.delete(n);else openB.add(n);buildMapa();}
+
+// ── RANKING ──
 function buildRanking(){
-  const c=document.getElementById('ranking-list');
-  c.innerHTML=ranking.map(r=>`
-    <div class="rank-card${r.me?' me':''}">
-      <div class="rank-pos">${r.pos===1?'🥇':r.pos===2?'🥈':r.pos===3?'🥉':r.pos}</div>
-      <div class="rank-av" style="background:${r.col};color:${r.me?'white':'#9a9490'}">${r.av}</div>
-      <div class="rank-info">
-        <div class="rank-nombre">${r.nombre}${r.me?' <span style="color:var(--red);font-size:10px">(tú)</span>':''}</div>
-        <div class="rank-racha">🔥 ${r.racha} días de racha</div>
-      </div>
-      <div class="rank-xp">${r.xp} XP</div>
+  document.getElementById('ranking-c').innerHTML=ranking.map(r=>`
+    <div class="rk-card${r.me?' me':''}">
+      <div class="rk-pos">${r.pos===1?'🥇':r.pos===2?'🥈':r.pos===3?'🥉':r.pos}</div>
+      <div class="rk-av" style="background:${r.col};color:${r.me?'white':'#9a9490'}">${r.av}</div>
+      <div class="rk-info"><div class="rk-nom">${r.nombre}${r.me?' <span style="color:var(--red);font-size:9px">(tú)</span>':''}</div><div class="rk-rch">🔥 ${r.racha} días de racha</div></div>
+      <div class="rk-xp">${r.xp} XP</div>
     </div>`).join('');
 }
 
+// ── LOGROS ──
 function buildLogros(){
-  const c=document.getElementById('logros-grid');
-  c.innerHTML=logros.map(l=>`
-    <div class="logro-card${l.ok?'':' locked'}">
-      <div class="logro-icon">${l.icon}</div>
-      <div class="logro-nombre">${l.nombre}</div>
-      <div class="logro-desc">${l.desc}</div>
-      <span class="logro-badge ${l.ok?'badge-ok':'badge-lock'}">${l.ok?'✓ Desbloqueado':'Bloqueado'}</span>
+  document.getElementById('logros-c').innerHTML=logros.map(l=>`
+    <div class="lg-card${l.ok?'':' lk'}">
+      <div class="lg-icon">${l.icon}</div>
+      <div class="lg-nom">${l.nombre}</div>
+      <div class="lg-desc">${l.desc}</div>
+      <span class="lg-badge ${l.ok?'b-ok':'b-lk'}">${l.ok?'✓ Desbloqueado':'Bloqueado'}</span>
     </div>`).join('');
 }
 
-function goTab(id,el){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('s-'+id).classList.add('active');
-  el.classList.add('active');
-}
-
+// ── MODAL ──
 function showModal(nombre,sub,color){
   document.getElementById('modal-title').textContent=nombre;
   document.getElementById('modal-sub').textContent=sub;
   document.getElementById('modal-btn').style.background=color;
-  document.getElementById('modal-rounds').innerHTML=
-    ['Video','Demo','Práctica','Examen'].map((r,i)=>`
-      <div class="modal-round" style="background:${color}18;border:.5px solid ${color}44">
-        <div class="modal-round-num" style="color:${color}">R${i+1}</div>
-        <div class="modal-round-name">${r}</div>
-      </div>`).join('');
+  document.getElementById('modal-rounds').innerHTML=['Video','Demo','Práctica','Examen'].map((r,i)=>`
+    <div class="modal-round" style="background:${color}18;border:.5px solid ${color}44">
+      <div class="modal-round-num" style="color:${color}">R${i+1}</div>
+      <div class="modal-round-name">${r}</div>
+    </div>`).join('');
   document.getElementById('modal').classList.add('show');
 }
+function hideModal(e){if(e.target.id==='modal')document.getElementById('modal').classList.remove('show');}
 
-function hideModal(e){
-  if(e.target.id==='modal') document.getElementById('modal').classList.remove('show');
+// ── PRECIO TOGGLE ──
+function setPriceMode(m){
+  document.getElementById('btn-mes').classList.toggle('active',m==='mes');
+  document.getElementById('btn-ano').classList.toggle('active',m==='ano');
+  if(m==='mes'){
+    document.getElementById('up-price-num').textContent='$99';
+    document.getElementById('up-price-per').textContent='/ mes MXN';
+    document.getElementById('up-price-note').innerHTML='Cancela cuando quieras. Sin contratos.';
+  } else {
+    document.getElementById('up-price-num').textContent='$830';
+    document.getElementById('up-price-per').textContent='/ año MXN';
+    document.getElementById('up-price-note').innerHTML='Equivale a <span>$69/mes</span>. Ahorras $358 al año.';
+  }
 }
 
-buildMapa();
-buildRanking();
-buildLogros();
+// ── ANIMACIÓN BEATS LANDING ──
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+},{threshold:.1});
+['b1','b2','b3','b4'].forEach((id,i)=>{
+  const el=document.getElementById(id);
+  if(el){el.style.transitionDelay=(i*.12)+'s';observer.observe(el);}
+});
+
+buildMapa();buildRanking();buildLogros();
 </script>
 </body>
 </html>
