@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Colorado Mate Club</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--red:#e63946;--dark:#0d0d14;--dark2:#16161f;--cream:#f5f0e8;--muted:#9a9490;--gold:#c9a84c;--green:#2d6a4f;--blue:#378add;}
+html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;color:var(--cream);}
+.app{max-width:420px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative;background:var(--dark);}
+
+.topbar{background:var(--dark2);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid rgba(255,255,255,.06);flex-shrink:0;}
+.logo{display:flex;align-items:center;gap:8px;}
+.logo-g{width:28px;height:28px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.logo-t{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;}
+.chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.05);padding:5px 12px;border-radius:20px;cursor:pointer;}
+.chip-av{width:22px;height:22px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;}
+.chip-n{font-size:12px;}
+.chip-xp{font-size:10px;color:var(--gold);font-family:'Bebas Neue',sans-serif;letter-spacing:1px;}
+
+.screen{display:none;flex:1;overflow-y:auto;padding-bottom:70px;}
+.screen.active{display:block;}
+
+.profe-bubble{margin:16px 20px;border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;animation:slideIn .4s ease;}
+.profe-bubble.motivar{background:rgba(230,57,70,.08);border:1px solid rgba(230,57,70,.25);}
+.profe-bubble.reganar{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.3);}
+.profe-bubble.urgente{background:rgba(230,57,70,.15);border:1px solid var(--red);}
+.pb-av{width:44px;height:44px;border-radius:50%;background:var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
+.pb-av span:first-child{font-size:16px;}
+.pb-av span:last-child{font-family:'Bebas Neue',sans-serif;font-size:9px;letter-spacing:1px;color:white;}
+.pb-body{flex:1;}
+.pb-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.pb-msg{font-size:13px;line-height:1.6;}
+.pb-close{font-size:16px;color:var(--muted);cursor:pointer;padding:0 4px;align-self:flex-start;}
+
+.stats-row{display:flex;gap:10px;padding:0 20px;margin-bottom:16px;}
+.stat-card{flex:1;background:var(--dark2);border-radius:10px;padding:12px 8px;text-align:center;}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1;}
+.stat-num.red{color:var(--red);}
+.stat-num.gold{color:var(--gold);}
+.stat-num.blue{color:var(--blue);}
+.stat-lbl{font-size:9px;color:var(--muted);margin-top:3px;letter-spacing:.5px;}
+
+.xp-card{margin:0 20px 16px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:12px;padding:14px 16px;}
+.xp-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.xp-lbl{font-size:11px;color:var(--muted);}
+.xp-nivel{font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--red);letter-spacing:1px;}
+.xp-bg{height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;margin-bottom:6px;}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:4px;transition:width .6s ease;}
+.xp-sub{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);}
+
+.racha-wrap{padding:0 20px;margin-bottom:16px;}
+.section-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.racha-grid{display:flex;gap:5px;}
+.racha-day{flex:1;height:38px;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;gap:2px;transition:all .2s;}
+.racha-day.done{background:rgba(45,106,79,.2);border:.5px solid rgba(45,106,79,.5);color:#5fbd8a;}
+.racha-day.hoy{background:var(--red);border:.5px solid var(--red);color:white;}
+.racha-day.pending{background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.07);color:var(--muted);}
+.racha-day .dia-label{font-size:8px;opacity:.7;}
+
+.tema-card{margin:0 20px 16px;background:rgba(230,57,70,.06);border:1px solid rgba(230,57,70,.2);border-radius:12px;padding:16px;cursor:pointer;transition:border-color .2s;}
+.tema-card:hover{border-color:rgba(230,57,70,.4);}
+.tema-ey{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:6px;}
+.tema-nombre{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;margin-bottom:10px;}
+.tema-rounds{display:flex;gap:6px;margin-bottom:12px;}
+.round-pip{flex:1;height:4px;border-radius:2px;}
+.round-pip.done{background:var(--green);}
+.round-pip.active{background:var(--red);}
+.round-pip.pending{background:rgba(255,255,255,.08);}
+.tema-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.tema-meta-txt{font-size:11px;color:var(--muted);}
+.tema-btn{width:100%;padding:13px;background:var(--red);color:white;border:none;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;cursor:pointer;transition:opacity .2s;}
+.tema-btn:hover{opacity:.88;}
+
+.bloque-wrap{margin:0 20px 10px;}
+.bloque-header{padding:13px 15px;display:flex;align-items:center;gap:10px;cursor:pointer;border-radius:10px;transition:background .15s;}
+.bloque-header:hover{background:rgba(255,255,255,.03);}
+.bloque-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:14px;flex-shrink:0;}
+.bloque-info{flex:1;}
+.bloque-nombre{font-size:13px;font-weight:500;}
+.bloque-sub{font-size:10px;color:var(--muted);margin-top:1px;}
+.bloque-arrow{font-size:11px;color:var(--muted);transition:transform .2s;}
+.bloque-arrow.open{transform:rotate(90deg);}
+.bloque-temas{border-radius:10px;overflow:hidden;margin-top:2px;}
+.tema-row{display:flex;align-items:center;gap:10px;padding:11px 15px;border-bottom:.5px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s;}
+.tema-row:last-child{border-bottom:none;}
+.tema-row:hover{background:rgba(255,255,255,.03);}
+.tema-row.locked{opacity:.35;cursor:default;pointer-events:none;}
+.tema-ico{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+.tema-row-info{flex:1;}
+.tema-row-nombre{font-size:13px;}
+.tema-row-sub{font-size:10px;color:var(--muted);margin-top:1px;}
+.tema-tag{font-size:9px;font-weight:500;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.tag-done{background:rgba(45,106,79,.2);color:#5fbd8a;border:.5px solid rgba(45,106,79,.4);}
+.tag-active{background:rgba(230,57,70,.15);color:var(--red);border:.5px solid rgba(230,57,70,.3);}
+.tag-lock{background:rgba(255,255,255,.05);color:var(--muted);}
+
+.rank-card{margin:0 20px 8px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;}
+.rank-card.me{background:rgba(230,57,70,.07);border-color:rgba(230,57,70,.3);}
+.rank-pos{font-family:'Bebas Neue',sans-serif;font-size:18px;width:26px;text-align:center;flex-shrink:0;}
+.rank-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;}
+.rank-info{flex:1;}
+.rank-nombre{font-size:13px;}
+.rank-racha{font-size:10px;color:var(--muted);margin-top:2px;}
+.rank-xp{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--red);}
+.rank-note{margin:10px 20px;background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.07);border-radius:8px;padding:10px 14px;font-size:11px;color:var(--muted);text-align:center;font-style:italic;}
+
+.logros-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px;}
+.logro-card{background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:10px;padding:14px;transition:border-color .2s;}
+.logro-card.locked{opacity:.35;}
+.logro-card:not(.locked):hover{border-color:rgba(255,255,255,.2);}
+.logro-icon{font-size:26px;margin-bottom:7px;}
+.logro-nombre{font-size:12px;font-weight:500;margin-bottom:2px;}
+.logro-desc{font-size:10px;color:var(--muted);line-height:1.4;}
+.logro-badge{display:inline-block;margin-top:7px;font-size:9px;font-weight:500;padding:2px 8px;border-radius:10px;}
+.badge-ok{background:rgba(45,106,79,.2);color:#5fbd8a;border:.5px solid rgba(45,106,79,.4);}
+.badge-lock{background:rgba(255,255,255,.05);color:var(--muted);}
+
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:var(--dark2);border-top:.5px solid rgba(255,255,255,.08);display:flex;padding:8px 0 6px;z-index:100;}
+.nav-item{flex:1;text-align:center;cursor:pointer;padding:4px 0;}
+.nav-icon{font-size:20px;}
+.nav-lbl{font-size:9px;color:var(--muted);margin-top:2px;letter-spacing:.5px;}
+.nav-item.active .nav-lbl{color:var(--red);}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:flex-end;justify-content:center;}
+.modal-overlay.show{display:flex;animation:fadeIn .2s;}
+.modal{background:var(--dark2);border-radius:18px 18px 0 0;padding:24px;width:100%;max-width:420px;border:.5px solid rgba(255,255,255,.1);}
+.modal-handle{width:36px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin:0 auto 20px;}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;margin-bottom:4px;}
+.modal-sub{font-size:12px;color:var(--muted);margin-bottom:18px;}
+.modal-rounds{display:flex;gap:8px;margin-bottom:20px;}
+.modal-round{flex:1;border-radius:8px;padding:10px 6px;text-align:center;}
+.modal-round-num{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;}
+.modal-round-name{font-size:9px;color:var(--muted);margin-top:2px;}
+.modal-btn{width:100%;padding:14px;color:white;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;margin-bottom:10px;}
+.modal-cancel{width:100%;padding:11px;background:none;color:var(--muted);border:.5px solid rgba(255,255,255,.1);border-radius:10px;font-size:13px;cursor:pointer;}
+
+@keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-g">🥊</div>
+      <span class="logo-t">Colorado Mate Club</span>
+    </div>
+    <div class="chip">
+      <div class="chip-av">CT</div>
+      <span class="chip-n">Carlos</span>
+      <span class="chip-xp">1240 XP</span>
+    </div>
+  </div>
+
+  <!-- INICIO -->
+  <div class="screen active" id="s-inicio">
+    <div class="profe-bubble motivar" id="profe-bubble">
+      <div class="pb-av"><span>🥊</span><span>PROFE</span></div>
+      <div class="pb-body">
+        <div class="pb-label">El Profe Colorado dice</div>
+        <div class="pb-msg">¡Órale Carlos! Llevas <strong style="color:var(--red)">5 días seguidos</strong>. Así se gana el examen — con disciplina diaria. ¡No pares!</div>
+      </div>
+      <span class="pb-close" onclick="document.getElementById('profe-bubble').style.display='none'">✕</span>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num red">🔥5</div>
+        <div class="stat-lbl">días racha</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num gold">N3</div>
+        <div class="stat-lbl">nivel</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num blue">1240</div>
+        <div class="stat-lbl">puntos XP</div>
+      </div>
+    </div>
+
+    <div class="xp-card">
+      <div class="xp-row">
+        <span class="xp-lbl">Nivel 3 → Nivel 4</span>
+        <span class="xp-nivel">Campeón en formación</span>
+      </div>
+      <div class="xp-bg"><div class="xp-fill" style="width:83%"></div></div>
+      <div class="xp-sub"><span>1240 XP</span><span>260 para subir de nivel</span></div>
+    </div>
+
+    <div class="racha-wrap">
+      <div class="section-lbl">Racha semanal</div>
+      <div class="racha-grid">
+        <div class="racha-day done"><span>✓</span><span class="dia-label">LUN</span></div>
+        <div class="racha-day done"><span>✓</span><span class="dia-label">MAR</span></div>
+        <div class="racha-day done"><span>✓</span><span class="dia-label">MIÉ</span></div>
+        <div class="racha-day done"><span>✓</span><span class="dia-label">JUE</span></div>
+        <div class="racha-day hoy"><span>🔥</span><span class="dia-label">HOY</span></div>
+        <div class="racha-day pending"><span>—</span><span class="dia-label">SAB</span></div>
+        <div class="racha-day pending"><span>—</span><span class="dia-label">DOM</span></div>
+      </div>
+    </div>
+
+    <div class="tema-card" onclick="showModal('Fracciones y decimales','Bloque 1 · Fundamentos','#e63946')">
+      <div class="tema-ey">continuar donde lo dejaste</div>
+      <div class="tema-nombre">Fracciones y decimales</div>
+      <div class="tema-rounds">
+        <div class="round-pip done"></div>
+        <div class="round-pip active"></div>
+        <div class="round-pip pending"></div>
+        <div class="round-pip pending"></div>
+      </div>
+      <div class="tema-meta">
+        <span class="tema-meta-txt">Round 2 de 4 — Demo</span>
+        <span class="tema-meta-txt">Bloque 1 · Fundamentos</span>
+      </div>
+      <button class="tema-btn">ENTRAR AL ROUND →</button>
+    </div>
+  </div>
+
+  <!-- MAPA -->
+  <div class="screen" id="s-mapa">
+    <div style="padding:20px 20px 12px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px">Ruta crítica</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px">15 temas · 4 bloques · 21 días al examen UDG</div>
+    </div>
+    <div id="mapa-container"></div>
+  </div>
+
+  <!-- RANKING -->
+  <div class="screen" id="s-ranking">
+    <div style="padding:20px 20px 12px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px">Ranking semanal</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px">Se reinicia cada lunes · Tu escuela</div>
+    </div>
+    <div id="ranking-list"></div>
+    <div class="rank-note">🔥 ¡Sube antes del domingo para terminar en el top 3!</div>
+  </div>
+
+  <!-- LOGROS -->
+  <div class="screen" id="s-logros">
+    <div style="padding:20px 20px 12px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px">Tus logros</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px">2 de 6 desbloqueados</div>
+    </div>
+    <div class="logros-grid" id="logros-grid"></div>
+  </div>
+
+  <!-- NAV -->
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="goTab('inicio',this)">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-lbl">Inicio</div>
+    </div>
+    <div class="nav-item" onclick="goTab('mapa',this)">
+      <div class="nav-icon">🗺️</div>
+      <div class="nav-lbl">Mapa</div>
+    </div>
+    <div class="nav-item" onclick="goTab('ranking',this)">
+      <div class="nav-icon">🏆</div>
+      <div class="nav-lbl">Ranking</div>
+    </div>
+    <div class="nav-item" onclick="goTab('logros',this)">
+      <div class="nav-icon">⭐</div>
+      <div class="nav-lbl">Logros</div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="hideModal(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-sub" id="modal-sub"></div>
+    <div class="modal-rounds" id="modal-rounds"></div>
+    <button class="modal-btn" id="modal-btn">ENTRAR AL TEMA →</button>
+    <button class="modal-cancel" onclick="document.getElementById('modal').classList.remove('show')">Cerrar</button>
+  </div>
+</div>
+
+<script>
+const bloques=[
+  {num:1,nombre:"Fundamentos",sub:"Sin esto, nada más funciona",color:"#e63946",
+   temas:[
+    {id:1,nombre:"Números naturales",sub:"Operaciones básicas",estado:"done"},
+    {id:2,nombre:"Jerarquía de operaciones",sub:"PEMDAS",estado:"done"},
+    {id:3,nombre:"Fracciones y decimales",sub:"Representación y cálculo",estado:"active"},
+    {id:4,nombre:"Porcentajes y proporciones",sub:"Razón y regla de tres",estado:"locked"},
+  ]},
+  {num:2,nombre:"Transición al álgebra",sub:"El pensamiento abstracto empieza aquí",color:"#c9a84c",
+   temas:[
+    {id:5,nombre:"Números enteros",sub:"Positivos, negativos y cero",estado:"locked"},
+    {id:6,nombre:"Expresiones algebraicas",sub:"Variables y términos",estado:"locked"},
+    {id:7,nombre:"Ecuaciones de primer grado",sub:"Despeje y solución",estado:"locked"},
+    {id:8,nombre:"Sistemas de ecuaciones",sub:"Dos incógnitas",estado:"locked"},
+  ]},
+  {num:3,nombre:"Geometría y medición",sub:"El espacio y sus propiedades",color:"#1d9e75",
+   temas:[
+    {id:9,nombre:"Perímetro y área",sub:"Figuras planas",estado:"locked"},
+    {id:10,nombre:"Volumen",sub:"Cuerpos geométricos",estado:"locked"},
+    {id:11,nombre:"Teorema de Pitágoras",sub:"Triángulos rectángulos",estado:"locked"},
+    {id:12,nombre:"Ángulos y triángulos",sub:"Clasificación y propiedades",estado:"locked"},
+  ]},
+  {num:4,nombre:"Datos y probabilidad",sub:"Interpretar el mundo con números",color:"#378add",
+   temas:[
+    {id:13,nombre:"Estadística básica",sub:"Media, mediana, moda",estado:"locked"},
+    {id:14,nombre:"Probabilidad",sub:"Eventos y posibilidades",estado:"locked"},
+    {id:15,nombre:"Gráficas e interpretación",sub:"Leer y construir datos",estado:"locked"},
+  ]},
+];
+
+const ranking=[
+  {pos:1,nombre:"Valeria R.",xp:2100,racha:12,av:"VR",me:false,col:"#c9a84c"},
+  {pos:2,nombre:"Diego M.",xp:1890,racha:8,av:"DM",me:false,col:"#9a9490"},
+  {pos:3,nombre:"Carlos T.",xp:1240,racha:5,av:"CT",me:true,col:"#e63946"},
+  {pos:4,nombre:"Sofía L.",xp:980,racha:3,av:"SL",me:false,col:"rgba(255,255,255,.15)"},
+  {pos:5,nombre:"Andrés P.",xp:720,racha:1,av:"AP",me:false,col:"rgba(255,255,255,.15)"},
+];
+
+const logros=[
+  {icon:"🔥",nombre:"Racha de fuego",desc:"5 días seguidos",ok:true},
+  {icon:"⚡",nombre:"Relámpago",desc:"Examen en menos de 8 min",ok:true},
+  {icon:"🎯",nombre:"Francotirador",desc:"10 ejercicios sin error",ok:false},
+  {icon:"👑",nombre:"Rey del ring",desc:"Completa los 4 bloques",ok:false},
+  {icon:"📚",nombre:"Studioso",desc:"30 días de estudio",ok:false},
+  {icon:"🏆",nombre:"Campeón UDG",desc:"Simula el examen real",ok:false},
+];
+
+const openBloques=new Set([1]);
+
+function buildMapa(){
+  const c=document.getElementById('mapa-container');
+  c.innerHTML='';
+  bloques.forEach(b=>{
+    const isOpen=openBloques.has(b.num);
+    const doneCount=b.temas.filter(t=>t.estado==='done').length;
+    const wrap=document.createElement('div');
+    wrap.className='bloque-wrap';
+    wrap.innerHTML=`
+      <div class="bloque-header" onclick="toggleBloque(${b.num})">
+        <div class="bloque-num" style="background:${b.color}22;border:1px solid ${b.color}55;color:${b.color}">${b.num}</div>
+        <div class="bloque-info">
+          <div class="bloque-nombre">${b.nombre}</div>
+          <div class="bloque-sub">${b.sub} · ${doneCount}/${b.temas.length}</div>
+        </div>
+        <span class="bloque-arrow${isOpen?' open':''}"id="arrow-${b.num}">▶</span>
+      </div>
+      ${isOpen?`<div class="bloque-temas" style="border:.5px solid ${b.color}22;border-radius:10px">
+        ${b.temas.map(t=>`
+          <div class="tema-row${t.estado==='locked'?' locked':''}" onclick="${t.estado!=='locked'?`showModal('${t.nombre}','Bloque ${b.num} · ${b.nombre}','${b.color}')`:''}" style="background:${t.estado==='active'?b.color+'0d':''}">
+            <div class="tema-ico" style="background:${t.estado==='done'?'rgba(45,106,79,.2)':t.estado==='active'?b.color+'22':'rgba(255,255,255,.05)'};border:1px solid ${t.estado==='done'?'rgba(45,106,79,.5)':t.estado==='active'?b.color+'55':'rgba(255,255,255,.1)'}">
+              ${t.estado==='done'?'✓':t.estado==='active'?'▶':t.id}
+            </div>
+            <div class="tema-row-info">
+              <div class="tema-row-nombre">${t.nombre}</div>
+              <div class="tema-row-sub">${t.sub}</div>
+            </div>
+            <span class="tema-tag ${t.estado==='done'?'tag-done':t.estado==='active'?'tag-active':'tag-lock'}">
+              ${t.estado==='done'?'Listo':t.estado==='active'?'En curso':'🔒'}
+            </span>
+          </div>`).join('')}
+      </div>`:''}
+    `;
+    c.appendChild(wrap);
+  });
+}
+
+function toggleBloque(num){
+  if(openBloques.has(num)) openBloques.delete(num);
+  else openBloques.add(num);
+  buildMapa();
+}
+
+function buildRanking(){
+  const c=document.getElementById('ranking-list');
+  c.innerHTML=ranking.map(r=>`
+    <div class="rank-card${r.me?' me':''}">
+      <div class="rank-pos">${r.pos===1?'🥇':r.pos===2?'🥈':r.pos===3?'🥉':r.pos}</div>
+      <div class="rank-av" style="background:${r.col};color:${r.me?'white':'#9a9490'}">${r.av}</div>
+      <div class="rank-info">
+        <div class="rank-nombre">${r.nombre}${r.me?' <span style="color:var(--red);font-size:10px">(tú)</span>':''}</div>
+        <div class="rank-racha">🔥 ${r.racha} días de racha</div>
+      </div>
+      <div class="rank-xp">${r.xp} XP</div>
+    </div>`).join('');
+}
+
+function buildLogros(){
+  const c=document.getElementById('logros-grid');
+  c.innerHTML=logros.map(l=>`
+    <div class="logro-card${l.ok?'':' locked'}">
+      <div class="logro-icon">${l.icon}</div>
+      <div class="logro-nombre">${l.nombre}</div>
+      <div class="logro-desc">${l.desc}</div>
+      <span class="logro-badge ${l.ok?'badge-ok':'badge-lock'}">${l.ok?'✓ Desbloqueado':'Bloqueado'}</span>
+    </div>`).join('');
+}
+
+function goTab(id,el){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('s-'+id).classList.add('active');
+  el.classList.add('active');
+}
+
+function showModal(nombre,sub,color){
+  document.getElementById('modal-title').textContent=nombre;
+  document.getElementById('modal-sub').textContent=sub;
+  document.getElementById('modal-btn').style.background=color;
+  document.getElementById('modal-rounds').innerHTML=
+    ['Video','Demo','Práctica','Examen'].map((r,i)=>`
+      <div class="modal-round" style="background:${color}18;border:.5px solid ${color}44">
+        <div class="modal-round-num" style="color:${color}">R${i+1}</div>
+        <div class="modal-round-name">${r}</div>
+      </div>`).join('');
+  document.getElementById('modal').classList.add('show');
+}
+
+function hideModal(e){
+  if(e.target.id==='modal') document.getElementById('modal').classList.remove('show');
+}
+
+buildMapa();
+buildRanking();
+buildLogros();
+</script>
+</body>
+</html>
