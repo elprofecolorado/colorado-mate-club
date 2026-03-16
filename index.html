@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Colorado Mate Club — El Profe Colorado</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Literata:ital,wght@0,400;1,400&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{--red:#e63946;--dark:#0d0d14;--dark2:#16161f;--cream:#f5f0e8;--muted:#9a9490;--gold:#c9a84c;--green:#2d6a4f;--blue:#378add;}
@@ -13,17 +14,42 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .page{display:none;flex:1;flex-direction:column;min-height:100vh;}
 .page.active{display:flex;}
 
-/* ── LANDING ── */
+/* AUTH */
+.auth-page{background:var(--dark2);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;}
+.auth-logo{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:32px;}
+.auth-glove{width:60px;height:60px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;}
+.auth-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;}
+.auth-sub{font-size:12px;color:var(--muted);text-align:center;font-family:'Literata',serif;font-style:italic;}
+.auth-card{width:100%;background:var(--dark);border:.5px solid rgba(255,255,255,.1);border-radius:14px;padding:24px;}
+.auth-tabs{display:flex;margin-bottom:24px;border-bottom:.5px solid rgba(255,255,255,.08);}
+.auth-tab{flex:1;text-align:center;padding:10px;font-size:13px;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);transition:all .2s;}
+.auth-tab.active{color:var(--cream);border-bottom-color:var(--red);}
+.auth-form{display:none;}
+.auth-form.active{display:block;}
+.auth-field{margin-bottom:14px;}
+.auth-label{font-size:11px;color:var(--muted);margin-bottom:5px;letter-spacing:.5px;text-transform:uppercase;}
+.auth-input{width:100%;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.12);border-radius:8px;padding:12px 14px;font-size:14px;color:var(--cream);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
+.auth-input:focus{border-color:var(--red);}
+.auth-input::placeholder{color:var(--muted);}
+.auth-btn{width:100%;padding:14px;background:var(--red);color:white;border:none;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;margin-top:6px;transition:opacity .2s;}
+.auth-btn:hover{opacity:.88;}
+.auth-btn:disabled{opacity:.5;cursor:not-allowed;}
+.auth-error{background:rgba(230,57,70,.15);border:.5px solid rgba(230,57,70,.3);border-radius:8px;padding:10px 12px;font-size:12px;color:#f09595;margin-bottom:12px;display:none;}
+.auth-error.show{display:block;}
+.auth-success{background:rgba(45,106,79,.15);border:.5px solid rgba(45,106,79,.3);border-radius:8px;padding:10px 12px;font-size:12px;color:#5fbd8a;margin-bottom:12px;display:none;}
+.auth-success.show{display:block;}
+
+/* LANDING */
 .landing{overflow-y:auto;}
 .l-hero{position:relative;min-height:480px;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 40px;overflow:hidden;background:var(--dark2);}
 .l-grain{position:absolute;inset:0;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;}
-.l-glow{position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:360px;height:360px;background:radial-gradient(ellipse,rgba(230,57,70,.18) 0%,transparent 70%);pointer-events:none;}
+.l-glow{position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:360px;height:360px;background:radial-gradient(ellipse,rgba(230,57,70,.18) 0%,transparent 70%);}
 .l-tape{position:absolute;top:0;left:0;right:0;height:4px;background:repeating-linear-gradient(90deg,var(--red) 0,var(--red) 40px,transparent 40px,transparent 60px);opacity:.7;}
 .l-nav{position:absolute;top:0;left:0;right:0;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;z-index:10;}
 .l-logo{display:flex;align-items:center;gap:8px;}
 .l-logo-g{width:30px;height:30px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;}
 .l-logo-t{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;}
-.l-nav-btn{background:var(--red);color:white;border:none;padding:8px 18px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
+.l-nav-btn{background:var(--red);color:white;border:none;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;}
 .l-content{position:relative;z-index:2;padding:0 24px;}
 .l-eyebrow{font-size:10px;font-weight:500;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:12px;animation:fadeUp .6s .1s both;}
 .l-title{font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:.95;letter-spacing:2px;margin-bottom:8px;animation:fadeUp .6s .2s both;}
@@ -35,7 +61,7 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .l-divider{height:1px;background:linear-gradient(90deg,var(--red),transparent);margin:0 24px;opacity:.4;}
 .l-story{padding:40px 24px;}
 .l-story-lbl{font-size:10px;font-weight:500;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:20px;}
-.beat{display:grid;grid-template-columns:44px 1fr;gap:0 14px;padding-bottom:28px;opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s;}
+.beat{display:grid;grid-template-columns:44px 1fr;padding-bottom:28px;opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s;}
 .beat.vis{opacity:1;transform:translateY(0);}
 .beat-line{display:flex;flex-direction:column;align-items:center;}
 .beat-dot{width:11px;height:11px;border-radius:50%;background:var(--red);flex-shrink:0;margin-top:4px;}
@@ -46,18 +72,17 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .l-quote{margin:0 24px 32px;border:1px solid rgba(230,57,70,.25);border-radius:12px;padding:20px;background:rgba(230,57,70,.05);position:relative;overflow:hidden;}
 .l-quote::before{content:'"';position:absolute;top:-8px;left:14px;font-family:'Literata',serif;font-size:72px;color:var(--red);opacity:.2;line-height:1;}
 .l-quote-txt{font-family:'Literata',serif;font-style:italic;font-size:14px;line-height:1.7;margin-bottom:14px;position:relative;z-index:1;}
-.l-cochera-items{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.l-ci-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
 .l-ci{background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.08);border-radius:7px;padding:8px 10px;font-size:11px;color:var(--muted);display:flex;gap:7px;align-items:center;}
 .l-ci-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0;}
 .l-mission{margin:0 24px 32px;background:var(--red);border-radius:12px;padding:22px;text-align:center;}
 .l-mission-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:white;margin-bottom:6px;}
 .l-mission-txt{font-family:'Literata',serif;font-style:italic;font-size:13px;color:rgba(255,255,255,.85);line-height:1.6;margin-bottom:16px;}
-.l-mission-btn{background:white;color:var(--red);border:none;padding:12px 28px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;}
+.l-mission-btn{background:white;color:var(--red);border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;}
 .l-plans{padding:0 24px 40px;}
 .l-plans-lbl{font-size:10px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
 .l-plans-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .plan-c{border-radius:10px;padding:16px;border:.5px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);cursor:pointer;transition:border-color .2s;}
-.plan-c:hover{border-color:rgba(255,255,255,.18);}
 .plan-c.feat{border:1.5px solid var(--red);background:rgba(230,57,70,.07);}
 .plan-badge{font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:7px;}
 .plan-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;margin-bottom:3px;}
@@ -67,115 +92,63 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .plan-feat span{color:var(--cream);}
 .l-footer{border-top:.5px solid rgba(255,255,255,.06);padding:18px 24px;text-align:center;font-size:11px;color:var(--muted);font-family:'Literata',serif;font-style:italic;}
 
-/* ── UPGRADE ── */
-.upgrade{overflow-y:auto;padding-bottom:40px;}
-.up-hero{background:var(--dark2);padding:50px 24px 28px;text-align:center;position:relative;overflow:hidden;}
-.up-glow{position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:280px;height:280px;background:radial-gradient(ellipse,rgba(230,57,70,.15) 0%,transparent 70%);pointer-events:none;}
-.up-ey{font-size:10px;font-weight:500;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:10px;}
-.up-title{font-family:'Bebas Neue',sans-serif;font-size:38px;line-height:1;letter-spacing:2px;margin-bottom:8px;}
-.up-title .acc{color:var(--red);}
-.up-sub{font-family:'Literata',serif;font-style:italic;font-size:13px;color:var(--muted);line-height:1.6;max-width:280px;margin:0 auto;}
-.up-compare{padding:24px 20px;}
-.up-ch{display:grid;grid-template-columns:1fr 110px 110px;gap:8px;margin-bottom:8px;padding:0 4px;}
-.up-cl{font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--muted);text-align:center;}
-.up-cl.r{color:var(--red);}
-.up-row{display:grid;grid-template-columns:1fr 110px 110px;gap:8px;padding:10px 4px;border-bottom:.5px solid rgba(255,255,255,.05);align-items:center;}
-.up-row:last-child{border-bottom:none;}
-.up-fn{font-size:12px;color:var(--cream);}
-.up-fs{font-size:10px;color:var(--muted);margin-top:1px;}
-.up-cell{text-align:center;}
-.ck-y{width:22px;height:22px;border-radius:50%;background:rgba(45,106,79,.2);border:.5px solid rgba(45,106,79,.5);display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#5fbd8a;}
-.ck-n{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.08);display:inline-flex;align-items:center;justify-content:center;font-size:11px;color:rgba(255,255,255,.2);}
-.ck-r{width:22px;height:22px;border-radius:50%;background:rgba(230,57,70,.2);border:.5px solid rgba(230,57,70,.5);display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:var(--red);}
-.up-price-section{padding:0 20px 20px;}
-.up-toggle{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:18px;}
-.up-topt{font-size:12px;color:var(--muted);cursor:pointer;padding:5px 13px;border-radius:20px;transition:all .2s;}
-.up-topt.active{background:rgba(230,57,70,.15);color:var(--cream);border:.5px solid rgba(230,57,70,.3);}
-.save-badge{background:var(--gold);color:#1a1200;font-size:9px;font-weight:500;padding:2px 7px;border-radius:10px;}
-.up-card{border:1.5px solid var(--red);border-radius:14px;padding:22px;background:rgba(230,57,70,.06);position:relative;overflow:hidden;}
-.up-card::after{content:'';position:absolute;top:0;right:0;width:100px;height:100px;background:radial-gradient(ellipse at top right,rgba(230,57,70,.12),transparent 70%);}
-.up-plan-name{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;margin-bottom:3px;}
-.up-plan-desc{font-family:'Literata',serif;font-style:italic;font-size:12px;color:var(--muted);margin-bottom:16px;}
-.up-price-row{display:flex;align-items:baseline;gap:5px;margin-bottom:4px;}
-.up-amount{font-family:'Bebas Neue',sans-serif;font-size:44px;line-height:1;}
-.up-period{font-size:12px;color:var(--muted);}
-.up-note{font-size:10px;color:var(--muted);margin-bottom:18px;}
-.up-note span{color:var(--gold);}
-.up-perks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;}
-.up-perk{background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.07);border-radius:8px;padding:10px 11px;}
-.up-perk-icon{font-size:13px;margin-bottom:3px;}
-.up-perk-title{font-size:11px;font-weight:500;margin-bottom:1px;}
-.up-perk-desc{font-size:10px;color:var(--muted);line-height:1.4;}
-.up-cta{width:100%;padding:14px;background:var(--red);color:white;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;margin-bottom:9px;}
-.up-cta-sec{width:100%;padding:11px;background:none;color:var(--muted);border:.5px solid rgba(255,255,255,.1);border-radius:10px;font-size:12px;cursor:pointer;}
-.up-testi{padding:20px 20px 0;}
-.up-testi-lbl{font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
-.testi{background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.07);border-radius:10px;padding:13px 15px;margin-bottom:9px;}
-.testi-txt{font-family:'Literata',serif;font-style:italic;font-size:13px;line-height:1.6;margin-bottom:7px;}
-.testi-aut{font-size:10px;color:var(--muted);}
-.testi-aut strong{color:var(--red);font-weight:500;}
-.up-guarantee{margin:16px 20px 0;border:.5px solid rgba(201,168,76,.3);border-radius:10px;padding:14px;background:rgba(201,168,76,.04);display:flex;gap:10px;}
-.up-g-icon{font-size:18px;flex-shrink:0;}
-.up-g-title{font-size:12px;font-weight:500;color:var(--gold);margin-bottom:3px;}
-.up-g-txt{font-size:11px;color:var(--muted);line-height:1.5;}
-
-/* ── APP PRINCIPAL ── */
-.topbar{background:var(--dark2);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid rgba(255,255,255,.06);flex-shrink:0;}
-.t-logo{display:flex;align-items:center;gap:8px;}
-.t-logo-g{width:26px;height:26px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;}
+/* APP */
+.topbar{background:var(--dark2);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid rgba(255,255,255,.06);flex-shrink:0;}
+.t-logo{display:flex;align-items:center;gap:7px;}
+.t-logo-g{width:25px;height:25px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;}
 .t-logo-t{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;}
-.chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.05);padding:4px 10px;border-radius:20px;}
+.chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.05);padding:4px 10px;border-radius:20px;cursor:pointer;}
 .chip-av{width:20px;height:20px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:500;}
 .chip-n{font-size:11px;}
-.chip-xp{font-size:10px;color:var(--gold);font-family:'Bebas Neue',sans-serif;letter-spacing:1px;}
+.chip-xp{font-size:10px;color:var(--gold);font-family:'Bebas Neue',sans-serif;}
 .screens{flex:1;position:relative;overflow:hidden;}
 .scr{display:none;position:absolute;inset:0;overflow-y:auto;padding-bottom:68px;}
 .scr.active{display:block;}
 
-/* inicio */
-.profe-bubble{margin:14px 18px;border-radius:13px;padding:13px 15px;display:flex;gap:11px;align-items:flex-start;animation:slideIn .4s ease;}
+/* INICIO */
+.profe-bubble{margin:13px 18px;border-radius:13px;padding:13px 15px;display:flex;gap:10px;align-items:flex-start;animation:slideIn .4s ease;}
 .profe-bubble.motivar{background:rgba(230,57,70,.08);border:1px solid rgba(230,57,70,.25);}
 .profe-bubble.reganar{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.3);}
 .profe-bubble.urgente{background:rgba(230,57,70,.15);border:1px solid var(--red);}
-.pb-av{width:42px;height:42px;border-radius:50%;background:var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
-.pb-av span:first-child{font-size:15px;}
+.pb-av{width:40px;height:40px;border-radius:50%;background:var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
+.pb-av span:first-child{font-size:14px;}
 .pb-av span:last-child{font-family:'Bebas Neue',sans-serif;font-size:8px;letter-spacing:1px;color:white;}
 .pb-body{flex:1;}
 .pb-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
 .pb-msg{font-size:12px;line-height:1.6;}
-.pb-close{font-size:15px;color:var(--muted);cursor:pointer;padding:0 3px;align-self:flex-start;}
-.stats-row{display:flex;gap:9px;padding:0 18px;margin-bottom:14px;}
+.pb-close{font-size:14px;color:var(--muted);cursor:pointer;padding:0 3px;}
+.stats-row{display:flex;gap:8px;padding:0 18px;margin-bottom:13px;}
 .stat-card{flex:1;background:var(--dark2);border-radius:9px;padding:11px 7px;text-align:center;}
 .stat-num{font-family:'Bebas Neue',sans-serif;font-size:20px;line-height:1;}
-.stat-num.r{color:var(--red);} .stat-num.g{color:var(--gold);} .stat-num.b{color:var(--blue);}
+.stat-num.r{color:var(--red);}.stat-num.g{color:var(--gold);}.stat-num.b{color:var(--blue);}
 .stat-lbl{font-size:9px;color:var(--muted);margin-top:2px;}
-.xp-card{margin:0 18px 14px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:11px;padding:13px 15px;}
+.xp-card{margin:0 18px 13px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:11px;padding:13px 15px;}
 .xp-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
 .xp-lbl{font-size:10px;color:var(--muted);}
 .xp-nivel{font-family:'Bebas Neue',sans-serif;font-size:12px;color:var(--red);letter-spacing:1px;}
 .xp-bg{height:7px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;margin-bottom:5px;}
-.xp-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:4px;}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:4px;transition:width .6s;}
 .xp-sub{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);}
-.racha-wrap{padding:0 18px;margin-bottom:14px;}
+.racha-wrap{padding:0 18px;margin-bottom:13px;}
 .sec-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:9px;}
 .racha-grid{display:flex;gap:5px;}
-.rday{flex:1;height:36px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:8px;gap:1px;transition:all .2s;}
+.rday{flex:1;height:36px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:8px;gap:1px;}
 .rday.done{background:rgba(45,106,79,.2);border:.5px solid rgba(45,106,79,.5);color:#5fbd8a;}
 .rday.hoy{background:var(--red);border:.5px solid var(--red);color:white;}
 .rday.pend{background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.07);color:var(--muted);}
 .rday .dl{font-size:7px;opacity:.7;}
-.tema-card{margin:0 18px 14px;background:rgba(230,57,70,.06);border:1px solid rgba(230,57,70,.2);border-radius:11px;padding:15px;cursor:pointer;transition:border-color .2s;}
+.tema-card{margin:0 18px 13px;background:rgba(230,57,70,.06);border:1px solid rgba(230,57,70,.2);border-radius:11px;padding:15px;cursor:pointer;transition:border-color .2s;}
 .tema-card:hover{border-color:rgba(230,57,70,.4);}
 .tema-ey{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:5px;}
 .tema-nom{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;margin-bottom:9px;}
 .rnd-pips{display:flex;gap:5px;margin-bottom:10px;}
 .rpip{flex:1;height:4px;border-radius:2px;}
-.rpip.done{background:var(--green);} .rpip.active{background:var(--red);} .rpip.pend{background:rgba(255,255,255,.08);}
+.rpip.done{background:var(--green);}.rpip.active{background:var(--red);}.rpip.pend{background:rgba(255,255,255,.08);}
 .tema-meta{display:flex;justify-content:space-between;margin-bottom:10px;}
 .tema-mt{font-size:10px;color:var(--muted);}
 .tema-btn{width:100%;padding:12px;background:var(--red);color:white;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;}
 
-/* mapa */
+/* MAPA */
 .blq-wrap{margin:0 18px 9px;}
 .blq-hdr{padding:12px 14px;display:flex;align-items:center;gap:9px;cursor:pointer;border-radius:9px;transition:background .15s;}
 .blq-hdr:hover{background:rgba(255,255,255,.03);}
@@ -199,7 +172,7 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .tag-a{background:rgba(230,57,70,.15);color:var(--red);border:.5px solid rgba(230,57,70,.3);}
 .tag-l{background:rgba(255,255,255,.05);color:var(--muted);}
 
-/* ranking */
+/* RANKING */
 .rk-card{margin:0 18px 8px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:9px;padding:11px 15px;display:flex;align-items:center;gap:11px;}
 .rk-card.me{background:rgba(230,57,70,.07);border-color:rgba(230,57,70,.3);}
 .rk-pos{font-family:'Bebas Neue',sans-serif;font-size:17px;width:24px;text-align:center;flex-shrink:0;}
@@ -210,7 +183,7 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .rk-xp{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--red);}
 .rk-note{margin:8px 18px;background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.07);border-radius:7px;padding:9px 13px;font-size:10px;color:var(--muted);text-align:center;font-style:italic;}
 
-/* logros */
+/* LOGROS */
 .logros-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 18px;}
 .lg-card{background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:9px;padding:13px;}
 .lg-card.lk{opacity:.35;}
@@ -221,21 +194,24 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .b-ok{background:rgba(45,106,79,.2);color:#5fbd8a;border:.5px solid rgba(45,106,79,.4);}
 .b-lk{background:rgba(255,255,255,.05);color:var(--muted);}
 
-/* ── TEMA ROUNDS ── */
+/* BOTTOM NAV */
+.bottom-nav{background:var(--dark2);border-top:.5px solid rgba(255,255,255,.08);display:flex;padding:7px 0 5px;flex-shrink:0;}
+.nav-item{flex:1;text-align:center;cursor:pointer;padding:3px 0;}
+.nav-icon{font-size:19px;}
+.nav-lbl{font-size:9px;color:var(--muted);margin-top:1px;}
+.nav-item.active .nav-lbl{color:var(--red);}
+
+/* TEMA */
 .tema-page{overflow-y:auto;padding-bottom:20px;}
 .tp-topbar{background:var(--dark2);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid rgba(255,255,255,.06);}
 .tp-back{font-size:12px;color:var(--muted);background:none;border:.5px solid rgba(255,255,255,.1);padding:5px 11px;border-radius:6px;cursor:pointer;}
 .tp-title{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;}
-.tp-header{padding:16px 18px 0;}
-.tp-ey{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:5px;}
-.tp-nom{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;margin-bottom:3px;}
-.tp-desc{font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:14px;}
-.rounds-strip{display:flex;padding:0 18px;border-bottom:.5px solid rgba(255,255,255,.06);margin-bottom:18px;}
-.rtab{flex:1;text-align:center;padding:9px 3px;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;}
+.rounds-strip{display:flex;padding:0 18px;border-bottom:.5px solid rgba(255,255,255,.06);margin-bottom:16px;}
+.rtab{flex:1;text-align:center;padding:9px 3px;border-bottom:2px solid transparent;cursor:pointer;}
 .rtab.active{border-bottom-color:var(--red);}
+.rtab.done .rtab-num{color:#5fbd8a;}
 .rtab-num{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-family:'Bebas Neue',sans-serif;}
 .rtab.active .rtab-num{color:var(--red);}
-.rtab.done .rtab-num{color:#5fbd8a;}
 .rtab-name{font-size:10px;color:var(--muted);margin-top:1px;}
 .rtab.active .rtab-name{color:var(--cream);}
 .rtab-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.1);margin:3px auto 0;}
@@ -243,29 +219,29 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .rtab.done .rtab-dot{background:#2d6a4f;}
 .rscr{display:none;padding:0 18px 24px;}
 .rscr.active{display:block;}
-.video-wrap{position:relative;border-radius:11px;overflow:hidden;margin-bottom:14px;background:#000;aspect-ratio:9/16;max-height:380px;}
-.vthumb{width:100%;height:100%;background:var(--dark2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;cursor:pointer;position:relative;}
-.tt-badge{position:absolute;top:11px;left:11px;background:#010101;border-radius:5px;padding:3px 9px;display:flex;align-items:center;gap:5px;}
+.video-wrap{position:relative;border-radius:11px;overflow:hidden;margin-bottom:14px;background:#000;aspect-ratio:9/16;max-height:360px;}
+.vthumb{width:100%;height:100%;background:var(--dark2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;position:relative;}
+.tt-badge{position:absolute;top:10px;left:10px;background:#010101;border-radius:5px;padding:3px 9px;display:flex;align-items:center;gap:5px;}
 .tt-dot{width:7px;height:7px;border-radius:50%;background:var(--red);}
-.tt-lbl{font-size:9px;font-weight:500;color:white;letter-spacing:.5px;}
-.views-badge{position:absolute;top:11px;right:11px;background:rgba(0,0,0,.6);border-radius:5px;padding:3px 7px;font-size:9px;color:rgba(255,255,255,.8);}
-.play-ring{width:54px;height:54px;border-radius:50%;border:2px solid var(--red);display:flex;align-items:center;justify-content:center;}
+.tt-lbl{font-size:9px;font-weight:500;color:white;}
+.views-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);border-radius:5px;padding:3px 7px;font-size:9px;color:rgba(255,255,255,.8);}
+.play-ring{width:52px;height:52px;border-radius:50%;border:2px solid var(--red);display:flex;align-items:center;justify-content:center;}
 .vinfo{text-align:center;}
-.vinfo-topic{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;}
+.vinfo-topic{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;}
 .vinfo-by{font-size:10px;color:var(--muted);margin-top:1px;}
 .vinfo-by span{color:var(--red);}
-.vfoot{position:absolute;bottom:0;left:0;right:0;padding:11px 13px;background:linear-gradient(transparent,rgba(0,0,0,.8));}
-.vf-row{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.6);}
-.vprog-bg{height:2px;background:rgba(255,255,255,.15);border-radius:1px;margin-top:6px;overflow:hidden;}
+.vfoot{position:absolute;bottom:0;left:0;right:0;padding:10px 12px;background:linear-gradient(transparent,rgba(0,0,0,.8));}
+.vf-row{display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,.6);}
+.vprog-bg{height:2px;background:rgba(255,255,255,.15);border-radius:1px;margin-top:5px;overflow:hidden;}
 .vprog-fill{height:100%;background:var(--red);border-radius:1px;transition:width .1s;width:0%;}
-.coach-bub{background:rgba(230,57,70,.08);border:.5px solid rgba(230,57,70,.2);border-radius:9px;padding:11px 13px;margin-bottom:14px;display:flex;gap:9px;align-items:flex-start;}
-.cb-av{width:30px;height:30px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:white;flex-shrink:0;}
+.cb{background:rgba(230,57,70,.08);border:.5px solid rgba(230,57,70,.2);border-radius:9px;padding:11px 13px;margin-bottom:13px;display:flex;gap:9px;align-items:flex-start;}
+.cb-av{width:28px;height:28px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:white;flex-shrink:0;}
 .cb-txt{font-family:'Literata',serif;font-style:italic;font-size:12px;line-height:1.6;}
 .cb-txt b{font-style:normal;color:var(--red);font-weight:500;}
-.kp-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:9px;}
-.kp-item{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:.5px solid rgba(255,255,255,.05);}
+.kp-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.kp-item{display:flex;gap:8px;padding:7px 0;border-bottom:.5px solid rgba(255,255,255,.05);}
 .kp-item:last-child{border-bottom:none;}
-.kp-num{font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--red);flex-shrink:0;width:14px;}
+.kp-num{font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--red);width:14px;flex-shrink:0;}
 .kp-txt{font-size:12px;line-height:1.4;}
 .kp-sub{font-size:10px;color:var(--muted);margin-top:1px;}
 .demo-step{background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.07);border-radius:9px;padding:14px;margin-bottom:7px;}
@@ -275,7 +251,7 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .demo-arrow{text-align:center;color:var(--red);font-size:15px;margin:3px 0;}
 .ex-q{font-size:14px;line-height:1.6;margin-bottom:12px;}
 .ex-math{display:inline-block;background:rgba(255,255,255,.06);border-radius:7px;padding:7px 14px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;margin-bottom:12px;}
-.ex-opts{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px;}
+.ex-opts{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:13px;}
 .ex-opt{border:.5px solid rgba(255,255,255,.1);border-radius:9px;padding:13px;text-align:center;font-size:15px;font-weight:500;cursor:pointer;color:var(--cream);background:rgba(255,255,255,.03);transition:all .15s;}
 .ex-opt:hover{border-color:var(--red);color:var(--red);}
 .ex-opt.correct{background:rgba(45,106,79,.2);border-color:#2d6a4f;color:#5fbd8a;}
@@ -284,21 +260,14 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .ex-fb.show{display:block;}
 .ex-fb.ok{background:rgba(45,106,79,.15);color:#5fbd8a;}
 .ex-fb.bad{background:rgba(161,35,35,.15);color:#f09595;}
-.exam-intro{text-align:center;padding:18px 0;}
-.exam-big{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:2px;margin-bottom:5px;}
-.exam-sub{font-size:12px;color:var(--muted);margin-bottom:20px;font-family:'Literata',serif;font-style:italic;}
-.exam-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:20px;}
+.exam-intro{text-align:center;padding:16px 0;}
+.exam-big{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:2px;margin-bottom:5px;}
+.exam-sub{font-size:12px;color:var(--muted);margin-bottom:18px;font-family:'Literata',serif;font-style:italic;}
+.exam-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:18px;}
 .es-card{background:rgba(255,255,255,.04);border-radius:7px;padding:11px;text-align:center;}
 .es-num{font-family:'Bebas Neue',sans-serif;font-size:22px;}
 .es-lbl{font-size:9px;color:var(--muted);margin-top:1px;}
-.rnd-btn{width:100%;padding:13px;background:var(--red);color:white;border:none;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-top:16px;}
-
-/* BOTTOM NAV */
-.bottom-nav{background:var(--dark2);border-top:.5px solid rgba(255,255,255,.08);display:flex;padding:7px 0 5px;flex-shrink:0;}
-.nav-item{flex:1;text-align:center;cursor:pointer;padding:3px 0;}
-.nav-icon{font-size:19px;}
-.nav-lbl{font-size:9px;color:var(--muted);margin-top:1px;letter-spacing:.5px;}
-.nav-item.active .nav-lbl{color:var(--red);}
+.rnd-btn{width:100%;padding:13px;background:var(--red);color:white;border:none;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-top:14px;}
 
 /* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:flex-end;justify-content:center;}
@@ -314,22 +283,86 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .modal-btn{width:100%;padding:13px;color:white;border:none;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-bottom:9px;}
 .modal-cancel{width:100%;padding:10px;background:none;color:var(--muted);border:.5px solid rgba(255,255,255,.1);border-radius:9px;font-size:12px;cursor:pointer;}
 
+/* LOADING */
+.loading-screen{position:fixed;inset:0;background:var(--dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:16px;}
+.loading-screen.hide{display:none;}
+.loading-logo{width:64px;height:64px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;animation:pulse 1.2s ease-in-out infinite;}
+.loading-txt{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--muted);}
+
 @keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 </style>
 </head>
 <body>
+
+<!-- LOADING -->
+<div class="loading-screen" id="loading">
+  <div class="loading-logo">🥊</div>
+  <div class="loading-txt">Colorado Mate Club</div>
+</div>
+
 <div class="app">
 
-  <!-- ══════════════ LANDING ══════════════ -->
-  <div class="page active" id="page-landing">
+  <!-- AUTH -->
+  <div class="page" id="page-auth">
+    <div class="auth-page">
+      <div class="auth-logo">
+        <div class="auth-glove">🥊</div>
+        <div class="auth-title">Colorado Mate Club</div>
+        <div class="auth-sub">"La cochera ahora está en tu celular"</div>
+      </div>
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <div class="auth-tab active" onclick="switchAuthTab('login')">Entrar</div>
+          <div class="auth-tab" onclick="switchAuthTab('register')">Registrarse</div>
+        </div>
+
+        <!-- LOGIN -->
+        <div class="auth-form active" id="form-login">
+          <div class="auth-error" id="login-error"></div>
+          <div class="auth-field">
+            <div class="auth-label">Correo</div>
+            <input class="auth-input" id="login-email" type="email" placeholder="tucorreo@gmail.com"/>
+          </div>
+          <div class="auth-field">
+            <div class="auth-label">Contraseña</div>
+            <input class="auth-input" id="login-pass" type="password" placeholder="••••••••"/>
+          </div>
+          <button class="auth-btn" id="btn-login" onclick="doLogin()">ENTRAR AL RING →</button>
+        </div>
+
+        <!-- REGISTER -->
+        <div class="auth-form" id="form-register">
+          <div class="auth-error" id="reg-error"></div>
+          <div class="auth-success" id="reg-success"></div>
+          <div class="auth-field">
+            <div class="auth-label">Tu nombre</div>
+            <input class="auth-input" id="reg-nombre" type="text" placeholder="¿Cómo te llamas?"/>
+          </div>
+          <div class="auth-field">
+            <div class="auth-label">Correo</div>
+            <input class="auth-input" id="reg-email" type="email" placeholder="tucorreo@gmail.com"/>
+          </div>
+          <div class="auth-field">
+            <div class="auth-label">Contraseña</div>
+            <input class="auth-input" id="reg-pass" type="password" placeholder="Mínimo 6 caracteres"/>
+          </div>
+          <button class="auth-btn" id="btn-register" onclick="doRegister()">CREAR MI CUENTA →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LANDING -->
+  <div class="page" id="page-landing">
     <div class="landing">
       <div class="l-hero">
         <div class="l-grain"></div><div class="l-glow"></div><div class="l-tape"></div>
         <div class="l-nav">
           <div class="l-logo"><div class="l-logo-g">🥊</div><span class="l-logo-t">Colorado Mate Club</span></div>
-          <button class="l-nav-btn" onclick="goPage('app')">Entrar gratis</button>
+          <button class="l-nav-btn" onclick="goPage('auth')">Entrar gratis</button>
         </div>
         <div class="l-content">
           <div class="l-eyebrow">Guadalajara, Jalisco · Desde la cochera</div>
@@ -351,8 +384,8 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
         <div class="beat" id="b4"><div class="beat-line"><div class="beat-dot"></div></div><div><div class="beat-title">Ahora llega a todos</div><div class="beat-txt">La cochera no alcanza para todos. La app sí. <strong>El mismo método, para cualquier chavo de México y LATAM.</strong></div></div></div>
       </div>
       <div class="l-quote">
-        <div class="l-quote-txt">"La cochera siempre estuvo abierta. Ahora la app también lo está — para cualquier chavo que quiera entrar a la prepa y no sepa por dónde empezar."</div>
-        <div class="l-cochera-items">
+        <div class="l-quote-txt">"La cochera siempre estuvo abierta. Ahora la app también lo está — para cualquier chavo que quiera entrar a la prepa."</div>
+        <div class="l-ci-grid">
           <div class="l-ci"><div class="l-ci-dot"></div>Mesas donadas</div>
           <div class="l-ci"><div class="l-ci-dot"></div>Sillas prestadas</div>
           <div class="l-ci"><div class="l-ci-dot"></div>Pizarrón regalado</div>
@@ -361,19 +394,19 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
       </div>
       <div class="l-mission">
         <div class="l-mission-title">Tu examen, nuestro ring</div>
-        <div class="l-mission-txt">Prepararte para el examen de admisión es una pelea por tu futuro. Nosotros somos tu esquina.</div>
-        <button class="l-mission-btn" onclick="goPage('app')">Empezar gratis →</button>
+        <div class="l-mission-txt">Prepararte para el examen es una pelea por tu futuro. Nosotros somos tu esquina.</div>
+        <button class="l-mission-btn" onclick="goPage('auth')">Empezar gratis →</button>
       </div>
       <div class="l-plans">
         <div class="l-plans-lbl">Elige tu nivel</div>
         <div class="l-plans-row">
-          <div class="plan-c" onclick="goPage('app')">
+          <div class="plan-c" onclick="goPage('auth')">
             <div class="plan-badge">Gratuito</div>
             <div class="plan-name">Cochera</div>
             <div class="plan-price"><strong>$0</strong> / siempre</div>
             <div class="plan-feat"><span>3 temas</span> del examen<br><span>5 ejercicios</span> por día<br><span>1 simulacro</span> por semana</div>
           </div>
-          <div class="plan-c feat" onclick="goPage('upgrade')">
+          <div class="plan-c feat" onclick="goPage('auth')">
             <div class="plan-badge">Premium</div>
             <div class="plan-name">Ring</div>
             <div class="plan-price"><strong>$99</strong> / mes MXN</div>
@@ -385,100 +418,39 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
     </div>
   </div>
 
-  <!-- ══════════════ UPGRADE ══════════════ -->
-  <div class="page" id="page-upgrade">
-    <div class="upgrade">
-      <div style="padding:14px 18px;background:var(--dark2);border-bottom:.5px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between;">
-        <div class="t-logo"><div class="t-logo-g">🥊</div><span class="t-logo-t">Colorado Mate Club</span></div>
-        <button style="font-size:11px;color:var(--muted);background:none;border:.5px solid rgba(255,255,255,.1);padding:5px 11px;border-radius:6px;cursor:pointer;" onclick="goPage('landing')">← Volver</button>
-      </div>
-      <div class="up-hero">
-        <div class="up-glow"></div>
-        <div class="up-ey">Sube de nivel</div>
-        <div class="up-title">DE LA <span class="acc">COCHERA</span><br>AL RING</div>
-        <div class="up-sub">Todo lo que necesitas para ganar tu lugar en la prepa — sin límites.</div>
-      </div>
-      <div class="up-compare">
-        <div class="up-ch"><div></div><div class="up-cl">Cochera</div><div class="up-cl r">Ring ▶</div></div>
-        <div class="up-row"><div><div class="up-fn">Temas del examen</div></div><div class="up-cell"><span class="ck-y">3</span></div><div class="up-cell"><span class="ck-r">∞</span></div></div>
-        <div class="up-row"><div><div class="up-fn">Ejercicios por día</div></div><div class="up-cell"><span class="ck-y">5</span></div><div class="up-cell"><span class="ck-r">∞</span></div></div>
-        <div class="up-row"><div><div class="up-fn">Simulacros tipo UDG</div></div><div class="up-cell"><span class="ck-y">1/sem</span></div><div class="up-cell"><span class="ck-r">∞</span></div></div>
-        <div class="up-row"><div><div class="up-fn">Coach IA personalizado</div><div class="up-fs">Te habla como en el ring</div></div><div class="up-cell"><span class="ck-n">—</span></div><div class="up-cell"><span class="ck-r">✓</span></div></div>
-        <div class="up-row"><div><div class="up-fn">Panel de diagnóstico</div><div class="up-fs">Tu cuello de botella exacto</div></div><div class="up-cell"><span class="ck-n">—</span></div><div class="up-cell"><span class="ck-r">✓</span></div></div>
-        <div class="up-row"><div><div class="up-fn">Ruta crítica 21 días</div><div class="up-fs">Plan personalizado</div></div><div class="up-cell"><span class="ck-n">—</span></div><div class="up-cell"><span class="ck-r">✓</span></div></div>
-        <div class="up-row"><div><div class="up-fn">Reporte de progreso</div><div class="up-fs">Para ti y tus papás</div></div><div class="up-cell"><span class="ck-n">—</span></div><div class="up-cell"><span class="ck-r">✓</span></div></div>
-      </div>
-      <div class="up-price-section">
-        <div class="up-toggle">
-          <div class="up-topt active" id="btn-mes" onclick="setPriceMode('mes')">Mensual</div>
-          <div class="up-topt" id="btn-ano" onclick="setPriceMode('ano')">Anual &nbsp;<span class="save-badge">-30%</span></div>
-        </div>
-        <div class="up-card">
-          <div class="up-plan-name">Plan Ring</div>
-          <div class="up-plan-desc">El método completo. El coach. El diagnóstico. Todo.</div>
-          <div class="up-price-row"><div class="up-amount" id="up-price-num">$99</div><div class="up-period" id="up-price-per">/ mes MXN</div></div>
-          <div class="up-note" id="up-price-note">Cancela cuando quieras. Sin contratos.</div>
-          <div class="up-perks">
-            <div class="up-perk"><div class="up-perk-icon">🎯</div><div class="up-perk-title">Coach IA</div><div class="up-perk-desc">Te motiva y corrige como en el ring</div></div>
-            <div class="up-perk"><div class="up-perk-icon">📊</div><div class="up-perk-title">Diagnóstico</div><div class="up-perk-desc">Detecta tu cuello de botella exacto</div></div>
-            <div class="up-perk"><div class="up-perk-icon">📅</div><div class="up-perk-title">Ruta 21 días</div><div class="up-perk-desc">Plan personalizado para tu examen</div></div>
-            <div class="up-perk"><div class="up-perk-icon">♾️</div><div class="up-perk-title">Sin límites</div><div class="up-perk-desc">Ejercicios y simulacros ilimitados</div></div>
-          </div>
-          <button class="up-cta" onclick="goPage('app')">ENTRAR AL RING →</button>
-          <button class="up-cta-sec" onclick="goPage('app')">Seguir en Cochera gratis</button>
-        </div>
-      </div>
-      <div class="up-testi">
-        <div class="up-testi-lbl">Lo que dicen los alumnos</div>
-        <div class="testi"><div class="testi-txt">"Reprobé el examen el año pasado. Con el Colorado Mate Club entendí en qué fallaba y pasé. El profe te habla diferente, te da confianza."</div><div class="testi-aut"><strong>Karla R.</strong> — Prepa UDG, Guadalajara</div></div>
-        <div class="testi"><div class="testi-txt">"Mi mamá pagó el Ring y valió cada peso. El diagnóstico me mostró que me faltaba álgebra. Estudié solo eso y quedé."</div><div class="testi-aut"><strong>Diego M.</strong> — Preparatoria, Monterrey</div></div>
-      </div>
-      <div class="up-guarantee">
-        <div class="up-g-icon">🏆</div>
-        <div><div class="up-g-title">Garantía del profe</div><div class="up-g-txt">Si en 7 días no ves progreso real en tu diagnóstico, te devolvemos tu dinero. Sin preguntas.</div></div>
-      </div>
-      <div style="text-align:center;padding:18px 24px;font-size:10px;color:rgba(255,255,255,.2);font-family:'Literata',serif;font-style:italic;">"La cochera siempre va a estar abierta. El ring es para los que quieren más." — El Profe Colorado</div>
-    </div>
-  </div>
-
-  <!-- ══════════════ APP PRINCIPAL ══════════════ -->
+  <!-- APP PRINCIPAL -->
   <div class="page" id="page-app">
     <div class="topbar">
       <div class="t-logo"><div class="t-logo-g">🥊</div><span class="t-logo-t">Colorado Mate Club</span></div>
-      <div class="chip"><div class="chip-av">CT</div><span class="chip-n">Carlos</span><span class="chip-xp">1240 XP</span></div>
+      <div class="chip" onclick="doLogout()">
+        <div class="chip-av" id="chip-av">CT</div>
+        <span class="chip-n" id="chip-nombre">Alumno</span>
+        <span class="chip-xp" id="chip-xp">0 XP</span>
+      </div>
     </div>
     <div class="screens">
-      <!-- INICIO -->
       <div class="scr active" id="scr-inicio">
         <div class="profe-bubble motivar" id="profe-bub">
           <div class="pb-av"><span>🥊</span><span>PROFE</span></div>
           <div class="pb-body">
             <div class="pb-label">El Profe Colorado dice</div>
-            <div class="pb-msg">¡Órale Carlos! Llevas <strong style="color:var(--red)">5 días seguidos</strong>. Así se gana el examen — con disciplina diaria. ¡No pares!</div>
+            <div class="pb-msg" id="profe-msg">¡Bienvenido al ring! Hoy empieza tu camino al examen.</div>
           </div>
           <span class="pb-close" onclick="document.getElementById('profe-bub').style.display='none'">✕</span>
         </div>
         <div class="stats-row">
-          <div class="stat-card"><div class="stat-num r">🔥5</div><div class="stat-lbl">días racha</div></div>
-          <div class="stat-card"><div class="stat-num g">N3</div><div class="stat-lbl">nivel</div></div>
-          <div class="stat-card"><div class="stat-num b">1240</div><div class="stat-lbl">puntos XP</div></div>
+          <div class="stat-card"><div class="stat-num r" id="stat-racha">🔥0</div><div class="stat-lbl">días racha</div></div>
+          <div class="stat-card"><div class="stat-num g" id="stat-nivel">N1</div><div class="stat-lbl">nivel</div></div>
+          <div class="stat-card"><div class="stat-num b" id="stat-xp">0</div><div class="stat-lbl">puntos XP</div></div>
         </div>
         <div class="xp-card">
-          <div class="xp-row"><span class="xp-lbl">Nivel 3 → Nivel 4</span><span class="xp-nivel">Campeón en formación</span></div>
-          <div class="xp-bg"><div class="xp-fill" style="width:83%"></div></div>
-          <div class="xp-sub"><span>1240 XP</span><span>260 para subir</span></div>
+          <div class="xp-row"><span class="xp-lbl" id="xp-label">Nivel 1 → Nivel 2</span><span class="xp-nivel" id="xp-titulo">Rookie del ring</span></div>
+          <div class="xp-bg"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
+          <div class="xp-sub"><span id="xp-actual">0 XP</span><span id="xp-falta">500 para subir</span></div>
         </div>
         <div class="racha-wrap">
           <div class="sec-lbl">Racha semanal</div>
-          <div class="racha-grid">
-            <div class="rday done"><span>✓</span><span class="dl">LUN</span></div>
-            <div class="rday done"><span>✓</span><span class="dl">MAR</span></div>
-            <div class="rday done"><span>✓</span><span class="dl">MIÉ</span></div>
-            <div class="rday done"><span>✓</span><span class="dl">JUE</span></div>
-            <div class="rday hoy"><span>🔥</span><span class="dl">HOY</span></div>
-            <div class="rday pend"><span>—</span><span class="dl">SAB</span></div>
-            <div class="rday pend"><span>—</span><span class="dl">DOM</span></div>
-          </div>
+          <div class="racha-grid" id="racha-grid"></div>
         </div>
         <div class="tema-card" onclick="goTema('Fracciones y decimales','Representación y cálculo','#e63946')">
           <div class="tema-ey">continuar donde lo dejaste</div>
@@ -488,20 +460,17 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
           <button class="tema-btn">ENTRAR AL ROUND →</button>
         </div>
       </div>
-      <!-- MAPA -->
       <div class="scr" id="scr-mapa">
         <div style="padding:18px 18px 10px"><div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px">Ruta crítica</div><div style="font-size:11px;color:var(--muted);margin-top:2px">15 temas · 4 bloques · 21 días al examen UDG</div></div>
         <div id="mapa-c"></div>
       </div>
-      <!-- RANKING -->
       <div class="scr" id="scr-ranking">
-        <div style="padding:18px 18px 10px"><div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px">Ranking semanal</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Se reinicia cada lunes · Tu escuela</div></div>
+        <div style="padding:18px 18px 10px"><div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px">Ranking semanal</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Alumnos del Colorado Mate Club</div></div>
         <div id="ranking-c"></div>
-        <div class="rk-note">🔥 ¡Sube antes del domingo para terminar en el top 3!</div>
+        <div class="rk-note">🔥 ¡Estudia hoy para subir en la tabla!</div>
       </div>
-      <!-- LOGROS -->
       <div class="scr" id="scr-logros">
-        <div style="padding:18px 18px 10px"><div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px">Tus logros</div><div style="font-size:11px;color:var(--muted);margin-top:2px">2 de 6 desbloqueados</div></div>
+        <div style="padding:18px 18px 10px"><div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px">Tus logros</div><div style="font-size:11px;color:var(--muted);margin-top:2px" id="logros-count">0 desbloqueados</div></div>
         <div class="logros-grid" id="logros-c"></div>
       </div>
     </div>
@@ -513,17 +482,17 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
     </div>
   </div>
 
-  <!-- ══════════════ TEMA ROUNDS ══════════════ -->
+  <!-- TEMA ROUNDS -->
   <div class="page" id="page-tema">
     <div class="tema-page">
       <div class="tp-topbar">
         <button class="tp-back" onclick="goPage('app')">← Volver</button>
-        <span class="tp-title" id="tp-title">Fracciones y decimales</span>
+        <span class="tp-title" id="tp-title">Fracciones</span>
       </div>
-      <div class="tp-header">
-        <div class="tp-ey">Bloque 1 · Fundamentos</div>
-        <div class="tp-nom" id="tp-nom">Fracciones y decimales</div>
-        <div class="tp-desc">Representación, operaciones y conversión entre fracciones y decimales.</div>
+      <div style="padding:14px 18px 0">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px" id="tp-bloque">Bloque 1 · Fundamentos</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;margin-bottom:3px" id="tp-nom">Fracciones y decimales</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Representación, operaciones y conversión.</div>
       </div>
       <div class="rounds-strip">
         <div class="rtab active" id="rt0" onclick="goRound(0)"><div class="rtab-num">Round 1</div><div class="rtab-name">Video</div><div class="rtab-dot"></div></div>
@@ -531,41 +500,38 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
         <div class="rtab" id="rt2" onclick="goRound(2)"><div class="rtab-num">Round 3</div><div class="rtab-name">Práctica</div><div class="rtab-dot"></div></div>
         <div class="rtab" id="rt3" onclick="goRound(3)"><div class="rtab-num">Round 4</div><div class="rtab-name">Examen</div><div class="rtab-dot"></div></div>
       </div>
-      <!-- R1 VIDEO -->
       <div class="rscr active" id="rs0">
         <div class="video-wrap">
           <div class="vthumb" id="vthumb" onclick="playVid()">
             <div class="tt-badge"><div class="tt-dot"></div><span class="tt-lbl">@elprofecolorado</span></div>
             <div class="views-badge">▶ 909</div>
-            <div class="play-ring"><span style="color:var(--red);font-size:18px;margin-left:3px">▶</span></div>
+            <div class="play-ring"><span style="color:var(--red);font-size:17px;margin-left:3px">▶</span></div>
             <div class="vinfo"><div class="vinfo-topic">Fracciones y decimales</div><div class="vinfo-by">por <span>El Profe Colorado</span></div></div>
             <div class="vfoot"><div class="vf-row"><span id="vtime">0:00 / 2:14</span><span>TikTok ↗</span></div><div class="vprog-bg"><div class="vprog-fill" id="vbar"></div></div></div>
           </div>
         </div>
-        <div class="coach-bub"><div class="cb-av">CO</div><div class="cb-txt">"Antes de practicar, <b>mira cómo lo resuelvo yo.</b> Igual que en la cochera — sin trucos, solo el método."</div></div>
+        <div class="cb"><div class="cb-av">CO</div><div class="cb-txt">"Antes de practicar, <b>mira cómo lo resuelvo yo.</b> Sin trucos — solo el método."</div></div>
         <div class="kp-lbl">Lo que vas a aprender</div>
         <div class="kp-item"><div class="kp-num">1</div><div><div class="kp-txt">Qué es una fracción</div><div class="kp-sub">Numerador, denominador y su significado</div></div></div>
         <div class="kp-item"><div class="kp-num">2</div><div><div class="kp-txt">Convertir fracción a decimal</div><div class="kp-sub">Dividir numerador entre denominador</div></div></div>
         <div class="kp-item"><div class="kp-num">3</div><div><div class="kp-txt">Fracciones equivalentes</div><div class="kp-sub">Misma cantidad, diferente representación</div></div></div>
-        <div class="kp-item"><div class="kp-num">4</div><div><div class="kp-txt">Sumar fracciones con mismo denominador</div><div class="kp-sub">El denominador no cambia</div></div></div>
+        <div class="kp-item"><div class="kp-num">4</div><div><div class="kp-txt">Sumar fracciones mismo denominador</div><div class="kp-sub">El denominador no cambia</div></div></div>
         <button class="rnd-btn" onclick="goRound(1)">Round 2: Ver la demo →</button>
       </div>
-      <!-- R2 DEMO -->
       <div class="rscr" id="rs1">
-        <div class="coach-bub"><div class="cb-av">CO</div><div class="cb-txt">"Ahora lo hacemos <b>paso a paso.</b> Sigue cada movimiento."</div></div>
+        <div class="cb"><div class="cb-av">CO</div><div class="cb-txt">"Ahora paso a paso. <b>Sigue cada movimiento.</b>"</div></div>
         <div class="demo-step"><div class="demo-num">Problema</div><div class="demo-expr">1/4 + 2/4 = ?</div></div>
         <div class="demo-arrow">↓</div>
-        <div class="demo-step"><div class="demo-num">Paso 1 — Verificar denominadores</div><div class="demo-expr">4 = 4 ✓</div><div class="demo-exp">Mismo denominador — podemos sumar directo</div></div>
+        <div class="demo-step"><div class="demo-num">Paso 1 — Verificar denominadores</div><div class="demo-expr">4 = 4 ✓</div><div class="demo-exp">Mismo denominador — sumamos directo</div></div>
         <div class="demo-arrow">↓</div>
         <div class="demo-step"><div class="demo-num">Paso 2 — Sumar numeradores</div><div class="demo-expr">1 + 2 = 3</div><div class="demo-exp">El denominador se queda igual: 4</div></div>
         <div class="demo-arrow">↓</div>
-        <div class="demo-step"><div class="demo-num">Resultado</div><div class="demo-expr" style="color:var(--gold)">= 3/4</div><div class="demo-exp">En decimal: 3 ÷ 4 = 0.75</div></div>
+        <div class="demo-step"><div class="demo-num">Resultado</div><div class="demo-expr" style="color:var(--gold)">= 3/4 = 0.75</div></div>
         <button class="rnd-btn" onclick="goRound(2)">Round 3: Ahora tú →</button>
       </div>
-      <!-- R3 PRÁCTICA -->
       <div class="rscr" id="rs2">
-        <div class="coach-bub"><div class="cb-av">CO</div><div class="cb-txt">"Tu turno. <b>Sin prisa.</b> Piensa antes de tocar."</div></div>
-        <div class="ex-q">Resuelve la siguiente suma de fracciones:</div>
+        <div class="cb"><div class="cb-av">CO</div><div class="cb-txt">"Tu turno. <b>Sin prisa.</b> Piensa antes de tocar."</div></div>
+        <div class="ex-q">Resuelve:</div>
         <div class="ex-math">2/5 + 1/5</div>
         <div class="ex-opts" id="ex-opts">
           <div class="ex-opt" onclick="pickOpt(this,false)">2/10</div>
@@ -576,7 +542,6 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
         <div class="ex-fb" id="ex-fb"></div>
         <button class="rnd-btn" id="btn-r4" style="display:none" onclick="goRound(3)">Round 4: Al examen →</button>
       </div>
-      <!-- R4 EXAMEN -->
       <div class="rscr" id="rs3">
         <div class="exam-intro">
           <div class="exam-big">🥊 ROUND 4</div>
@@ -586,8 +551,8 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
             <div class="es-card"><div class="es-num">12</div><div class="es-lbl">Minutos</div></div>
             <div class="es-card"><div class="es-num">70%</div><div class="es-lbl">Para pasar</div></div>
           </div>
-          <div class="coach-bub"><div class="cb-av">CO</div><div class="cb-txt">"Este es el momento de la verdad. <b>Respira, piensa, ejecuta.</b>"</div></div>
-          <button class="rnd-btn" onclick="goPage('app')">Iniciar examen →</button>
+          <div class="cb"><div class="cb-av">CO</div><div class="cb-txt">"<b>Respira, piensa, ejecuta.</b> Ya estás listo."</div></div>
+          <button class="rnd-btn" onclick="sumarXP(50);goPage('app')">Iniciar examen →</button>
         </div>
       </div>
     </div>
@@ -602,13 +567,223 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
     <div class="modal-title" id="modal-title"></div>
     <div class="modal-sub" id="modal-sub"></div>
     <div class="modal-rounds" id="modal-rounds"></div>
-    <button class="modal-btn" id="modal-btn" onclick="goPage('tema')">ENTRAR AL TEMA →</button>
+    <button class="modal-btn" id="modal-btn" onclick="goPage('tema');document.getElementById('modal').classList.remove('show')">ENTRAR AL TEMA →</button>
     <button class="modal-cancel" onclick="document.getElementById('modal').classList.remove('show')">Cerrar</button>
   </div>
 </div>
 
 <script>
-// ── DATA ──
+// ══════════════════════════════
+// SUPABASE
+// ══════════════════════════════
+const SUPA_URL = 'https://yjoapzwkjsdphutyzxcg.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlqb2FwendranNkcGh1dHl6eGNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NzUyODksImV4cCI6MjA4OTA1MTI4OX0.Bz5zjBTq1bA-0cNFLUegTfVi3_Yh8yaQiOUILU445Rw';
+const { createClient } = supabase;
+const sb = createClient(SUPA_URL, SUPA_KEY);
+
+let currentUser = null;
+let perfil = null;
+
+// ══════════════════════════════
+// INIT
+// ══════════════════════════════
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    currentUser = session.user;
+    await loadPerfil();
+    goPage('app');
+  } else {
+    goPage('landing');
+  }
+  document.getElementById('loading').classList.add('hide');
+}
+
+// ══════════════════════════════
+// AUTH
+// ══════════════════════════════
+function switchAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register')));
+  document.getElementById('form-login').classList.toggle('active', tab==='login');
+  document.getElementById('form-register').classList.toggle('active', tab==='register');
+}
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const btn = document.getElementById('btn-login');
+  const err = document.getElementById('login-error');
+  if (!email || !pass) { showErr(err,'Ingresa tu correo y contraseña'); return; }
+  btn.disabled = true; btn.textContent = 'Entrando...';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+  if (error) { showErr(err, error.message); btn.disabled=false; btn.textContent='ENTRAR AL RING →'; return; }
+  currentUser = data.user;
+  await loadPerfil();
+  goPage('app');
+  btn.disabled=false; btn.textContent='ENTRAR AL RING →';
+}
+
+async function doRegister() {
+  const nombre = document.getElementById('reg-nombre').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const pass = document.getElementById('reg-pass').value;
+  const btn = document.getElementById('btn-register');
+  const err = document.getElementById('reg-error');
+  const suc = document.getElementById('reg-success');
+  if (!nombre||!email||!pass) { showErr(err,'Llena todos los campos'); return; }
+  if (pass.length < 6) { showErr(err,'La contraseña debe tener al menos 6 caracteres'); return; }
+  btn.disabled=true; btn.textContent='Registrando...';
+  const { data, error } = await sb.auth.signUp({ email, password: pass, options: { data: { nombre } } });
+  if (error) { showErr(err,error.message); btn.disabled=false; btn.textContent='CREAR MI CUENTA →'; return; }
+  suc.textContent='¡Cuenta creada! Revisa tu correo para confirmar.'; suc.classList.add('show');
+  btn.disabled=false; btn.textContent='CREAR MI CUENTA →';
+}
+
+async function doLogout() {
+  await sb.auth.signOut();
+  currentUser=null; perfil=null;
+  goPage('landing');
+}
+
+function showErr(el, msg) { el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),4000); }
+
+// ══════════════════════════════
+// PERFIL
+// ══════════════════════════════
+async function loadPerfil() {
+  const { data } = await sb.from('perfiles').select('*').eq('id', currentUser.id).single();
+  perfil = data;
+  if (perfil) updateUI();
+  await updateRacha();
+  await loadRanking();
+  buildLogros();
+}
+
+function updateUI() {
+  if (!perfil) return;
+  const nombre = perfil.nombre || 'Alumno';
+  const av = nombre.substring(0,2).toUpperCase();
+  document.getElementById('chip-av').textContent = av;
+  document.getElementById('chip-nombre').textContent = nombre.split(' ')[0];
+  document.getElementById('chip-xp').textContent = perfil.xp + ' XP';
+  document.getElementById('stat-racha').textContent = '🔥' + perfil.racha;
+  document.getElementById('stat-nivel').textContent = 'N' + perfil.nivel;
+  document.getElementById('stat-xp').textContent = perfil.xp;
+  const xpNext = perfil.nivel * 500;
+  const xpPrev = (perfil.nivel-1) * 500;
+  const pct = Math.round(((perfil.xp - xpPrev) / (xpNext - xpPrev)) * 100);
+  document.getElementById('xp-fill').style.width = Math.min(pct,100) + '%';
+  document.getElementById('xp-label').textContent = 'Nivel ' + perfil.nivel + ' → Nivel ' + (perfil.nivel+1);
+  document.getElementById('xp-actual').textContent = perfil.xp + ' XP';
+  document.getElementById('xp-falta').textContent = (xpNext - perfil.xp) + ' para subir';
+  const titulos = ['Rookie del ring','Peleador en formación','Campeón en formación','Gladiador matemático','Leyenda del Colorado'];
+  document.getElementById('xp-titulo').textContent = titulos[Math.min(perfil.nivel-1, titulos.length-1)];
+  // Mensaje del profe
+  const msgs = [
+    `¡Bienvenido <strong style="color:var(--red)">${nombre.split(' ')[0]}</strong>! Hoy empieza tu camino al examen. ¡Vamos!`,
+    `¡Órale <strong style="color:var(--red)">${nombre.split(' ')[0]}</strong>! Llevas <strong style="color:var(--red)">${perfil.racha} días</strong> seguidos. Así se gana.`,
+    `<strong style="color:var(--red)">${nombre.split(' ')[0]}</strong>, ya tienes <strong style="color:var(--red)">${perfil.xp} XP</strong>. ¡No pares ahora!`,
+  ];
+  const msgIdx = perfil.racha > 0 ? (perfil.xp > 100 ? 2 : 1) : 0;
+  document.getElementById('profe-msg').innerHTML = msgs[msgIdx];
+  document.getElementById('profe-bub').style.display = 'flex';
+  buildRachaGrid();
+}
+
+async function updateRacha() {
+  if (!perfil) return;
+  const hoy = new Date().toISOString().split('T')[0];
+  const ultimo = perfil.ultimo_acceso;
+  if (ultimo === hoy) return;
+  const ayer = new Date(Date.now()-86400000).toISOString().split('T')[0];
+  const nuevaRacha = ultimo === ayer ? perfil.racha + 1 : 1;
+  const diasRacha = Array.isArray(perfil.dias_racha) ? perfil.dias_racha : [];
+  diasRacha.push(hoy);
+  if (diasRacha.length > 7) diasRacha.shift();
+  await sb.from('perfiles').update({ racha: nuevaRacha, ultimo_acceso: hoy, dias_racha: diasRacha }).eq('id', currentUser.id);
+  perfil.racha = nuevaRacha;
+  perfil.ultimo_acceso = hoy;
+  perfil.dias_racha = diasRacha;
+  updateUI();
+}
+
+function buildRachaGrid() {
+  const dias = ['LUN','MAR','MIÉ','JUE','VIE','SAB','DOM'];
+  const hoy = new Date().getDay();
+  const diasActivos = perfil ? Math.min(perfil.racha, 7) : 0;
+  const grid = document.getElementById('racha-grid');
+  grid.innerHTML = dias.map((d,i) => {
+    const isHoy = i === (hoy === 0 ? 6 : hoy-1);
+    const isDone = i < diasActivos && !isHoy;
+    const cls = isHoy ? 'hoy' : isDone ? 'done' : 'pend';
+    const icon = isHoy ? '🔥' : isDone ? '✓' : '—';
+    return `<div class="rday ${cls}"><span>${icon}</span><span class="dl">${d}</span></div>`;
+  }).join('');
+}
+
+async function sumarXP(puntos) {
+  if (!perfil || !currentUser) return;
+  const nuevoXP = perfil.xp + puntos;
+  const nuevoNivel = Math.floor(nuevoXP / 500) + 1;
+  await sb.from('perfiles').update({ xp: nuevoXP, nivel: nuevoNivel }).eq('id', currentUser.id);
+  perfil.xp = nuevoXP;
+  perfil.nivel = nuevoNivel;
+  updateUI();
+}
+
+// ══════════════════════════════
+// RANKING REAL
+// ══════════════════════════════
+async function loadRanking() {
+  const { data } = await sb.from('ranking_semanal').select('*').limit(10);
+  const c = document.getElementById('ranking-c');
+  if (!data || data.length === 0) {
+    c.innerHTML = '<div style="padding:24px;text-align:center;font-size:13px;color:var(--muted);font-style:italic">Aún no hay alumnos en el ranking.<br>¡Sé el primero!</div>';
+    return;
+  }
+  c.innerHTML = data.map((r,i) => {
+    const esYo = currentUser && r.id === currentUser.id;
+    const pos = i+1;
+    return `<div class="rk-card${esYo?' me':''}">
+      <div class="rk-pos">${pos===1?'🥇':pos===2?'🥈':pos===3?'🥉':pos}</div>
+      <div class="rk-av" style="background:${esYo?'var(--red)':'rgba(255,255,255,.1)'};color:${esYo?'white':'#9a9490'}">${r.avatar||'??'}</div>
+      <div class="rk-info">
+        <div class="rk-nom">${r.nombre}${esYo?' <span style="color:var(--red);font-size:9px">(tú)</span>':''}</div>
+        <div class="rk-rch">🔥 ${r.racha} días de racha</div>
+      </div>
+      <div class="rk-xp">${r.xp} XP</div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════
+// LOGROS
+// ══════════════════════════════
+const logrosData = [
+  {id:'racha5',icon:'🔥',nombre:'Racha de fuego',desc:'5 días seguidos'},
+  {id:'rapido',icon:'⚡',nombre:'Relámpago',desc:'Examen en menos de 8 min'},
+  {id:'perfecto',icon:'🎯',nombre:'Francotirador',desc:'10 ejercicios sin error'},
+  {id:'campe on',icon:'👑',nombre:'Rey del ring',desc:'Completa los 4 bloques'},
+  {id:'studioso',icon:'📚',nombre:'Studioso',desc:'30 días de estudio'},
+  {id:'udgchamp',icon:'🏆',nombre:'Campeón UDG',desc:'Simula el examen real'},
+];
+function buildLogros() {
+  const desbloqueados = perfil ? (perfil.racha >= 5 ? 1 : 0) : 0;
+  document.getElementById('logros-count').textContent = desbloqueados + ' de ' + logrosData.length + ' desbloqueados';
+  document.getElementById('logros-c').innerHTML = logrosData.map((l,i) => {
+    const ok = perfil && ((l.id==='racha5' && perfil.racha>=5));
+    return `<div class="lg-card${ok?'':' lk'}">
+      <div class="lg-icon">${l.icon}</div>
+      <div class="lg-nom">${l.nombre}</div>
+      <div class="lg-desc">${l.desc}</div>
+      <span class="lg-badge ${ok?'b-ok':'b-lk'}">${ok?'✓ Desbloqueado':'Bloqueado'}</span>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════
+// MAPA
+// ══════════════════════════════
 const bloques=[
   {num:1,nombre:"Fundamentos",sub:"Sin esto, nada más funciona",color:"#e63946",
    temas:[{id:1,nombre:"Números naturales",sub:"Operaciones básicas",est:"done"},{id:2,nombre:"Jerarquía de operaciones",sub:"PEMDAS",est:"done"},{id:3,nombre:"Fracciones y decimales",sub:"Representación y cálculo",est:"active"},{id:4,nombre:"Porcentajes y proporciones",sub:"Razón y regla de tres",est:"locked"}]},
@@ -619,90 +794,7 @@ const bloques=[
   {num:4,nombre:"Datos y probabilidad",sub:"Interpretar el mundo con números",color:"#378add",
    temas:[{id:13,nombre:"Estadística básica",sub:"Media, mediana, moda",est:"locked"},{id:14,nombre:"Probabilidad",sub:"Eventos y posibilidades",est:"locked"},{id:15,nombre:"Gráficas e interpretación",sub:"Leer y construir datos",est:"locked"}]},
 ];
-const ranking=[
-  {pos:1,nombre:"Valeria R.",xp:2100,racha:12,av:"VR",me:false,col:"#c9a84c"},
-  {pos:2,nombre:"Diego M.",xp:1890,racha:8,av:"DM",me:false,col:"#9a9490"},
-  {pos:3,nombre:"Carlos T.",xp:1240,racha:5,av:"CT",me:true,col:"#e63946"},
-  {pos:4,nombre:"Sofía L.",xp:980,racha:3,av:"SL",me:false,col:"rgba(255,255,255,.15)"},
-  {pos:5,nombre:"Andrés P.",xp:720,racha:1,av:"AP",me:false,col:"rgba(255,255,255,.15)"},
-];
-const logros=[
-  {icon:"🔥",nombre:"Racha de fuego",desc:"5 días seguidos",ok:true},
-  {icon:"⚡",nombre:"Relámpago",desc:"Examen en menos de 8 min",ok:true},
-  {icon:"🎯",nombre:"Francotirador",desc:"10 ejercicios sin error",ok:false},
-  {icon:"👑",nombre:"Rey del ring",desc:"Completa los 4 bloques",ok:false},
-  {icon:"📚",nombre:"Studioso",desc:"30 días de estudio",ok:false},
-  {icon:"🏆",nombre:"Campeón UDG",desc:"Simula el examen real",ok:false},
-];
 const openB=new Set([1]);
-
-// ── NAVEGACIÓN ──
-function goPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  window.scrollTo(0,0);
-}
-function goScr(id,el){
-  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('scr-'+id).classList.add('active');
-  el.classList.add('active');
-}
-function goTema(nombre,sub,color){
-  document.getElementById('tp-title').textContent=nombre;
-  document.getElementById('tp-nom').textContent=nombre;
-  goPage('tema');
-  goRound(0);
-}
-
-// ── ROUNDS ──
-let curRound=0;
-function goRound(n){
-  curRound=n;
-  document.querySelectorAll('.rscr').forEach((s,i)=>s.classList.toggle('active',i===n));
-  document.querySelectorAll('.rtab').forEach((t,i)=>{
-    t.classList.toggle('active',i===n);
-    if(i<n)t.classList.add('done'); else t.classList.remove('done');
-  });
-}
-
-// ── VIDEO ──
-let playing=false,vpct=0,viv;
-function playVid(){
-  if(playing)return;
-  playing=true;
-  const th=document.getElementById('vthumb');
-  th.onclick=null;
-  th.querySelector('.play-ring').style.display='none';
-  th.querySelector('.vinfo').innerHTML='<div style="color:rgba(255,255,255,.7);font-size:12px">▶ Reproduciendo...</div><div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:3px">@elprofecolorado en TikTok</div>';
-  viv=setInterval(()=>{
-    vpct+=100/134;
-    if(vpct>=100){vpct=100;clearInterval(viv);}
-    document.getElementById('vbar').style.width=vpct+'%';
-    const t=Math.floor((vpct/100)*134);
-    const m=Math.floor(t/60),s=t%60;
-    document.getElementById('vtime').textContent=m+':'+String(s).padStart(2,'0')+' / 2:14';
-  },1000);
-}
-
-// ── PRÁCTICA ──
-function pickOpt(el,ok){
-  document.querySelectorAll('#ex-opts .ex-opt').forEach(o=>o.onclick=null);
-  const fb=document.getElementById('ex-fb');
-  if(ok){
-    el.classList.add('correct');
-    fb.className='ex-fb show ok';
-    fb.textContent='¡Correcto! 2/5 + 1/5 = 3/5. El denominador se queda igual cuando son iguales.';
-  } else {
-    el.classList.add('wrong');
-    document.querySelectorAll('#ex-opts .ex-opt').forEach(o=>{if(o.textContent==='3/5')o.classList.add('correct');});
-    fb.className='ex-fb show bad';
-    fb.textContent='Casi. Cuando los denominadores son iguales, solo sumas los numeradores: 2+1=3, y el denominador sigue siendo 5.';
-  }
-  document.getElementById('btn-r4').style.display='block';
-}
-
-// ── MAPA ──
 function buildMapa(){
   const c=document.getElementById('mapa-c');c.innerHTML='';
   bloques.forEach(b=>{
@@ -715,7 +807,7 @@ function buildMapa(){
       <span class="blq-arr${isOpen?' open':''}">▶</span>
     </div>
     ${isOpen?`<div class="blq-temas" style="border:.5px solid ${b.color}22;border-radius:9px">${b.temas.map(t=>`
-      <div class="t-row${t.est==='locked'?' lk':''}" onclick="${t.est!=='locked'?`goTema('${t.nombre}','${t.sub}','${b.color}')`:''}" style="background:${t.est==='active'?b.color+'0d':''}">
+      <div class="t-row${t.est==='locked'?' lk':''}" onclick="${t.est!=='locked'?`showModal('${t.nombre}','Bloque ${b.num} · ${b.nombre}','${b.color}')`:''}" style="background:${t.est==='active'?b.color+'0d':''}">
         <div class="t-ico" style="background:${t.est==='done'?'rgba(45,106,79,.2)':t.est==='active'?b.color+'22':'rgba(255,255,255,.05)'};border:1px solid ${t.est==='done'?'rgba(45,106,79,.5)':t.est==='active'?b.color+'55':'rgba(255,255,255,.1)'}">
           ${t.est==='done'?'✓':t.est==='active'?'▶':t.id}
         </div>
@@ -727,29 +819,74 @@ function buildMapa(){
 }
 function toggleB(n){if(openB.has(n))openB.delete(n);else openB.add(n);buildMapa();}
 
-// ── RANKING ──
-function buildRanking(){
-  document.getElementById('ranking-c').innerHTML=ranking.map(r=>`
-    <div class="rk-card${r.me?' me':''}">
-      <div class="rk-pos">${r.pos===1?'🥇':r.pos===2?'🥈':r.pos===3?'🥉':r.pos}</div>
-      <div class="rk-av" style="background:${r.col};color:${r.me?'white':'#9a9490'}">${r.av}</div>
-      <div class="rk-info"><div class="rk-nom">${r.nombre}${r.me?' <span style="color:var(--red);font-size:9px">(tú)</span>':''}</div><div class="rk-rch">🔥 ${r.racha} días de racha</div></div>
-      <div class="rk-xp">${r.xp} XP</div>
-    </div>`).join('');
+// ══════════════════════════════
+// NAVEGACIÓN
+// ══════════════════════════════
+function goPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='app'){buildMapa();buildLogros();}
+}
+function goScr(id,el){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('scr-'+id).classList.add('active');
+  el.classList.add('active');
+  if(id==='ranking') loadRanking();
+}
+function goTema(nombre,sub,color){
+  document.getElementById('tp-title').textContent=nombre;
+  document.getElementById('tp-nom').textContent=nombre;
+  goPage('tema'); goRound(0);
 }
 
-// ── LOGROS ──
-function buildLogros(){
-  document.getElementById('logros-c').innerHTML=logros.map(l=>`
-    <div class="lg-card${l.ok?'':' lk'}">
-      <div class="lg-icon">${l.icon}</div>
-      <div class="lg-nom">${l.nombre}</div>
-      <div class="lg-desc">${l.desc}</div>
-      <span class="lg-badge ${l.ok?'b-ok':'b-lk'}">${l.ok?'✓ Desbloqueado':'Bloqueado'}</span>
-    </div>`).join('');
+// ══════════════════════════════
+// ROUNDS
+// ══════════════════════════════
+function goRound(n){
+  document.querySelectorAll('.rscr').forEach((s,i)=>s.classList.toggle('active',i===n));
+  document.querySelectorAll('.rtab').forEach((t,i)=>{
+    t.classList.toggle('active',i===n);
+    if(i<n)t.classList.add('done'); else t.classList.remove('done');
+  });
 }
 
-// ── MODAL ──
+// VIDEO
+let playing=false,vpct=0,viv;
+function playVid(){
+  if(playing)return; playing=true;
+  const th=document.getElementById('vthumb');
+  th.onclick=null;
+  th.querySelector('.play-ring').style.display='none';
+  th.querySelector('.vinfo').innerHTML='<div style="color:rgba(255,255,255,.7);font-size:12px">▶ Reproduciendo...</div><div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:2px">@elprofecolorado en TikTok</div>';
+  viv=setInterval(()=>{
+    vpct+=100/134; if(vpct>=100){vpct=100;clearInterval(viv);}
+    document.getElementById('vbar').style.width=vpct+'%';
+    const t=Math.floor((vpct/100)*134),m=Math.floor(t/60),s=t%60;
+    document.getElementById('vtime').textContent=m+':'+String(s).padStart(2,'0')+' / 2:14';
+  },1000);
+}
+
+// PRÁCTICA
+function pickOpt(el,ok){
+  document.querySelectorAll('#ex-opts .ex-opt').forEach(o=>o.onclick=null);
+  const fb=document.getElementById('ex-fb');
+  if(ok){
+    el.classList.add('correct');
+    fb.className='ex-fb show ok';
+    fb.textContent='¡Correcto! 2/5 + 1/5 = 3/5. Los denominadores iguales — solo sumas los numeradores.';
+    sumarXP(10);
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('#ex-opts .ex-opt').forEach(o=>{if(o.textContent==='3/5')o.classList.add('correct');});
+    fb.className='ex-fb show bad';
+    fb.textContent='Casi. Denominadores iguales: solo sumas numeradores. 2+1=3, denominador sigue 5. Resultado: 3/5.';
+  }
+  document.getElementById('btn-r4').style.display='block';
+}
+
+// MODAL
 function showModal(nombre,sub,color){
   document.getElementById('modal-title').textContent=nombre;
   document.getElementById('modal-sub').textContent=sub;
@@ -763,31 +900,12 @@ function showModal(nombre,sub,color){
 }
 function hideModal(e){if(e.target.id==='modal')document.getElementById('modal').classList.remove('show');}
 
-// ── PRECIO TOGGLE ──
-function setPriceMode(m){
-  document.getElementById('btn-mes').classList.toggle('active',m==='mes');
-  document.getElementById('btn-ano').classList.toggle('active',m==='ano');
-  if(m==='mes'){
-    document.getElementById('up-price-num').textContent='$99';
-    document.getElementById('up-price-per').textContent='/ mes MXN';
-    document.getElementById('up-price-note').innerHTML='Cancela cuando quieras. Sin contratos.';
-  } else {
-    document.getElementById('up-price-num').textContent='$830';
-    document.getElementById('up-price-per').textContent='/ año MXN';
-    document.getElementById('up-price-note').innerHTML='Equivale a <span>$69/mes</span>. Ahorras $358 al año.';
-  }
-}
+// BEATS LANDING
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.1});
+['b1','b2','b3','b4'].forEach((id,i)=>{const el=document.getElementById(id);if(el){el.style.transitionDelay=(i*.12)+'s';obs.observe(el);}});
 
-// ── ANIMACIÓN BEATS LANDING ──
-const observer=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
-},{threshold:.1});
-['b1','b2','b3','b4'].forEach((id,i)=>{
-  const el=document.getElementById(id);
-  if(el){el.style.transitionDelay=(i*.12)+'s';observer.observe(el);}
-});
-
-buildMapa();buildRanking();buildLogros();
+// INICIAR
+init();
 </script>
 </body>
 </html>
