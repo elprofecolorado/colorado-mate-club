@@ -14,6 +14,12 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .page{display:none;flex:1;flex-direction:column;min-height:100vh;}
 .page.active{display:flex;}
 
+/* LOADING */
+.loading-screen{position:fixed;inset:0;background:var(--dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:16px;}
+.loading-screen.hide{display:none;}
+.loading-logo{width:64px;height:64px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;animation:pulse 1.2s ease-in-out infinite;}
+.loading-txt{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--muted);}
+
 /* AUTH */
 .auth-page{background:var(--dark2);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;}
 .auth-logo{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:32px;}
@@ -39,60 +45,7 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .auth-success{background:rgba(45,106,79,.15);border:.5px solid rgba(45,106,79,.3);border-radius:8px;padding:10px 12px;font-size:12px;color:#5fbd8a;margin-bottom:12px;display:none;}
 .auth-success.show{display:block;}
 
-/* LANDING */
-.landing{overflow-y:auto;}
-.l-hero{position:relative;min-height:480px;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 40px;overflow:hidden;background:var(--dark2);}
-.l-grain{position:absolute;inset:0;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;}
-.l-glow{position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:360px;height:360px;background:radial-gradient(ellipse,rgba(230,57,70,.18) 0%,transparent 70%);}
-.l-tape{position:absolute;top:0;left:0;right:0;height:4px;background:repeating-linear-gradient(90deg,var(--red) 0,var(--red) 40px,transparent 40px,transparent 60px);opacity:.7;}
-.l-nav{position:absolute;top:0;left:0;right:0;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;z-index:10;}
-.l-logo{display:flex;align-items:center;gap:8px;}
-.l-logo-g{width:30px;height:30px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;}
-.l-logo-t{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;}
-.l-nav-btn{background:var(--red);color:white;border:none;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;}
-.l-content{position:relative;z-index:2;padding:0 24px;}
-.l-eyebrow{font-size:10px;font-weight:500;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:12px;animation:fadeUp .6s .1s both;}
-.l-title{font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:.95;letter-spacing:2px;margin-bottom:8px;animation:fadeUp .6s .2s both;}
-.l-title .acc{color:var(--red);}
-.l-sub{font-family:'Literata',serif;font-style:italic;font-size:15px;color:var(--muted);margin-bottom:24px;line-height:1.6;max-width:320px;animation:fadeUp .6s .3s both;}
-.l-stats{display:flex;gap:24px;animation:fadeUp .6s .4s both;}
-.l-stat-num{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;}
-.l-stat-lbl{font-size:10px;color:var(--muted);margin-top:2px;}
-.l-divider{height:1px;background:linear-gradient(90deg,var(--red),transparent);margin:0 24px;opacity:.4;}
-.l-story{padding:40px 24px;}
-.l-story-lbl{font-size:10px;font-weight:500;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:20px;}
-.beat{display:grid;grid-template-columns:44px 1fr;padding-bottom:28px;opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s;}
-.beat.vis{opacity:1;transform:translateY(0);}
-.beat-line{display:flex;flex-direction:column;align-items:center;}
-.beat-dot{width:11px;height:11px;border-radius:50%;background:var(--red);flex-shrink:0;margin-top:4px;}
-.beat-trail{flex:1;width:1px;background:linear-gradient(to bottom,var(--red),transparent);margin-top:5px;opacity:.3;}
-.beat-title{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:1px;margin-bottom:5px;}
-.beat-txt{font-family:'Literata',serif;font-size:13px;color:var(--muted);line-height:1.7;}
-.beat-txt strong{color:var(--cream);font-weight:500;}
-.l-quote{margin:0 24px 32px;border:1px solid rgba(230,57,70,.25);border-radius:12px;padding:20px;background:rgba(230,57,70,.05);position:relative;overflow:hidden;}
-.l-quote::before{content:'"';position:absolute;top:-8px;left:14px;font-family:'Literata',serif;font-size:72px;color:var(--red);opacity:.2;line-height:1;}
-.l-quote-txt{font-family:'Literata',serif;font-style:italic;font-size:14px;line-height:1.7;margin-bottom:14px;position:relative;z-index:1;}
-.l-ci-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
-.l-ci{background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.08);border-radius:7px;padding:8px 10px;font-size:11px;color:var(--muted);display:flex;gap:7px;align-items:center;}
-.l-ci-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0;}
-.l-mission{margin:0 24px 32px;background:var(--red);border-radius:12px;padding:22px;text-align:center;}
-.l-mission-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:white;margin-bottom:6px;}
-.l-mission-txt{font-family:'Literata',serif;font-style:italic;font-size:13px;color:rgba(255,255,255,.85);line-height:1.6;margin-bottom:16px;}
-.l-mission-btn{background:white;color:var(--red);border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;}
-.l-plans{padding:0 24px 40px;}
-.l-plans-lbl{font-size:10px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
-.l-plans-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.plan-c{border-radius:10px;padding:16px;border:.5px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);cursor:pointer;transition:border-color .2s;}
-.plan-c.feat{border:1.5px solid var(--red);background:rgba(230,57,70,.07);}
-.plan-badge{font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:7px;}
-.plan-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;margin-bottom:3px;}
-.plan-price{font-size:12px;color:var(--muted);margin-bottom:10px;}
-.plan-price strong{color:var(--cream);font-size:15px;}
-.plan-feat{font-size:10px;color:var(--muted);line-height:1.9;}
-.plan-feat span{color:var(--cream);}
-.l-footer{border-top:.5px solid rgba(255,255,255,.06);padding:18px 24px;text-align:center;font-size:11px;color:var(--muted);font-family:'Literata',serif;font-style:italic;}
-
-/* APP */
+/* TOPBAR */
 .topbar{background:var(--dark2);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid rgba(255,255,255,.06);flex-shrink:0;}
 .t-logo{display:flex;align-items:center;gap:7px;}
 .t-logo-g{width:25px;height:25px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;}
@@ -101,15 +54,94 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .chip-av{width:20px;height:20px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:500;}
 .chip-n{font-size:11px;}
 .chip-xp{font-size:10px;color:var(--gold);font-family:'Bebas Neue',sans-serif;}
+
+/* ══════════════════════════════
+   PANEL ADMIN — EL PROFE COLORADO
+══════════════════════════════ */
+.admin-page{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.admin-topbar{background:#1a1a2e;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid rgba(255,255,255,.08);flex-shrink:0;}
+.admin-logo{display:flex;align-items:center;gap:8px;}
+.admin-logo-g{width:28px;height:28px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;}
+.admin-logo-t{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;}
+.admin-badge{background:rgba(201,168,76,.2);border:.5px solid rgba(201,168,76,.4);border-radius:20px;padding:3px 10px;font-size:10px;font-weight:500;color:var(--gold);letter-spacing:1px;}
+.admin-logout{font-size:11px;color:var(--muted);background:none;border:.5px solid rgba(255,255,255,.1);padding:5px 10px;border-radius:6px;cursor:pointer;}
+
+.admin-screens{flex:1;overflow:hidden;position:relative;}
+.admin-scr{display:none;position:absolute;inset:0;overflow-y:auto;padding-bottom:68px;}
+.admin-scr.active{display:block;}
+
+/* ADMIN INICIO */
+.admin-hero{background:#1a1a2e;padding:20px 18px;margin-bottom:0;}
+.admin-hero-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;margin-bottom:2px;}
+.admin-hero-sub{font-size:11px;color:var(--muted);}
+.admin-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 18px;}
+.admin-stat{background:var(--dark2);border-radius:10px;padding:14px;}
+.admin-stat-num{font-family:'Bebas Neue',sans-serif;font-size:32px;line-height:1;}
+.admin-stat-num.r{color:var(--red);}
+.admin-stat-num.g{color:var(--gold);}
+.admin-stat-num.b{color:var(--blue);}
+.admin-stat-num.gr{color:#5fbd8a;}
+.admin-stat-lbl{font-size:10px;color:var(--muted);margin-top:3px;}
+.admin-stat-sub{font-size:9px;color:var(--muted);margin-top:2px;opacity:.7;}
+
+.admin-sec-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);padding:0 18px;margin-bottom:10px;}
+
+/* ALUMNOS LIST */
+.alumno-card{margin:0 18px 9px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:10px;padding:13px 15px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s;}
+.alumno-card:hover{border-color:rgba(255,255,255,.18);}
+.alumno-card.riesgo{border-color:rgba(230,57,70,.3);background:rgba(230,57,70,.04);}
+.alumno-av{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;}
+.alumno-info{flex:1;}
+.alumno-nombre{font-size:13px;font-weight:500;}
+.alumno-meta{font-size:10px;color:var(--muted);margin-top:2px;}
+.alumno-stats{display:flex;flex-direction:column;align-items:flex-end;gap:3px;}
+.alumno-xp{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--red);}
+.alumno-racha{font-size:10px;color:var(--muted);}
+.alumno-tag{font-size:9px;font-weight:500;padding:2px 7px;border-radius:10px;margin-top:2px;}
+.tag-activo{background:rgba(45,106,79,.2);color:#5fbd8a;border:.5px solid rgba(45,106,79,.4);}
+.tag-riesgo{background:rgba(230,57,70,.15);color:var(--red);border:.5px solid rgba(230,57,70,.3);}
+.tag-nuevo{background:rgba(55,138,221,.15);color:var(--blue);border:.5px solid rgba(55,138,221,.3);}
+
+/* TEMAS STATS */
+.tema-stat-row{margin:0 18px 8px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:9px;padding:12px 14px;}
+.tsrow-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
+.tsrow-nombre{font-size:12px;font-weight:500;}
+.tsrow-pct{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--red);}
+.tsrow-bg{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;margin-bottom:5px;}
+.tsrow-fill{height:100%;border-radius:3px;}
+.tsrow-meta{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);}
+
+/* ADMIN NAV */
+.admin-nav{background:#1a1a2e;border-top:.5px solid rgba(255,255,255,.08);display:flex;padding:7px 0 5px;flex-shrink:0;}
+.admin-nav-item{flex:1;text-align:center;cursor:pointer;padding:3px 0;}
+.admin-nav-icon{font-size:19px;}
+.admin-nav-lbl{font-size:9px;color:var(--muted);margin-top:1px;}
+.admin-nav-item.active .admin-nav-lbl{color:var(--gold);}
+
+/* ALUMNO DETALLE MODAL */
+.detalle-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:flex-end;justify-content:center;}
+.detalle-overlay.show{display:flex;animation:fadeIn .2s;}
+.detalle-modal{background:var(--dark2);border-radius:18px 18px 0 0;padding:22px;width:100%;max-width:420px;border:.5px solid rgba(255,255,255,.1);max-height:80vh;overflow-y:auto;}
+.det-handle{width:34px;height:3px;background:rgba(255,255,255,.15);border-radius:2px;margin:0 auto 18px;}
+.det-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:14px;border-bottom:.5px solid rgba(255,255,255,.07);}
+.det-av{width:44px;height:44px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;flex-shrink:0;}
+.det-nombre{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;}
+.det-email{font-size:11px;color:var(--muted);}
+.det-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;}
+.det-stat{background:rgba(255,255,255,.04);border-radius:8px;padding:10px;text-align:center;}
+.det-stat-num{font-family:'Bebas Neue',sans-serif;font-size:20px;}
+.det-stat-lbl{font-size:9px;color:var(--muted);margin-top:1px;}
+.det-sec{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.det-profe-btn{width:100%;padding:12px;background:var(--red);color:white;border:none;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;margin-bottom:8px;}
+.det-close{width:100%;padding:10px;background:none;color:var(--muted);border:.5px solid rgba(255,255,255,.1);border-radius:9px;font-size:12px;cursor:pointer;}
+
+/* APP ALUMNO */
 .screens{flex:1;position:relative;overflow:hidden;}
 .scr{display:none;position:absolute;inset:0;overflow-y:auto;padding-bottom:68px;}
 .scr.active{display:block;}
-
-/* INICIO */
 .profe-bubble{margin:13px 18px;border-radius:13px;padding:13px 15px;display:flex;gap:10px;align-items:flex-start;animation:slideIn .4s ease;}
 .profe-bubble.motivar{background:rgba(230,57,70,.08);border:1px solid rgba(230,57,70,.25);}
 .profe-bubble.reganar{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.3);}
-.profe-bubble.urgente{background:rgba(230,57,70,.15);border:1px solid var(--red);}
 .pb-av{width:40px;height:40px;border-radius:50%;background:var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
 .pb-av span:first-child{font-size:14px;}
 .pb-av span:last-child{font-family:'Bebas Neue',sans-serif;font-size:8px;letter-spacing:1px;color:white;}
@@ -147,8 +179,6 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .tema-meta{display:flex;justify-content:space-between;margin-bottom:10px;}
 .tema-mt{font-size:10px;color:var(--muted);}
 .tema-btn{width:100%;padding:12px;background:var(--red);color:white;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;}
-
-/* MAPA */
 .blq-wrap{margin:0 18px 9px;}
 .blq-hdr{padding:12px 14px;display:flex;align-items:center;gap:9px;cursor:pointer;border-radius:9px;transition:background .15s;}
 .blq-hdr:hover{background:rgba(255,255,255,.03);}
@@ -171,8 +201,6 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .tag-d{background:rgba(45,106,79,.2);color:#5fbd8a;border:.5px solid rgba(45,106,79,.4);}
 .tag-a{background:rgba(230,57,70,.15);color:var(--red);border:.5px solid rgba(230,57,70,.3);}
 .tag-l{background:rgba(255,255,255,.05);color:var(--muted);}
-
-/* RANKING */
 .rk-card{margin:0 18px 8px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:9px;padding:11px 15px;display:flex;align-items:center;gap:11px;}
 .rk-card.me{background:rgba(230,57,70,.07);border-color:rgba(230,57,70,.3);}
 .rk-pos{font-family:'Bebas Neue',sans-serif;font-size:17px;width:24px;text-align:center;flex-shrink:0;}
@@ -182,8 +210,6 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .rk-rch{font-size:9px;color:var(--muted);margin-top:2px;}
 .rk-xp{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--red);}
 .rk-note{margin:8px 18px;background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.07);border-radius:7px;padding:9px 13px;font-size:10px;color:var(--muted);text-align:center;font-style:italic;}
-
-/* LOGROS */
 .logros-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 18px;}
 .lg-card{background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:9px;padding:13px;}
 .lg-card.lk{opacity:.35;}
@@ -193,8 +219,6 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .lg-badge{display:inline-block;margin-top:6px;font-size:9px;font-weight:500;padding:2px 8px;border-radius:10px;}
 .b-ok{background:rgba(45,106,79,.2);color:#5fbd8a;border:.5px solid rgba(45,106,79,.4);}
 .b-lk{background:rgba(255,255,255,.05);color:var(--muted);}
-
-/* BOTTOM NAV */
 .bottom-nav{background:var(--dark2);border-top:.5px solid rgba(255,255,255,.08);display:flex;padding:7px 0 5px;flex-shrink:0;}
 .nav-item{flex:1;text-align:center;cursor:pointer;padding:3px 0;}
 .nav-icon{font-size:19px;}
@@ -268,8 +292,6 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .es-num{font-family:'Bebas Neue',sans-serif;font-size:22px;}
 .es-lbl{font-size:9px;color:var(--muted);margin-top:1px;}
 .rnd-btn{width:100%;padding:13px;background:var(--red);color:white;border:none;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-top:14px;}
-
-/* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:flex-end;justify-content:center;}
 .modal-overlay.show{display:flex;animation:fadeIn .2s;}
 .modal{background:var(--dark2);border-radius:17px 17px 0 0;padding:22px;width:100%;max-width:420px;border:.5px solid rgba(255,255,255,.1);}
@@ -283,11 +305,58 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .modal-btn{width:100%;padding:13px;color:white;border:none;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-bottom:9px;}
 .modal-cancel{width:100%;padding:10px;background:none;color:var(--muted);border:.5px solid rgba(255,255,255,.1);border-radius:9px;font-size:12px;cursor:pointer;}
 
-/* LOADING */
-.loading-screen{position:fixed;inset:0;background:var(--dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:16px;}
-.loading-screen.hide{display:none;}
-.loading-logo{width:64px;height:64px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;animation:pulse 1.2s ease-in-out infinite;}
-.loading-txt{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--muted);}
+/* LANDING */
+.landing{overflow-y:auto;}
+.l-hero{position:relative;min-height:480px;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 40px;overflow:hidden;background:var(--dark2);}
+.l-grain{position:absolute;inset:0;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;}
+.l-glow{position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:360px;height:360px;background:radial-gradient(ellipse,rgba(230,57,70,.18) 0%,transparent 70%);}
+.l-tape{position:absolute;top:0;left:0;right:0;height:4px;background:repeating-linear-gradient(90deg,var(--red) 0,var(--red) 40px,transparent 40px,transparent 60px);opacity:.7;}
+.l-nav{position:absolute;top:0;left:0;right:0;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;z-index:10;}
+.l-logo{display:flex;align-items:center;gap:8px;}
+.l-logo-g{width:30px;height:30px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.l-logo-t{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;}
+.l-nav-btn{background:var(--red);color:white;border:none;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;}
+.l-content{position:relative;z-index:2;padding:0 24px;}
+.l-eyebrow{font-size:10px;font-weight:500;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:12px;animation:fadeUp .6s .1s both;}
+.l-title{font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:.95;letter-spacing:2px;margin-bottom:8px;animation:fadeUp .6s .2s both;}
+.l-title .acc{color:var(--red);}
+.l-sub{font-family:'Literata',serif;font-style:italic;font-size:15px;color:var(--muted);margin-bottom:24px;line-height:1.6;max-width:320px;animation:fadeUp .6s .3s both;}
+.l-stats{display:flex;gap:24px;animation:fadeUp .6s .4s both;}
+.l-stat-num{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;}
+.l-stat-lbl{font-size:10px;color:var(--muted);margin-top:2px;}
+.l-divider{height:1px;background:linear-gradient(90deg,var(--red),transparent);margin:0 24px;opacity:.4;}
+.l-story{padding:40px 24px;}
+.l-story-lbl{font-size:10px;font-weight:500;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:20px;}
+.beat{display:grid;grid-template-columns:44px 1fr;padding-bottom:28px;opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s;}
+.beat.vis{opacity:1;transform:translateY(0);}
+.beat-line{display:flex;flex-direction:column;align-items:center;}
+.beat-dot{width:11px;height:11px;border-radius:50%;background:var(--red);flex-shrink:0;margin-top:4px;}
+.beat-trail{flex:1;width:1px;background:linear-gradient(to bottom,var(--red),transparent);margin-top:5px;opacity:.3;}
+.beat-title{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:1px;margin-bottom:5px;}
+.beat-txt{font-family:'Literata',serif;font-size:13px;color:var(--muted);line-height:1.7;}
+.beat-txt strong{color:var(--cream);font-weight:500;}
+.l-quote{margin:0 24px 32px;border:1px solid rgba(230,57,70,.25);border-radius:12px;padding:20px;background:rgba(230,57,70,.05);position:relative;overflow:hidden;}
+.l-quote::before{content:'"';position:absolute;top:-8px;left:14px;font-family:'Literata',serif;font-size:72px;color:var(--red);opacity:.2;line-height:1;}
+.l-quote-txt{font-family:'Literata',serif;font-style:italic;font-size:14px;line-height:1.7;margin-bottom:14px;position:relative;z-index:1;}
+.l-ci-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.l-ci{background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.08);border-radius:7px;padding:8px 10px;font-size:11px;color:var(--muted);display:flex;gap:7px;align-items:center;}
+.l-ci-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+.l-mission{margin:0 24px 32px;background:var(--red);border-radius:12px;padding:22px;text-align:center;}
+.l-mission-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:white;margin-bottom:6px;}
+.l-mission-txt{font-family:'Literata',serif;font-style:italic;font-size:13px;color:rgba(255,255,255,.85);line-height:1.6;margin-bottom:16px;}
+.l-mission-btn{background:white;color:var(--red);border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;}
+.l-plans{padding:0 24px 40px;}
+.l-plans-lbl{font-size:10px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.l-plans-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.plan-c{border-radius:10px;padding:16px;border:.5px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);cursor:pointer;transition:border-color .2s;}
+.plan-c.feat{border:1.5px solid var(--red);background:rgba(230,57,70,.07);}
+.plan-badge{font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:7px;}
+.plan-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;margin-bottom:3px;}
+.plan-price{font-size:12px;color:var(--muted);margin-bottom:10px;}
+.plan-price strong{color:var(--cream);font-size:15px;}
+.plan-feat{font-size:10px;color:var(--muted);line-height:1.9;}
+.plan-feat span{color:var(--cream);}
+.l-footer{border-top:.5px solid rgba(255,255,255,.06);padding:18px 24px;text-align:center;font-size:11px;color:var(--muted);font-family:'Literata',serif;font-style:italic;}
 
 @keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -297,7 +366,6 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 </head>
 <body>
 
-<!-- LOADING -->
 <div class="loading-screen" id="loading">
   <div class="loading-logo">🥊</div>
   <div class="loading-txt">Colorado Mate Club</div>
@@ -318,37 +386,18 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
           <div class="auth-tab active" onclick="switchAuthTab('login')">Entrar</div>
           <div class="auth-tab" onclick="switchAuthTab('register')">Registrarse</div>
         </div>
-
-        <!-- LOGIN -->
         <div class="auth-form active" id="form-login">
           <div class="auth-error" id="login-error"></div>
-          <div class="auth-field">
-            <div class="auth-label">Correo</div>
-            <input class="auth-input" id="login-email" type="email" placeholder="tucorreo@gmail.com"/>
-          </div>
-          <div class="auth-field">
-            <div class="auth-label">Contraseña</div>
-            <input class="auth-input" id="login-pass" type="password" placeholder="••••••••"/>
-          </div>
+          <div class="auth-field"><div class="auth-label">Correo</div><input class="auth-input" id="login-email" type="email" placeholder="tucorreo@gmail.com"/></div>
+          <div class="auth-field"><div class="auth-label">Contraseña</div><input class="auth-input" id="login-pass" type="password" placeholder="••••••••"/></div>
           <button class="auth-btn" id="btn-login" onclick="doLogin()">ENTRAR AL RING →</button>
         </div>
-
-        <!-- REGISTER -->
         <div class="auth-form" id="form-register">
           <div class="auth-error" id="reg-error"></div>
           <div class="auth-success" id="reg-success"></div>
-          <div class="auth-field">
-            <div class="auth-label">Tu nombre</div>
-            <input class="auth-input" id="reg-nombre" type="text" placeholder="¿Cómo te llamas?"/>
-          </div>
-          <div class="auth-field">
-            <div class="auth-label">Correo</div>
-            <input class="auth-input" id="reg-email" type="email" placeholder="tucorreo@gmail.com"/>
-          </div>
-          <div class="auth-field">
-            <div class="auth-label">Contraseña</div>
-            <input class="auth-input" id="reg-pass" type="password" placeholder="Mínimo 6 caracteres"/>
-          </div>
+          <div class="auth-field"><div class="auth-label">Tu nombre</div><input class="auth-input" id="reg-nombre" type="text" placeholder="¿Cómo te llamas?"/></div>
+          <div class="auth-field"><div class="auth-label">Correo</div><input class="auth-input" id="reg-email" type="email" placeholder="tucorreo@gmail.com"/></div>
+          <div class="auth-field"><div class="auth-label">Contraseña</div><input class="auth-input" id="reg-pass" type="password" placeholder="Mínimo 6 caracteres"/></div>
           <button class="auth-btn" id="btn-register" onclick="doRegister()">CREAR MI CUENTA →</button>
         </div>
       </div>
@@ -384,7 +433,7 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
         <div class="beat" id="b4"><div class="beat-line"><div class="beat-dot"></div></div><div><div class="beat-title">Ahora llega a todos</div><div class="beat-txt">La cochera no alcanza para todos. La app sí. <strong>El mismo método, para cualquier chavo de México y LATAM.</strong></div></div></div>
       </div>
       <div class="l-quote">
-        <div class="l-quote-txt">"La cochera siempre estuvo abierta. Ahora la app también lo está — para cualquier chavo que quiera entrar a la prepa."</div>
+        <div class="l-quote-txt">"La cochera siempre estuvo abierta. Ahora la app también — para cualquier chavo que quiera entrar a la prepa."</div>
         <div class="l-ci-grid">
           <div class="l-ci"><div class="l-ci-dot"></div>Mesas donadas</div>
           <div class="l-ci"><div class="l-ci-dot"></div>Sillas prestadas</div>
@@ -400,25 +449,101 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
       <div class="l-plans">
         <div class="l-plans-lbl">Elige tu nivel</div>
         <div class="l-plans-row">
-          <div class="plan-c" onclick="goPage('auth')">
-            <div class="plan-badge">Gratuito</div>
-            <div class="plan-name">Cochera</div>
-            <div class="plan-price"><strong>$0</strong> / siempre</div>
-            <div class="plan-feat"><span>3 temas</span> del examen<br><span>5 ejercicios</span> por día<br><span>1 simulacro</span> por semana</div>
-          </div>
-          <div class="plan-c feat" onclick="goPage('auth')">
-            <div class="plan-badge">Premium</div>
-            <div class="plan-name">Ring</div>
-            <div class="plan-price"><strong>$99</strong> / mes MXN</div>
-            <div class="plan-feat"><span>Todo</span> desbloqueado<br><span>Coach IA</span> personalizado<br><span>Ruta crítica</span> 21 días</div>
-          </div>
+          <div class="plan-c" onclick="goPage('auth')"><div class="plan-badge">Gratuito</div><div class="plan-name">Cochera</div><div class="plan-price"><strong>$0</strong> / siempre</div><div class="plan-feat"><span>3 temas</span> del examen<br><span>5 ejercicios</span> por día</div></div>
+          <div class="plan-c feat" onclick="goPage('auth')"><div class="plan-badge">Premium</div><div class="plan-name">Ring</div><div class="plan-price"><strong>$99</strong> / mes MXN</div><div class="plan-feat"><span>Todo</span> desbloqueado<br><span>Coach IA</span> personalizado</div></div>
         </div>
       </div>
       <div class="l-footer">Hecho con disciplina de ring y corazón de maestro — Guadalajara, Jalisco.</div>
     </div>
   </div>
 
-  <!-- APP PRINCIPAL -->
+  <!-- ══════ PANEL ADMIN ══════ -->
+  <div class="page" id="page-admin">
+    <div class="admin-page">
+      <div class="admin-topbar">
+        <div class="admin-logo"><div class="admin-logo-g">🥊</div><span class="admin-logo-t">Colorado Mate Club</span></div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="admin-badge">PROFE</span>
+          <button class="admin-logout" onclick="doLogout()">Salir</button>
+        </div>
+      </div>
+      <div class="admin-screens">
+
+        <!-- ADMIN INICIO -->
+        <div class="admin-scr active" id="ascr-inicio">
+          <div class="admin-hero">
+            <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Panel del Profe</div>
+            <div class="admin-hero-title">¡Buenos días, Profe Colorado! 🥊</div>
+            <div class="admin-hero-sub" id="admin-fecha">Cargando estadísticas...</div>
+          </div>
+          <div class="admin-stats">
+            <div class="admin-stat"><div class="admin-stat-num r" id="adm-total">0</div><div class="admin-stat-lbl">Total alumnos</div><div class="admin-stat-sub">registrados</div></div>
+            <div class="admin-stat"><div class="admin-stat-num gr" id="adm-activos">0</div><div class="admin-stat-lbl">Activos hoy</div><div class="admin-stat-sub">con racha</div></div>
+            <div class="admin-stat"><div class="admin-stat-num g" id="adm-xp">0</div><div class="admin-stat-lbl">XP total</div><div class="admin-stat-sub">de todos los alumnos</div></div>
+            <div class="admin-stat"><div class="admin-stat-num b" id="adm-riesgo">0</div><div class="admin-stat-lbl">En riesgo</div><div class="admin-stat-sub">sin entrar 3+ días</div></div>
+          </div>
+
+          <div style="padding:0 18px 10px">
+            <div class="admin-sec-lbl" style="padding:0;margin-bottom:10px">Alumnos en riesgo 🚨</div>
+            <div id="adm-riesgo-list"></div>
+          </div>
+
+          <div style="padding:0 18px 16px">
+            <div class="admin-sec-lbl" style="padding:0;margin-bottom:10px">Top 3 esta semana 🏆</div>
+            <div id="adm-top-list"></div>
+          </div>
+        </div>
+
+        <!-- TODOS LOS ALUMNOS -->
+        <div class="admin-scr" id="ascr-alumnos">
+          <div style="padding:18px 18px 10px"><div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px">Todos los alumnos</div><div style="font-size:11px;color:var(--muted);margin-top:2px" id="adm-count-lbl">Cargando...</div></div>
+          <div id="adm-alumnos-list"></div>
+        </div>
+
+        <!-- ESTADÍSTICAS TEMAS -->
+        <div class="admin-scr" id="ascr-temas">
+          <div style="padding:18px 18px 10px"><div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px">Estadísticas por tema</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Dónde están fallando tus alumnos</div></div>
+          <div id="adm-temas-stats"></div>
+        </div>
+
+        <!-- CONFIGURACIÓN -->
+        <div class="admin-scr" id="ascr-config">
+          <div style="padding:18px 18px 10px"><div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px">Configuración</div></div>
+          <div style="padding:0 18px">
+            <div style="background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:10px;padding:16px;margin-bottom:10px;">
+              <div style="font-size:12px;font-weight:500;margin-bottom:4px">El Profe Colorado</div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:12px" id="config-email">cargando...</div>
+              <div style="display:flex;gap:8px">
+                <div style="flex:1;background:rgba(255,255,255,.04);border-radius:8px;padding:10px;text-align:center">
+                  <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold)" id="config-plan">PROFE</div>
+                  <div style="font-size:9px;color:var(--muted)">rol</div>
+                </div>
+                <div style="flex:1;background:rgba(255,255,255,.04);border-radius:8px;padding:10px;text-align:center">
+                  <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--red)" id="config-desde">—</div>
+                  <div style="font-size:9px;color:var(--muted)">miembro desde</div>
+                </div>
+              </div>
+            </div>
+            <div style="background:rgba(230,57,70,.06);border:1px solid rgba(230,57,70,.2);border-radius:10px;padding:16px;margin-bottom:10px;">
+              <div style="font-size:12px;font-weight:500;color:var(--red);margin-bottom:4px">🥊 Tu TikTok</div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:8px">@elprofecolorado</div>
+              <div style="font-size:11px;color:var(--muted);line-height:1.6">Tus videos de TikTok son el Round 1 de cada tema. Cuando grabes uno nuevo, agrega el link en el tema correspondiente.</div>
+            </div>
+            <button style="width:100%;padding:13px;background:none;color:var(--red);border:1px solid rgba(230,57,70,.3);border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;" onclick="doLogout()">CERRAR SESIÓN →</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="admin-nav">
+        <div class="admin-nav-item active" onclick="goAdminScr('inicio',this)"><div class="admin-nav-icon">🏠</div><div class="admin-nav-lbl">Inicio</div></div>
+        <div class="admin-nav-item" onclick="goAdminScr('alumnos',this)"><div class="admin-nav-icon">👥</div><div class="admin-nav-lbl">Alumnos</div></div>
+        <div class="admin-nav-item" onclick="goAdminScr('temas',this)"><div class="admin-nav-icon">📊</div><div class="admin-nav-lbl">Temas</div></div>
+        <div class="admin-nav-item" onclick="goAdminScr('config',this)"><div class="admin-nav-icon">⚙️</div><div class="admin-nav-lbl">Config</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP ALUMNO -->
   <div class="page" id="page-app">
     <div class="topbar">
       <div class="t-logo"><div class="t-logo-g">🥊</div><span class="t-logo-t">Colorado Mate Club</span></div>
@@ -432,10 +557,7 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
       <div class="scr active" id="scr-inicio">
         <div class="profe-bubble motivar" id="profe-bub">
           <div class="pb-av"><span>🥊</span><span>PROFE</span></div>
-          <div class="pb-body">
-            <div class="pb-label">El Profe Colorado dice</div>
-            <div class="pb-msg" id="profe-msg">¡Bienvenido al ring! Hoy empieza tu camino al examen.</div>
-          </div>
+          <div class="pb-body"><div class="pb-label">El Profe Colorado dice</div><div class="pb-msg" id="profe-msg">¡Bienvenido al ring!</div></div>
           <span class="pb-close" onclick="document.getElementById('profe-bub').style.display='none'">✕</span>
         </div>
         <div class="stats-row">
@@ -448,15 +570,12 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
           <div class="xp-bg"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
           <div class="xp-sub"><span id="xp-actual">0 XP</span><span id="xp-falta">500 para subir</span></div>
         </div>
-        <div class="racha-wrap">
-          <div class="sec-lbl">Racha semanal</div>
-          <div class="racha-grid" id="racha-grid"></div>
-        </div>
+        <div class="racha-wrap"><div class="sec-lbl">Racha semanal</div><div class="racha-grid" id="racha-grid"></div></div>
         <div class="tema-card" onclick="goTema('Fracciones y decimales','Representación y cálculo','#e63946')">
           <div class="tema-ey">continuar donde lo dejaste</div>
           <div class="tema-nom">Fracciones y decimales</div>
           <div class="rnd-pips"><div class="rpip done"></div><div class="rpip active"></div><div class="rpip pend"></div><div class="rpip pend"></div></div>
-          <div class="tema-meta"><span class="tema-mt">Round 2 de 4 — Demo</span><span class="tema-mt">Bloque 1 · Fundamentos</span></div>
+          <div class="tema-meta"><span class="tema-mt">Round 2 de 4 — Demo</span><span class="tema-mt">Bloque 1</span></div>
           <button class="tema-btn">ENTRAR AL ROUND →</button>
         </div>
       </div>
@@ -485,13 +604,10 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
   <!-- TEMA ROUNDS -->
   <div class="page" id="page-tema">
     <div class="tema-page">
-      <div class="tp-topbar">
-        <button class="tp-back" onclick="goPage('app')">← Volver</button>
-        <span class="tp-title" id="tp-title">Fracciones</span>
-      </div>
+      <div class="tp-topbar"><button class="tp-back" onclick="goPage('app')">← Volver</button><span class="tp-title" id="tp-title">Tema</span></div>
       <div style="padding:14px 18px 0">
-        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px" id="tp-bloque">Bloque 1 · Fundamentos</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;margin-bottom:3px" id="tp-nom">Fracciones y decimales</div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px">Bloque 1 · Fundamentos</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;margin-bottom:3px" id="tp-nom">Fracciones</div>
         <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Representación, operaciones y conversión.</div>
       </div>
       <div class="rounds-strip">
@@ -501,36 +617,28 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
         <div class="rtab" id="rt3" onclick="goRound(3)"><div class="rtab-num">Round 4</div><div class="rtab-name">Examen</div><div class="rtab-dot"></div></div>
       </div>
       <div class="rscr active" id="rs0">
-        <div class="video-wrap">
-          <div class="vthumb" id="vthumb" onclick="playVid()">
-            <div class="tt-badge"><div class="tt-dot"></div><span class="tt-lbl">@elprofecolorado</span></div>
-            <div class="views-badge">▶ 909</div>
-            <div class="play-ring"><span style="color:var(--red);font-size:17px;margin-left:3px">▶</span></div>
-            <div class="vinfo"><div class="vinfo-topic">Fracciones y decimales</div><div class="vinfo-by">por <span>El Profe Colorado</span></div></div>
-            <div class="vfoot"><div class="vf-row"><span id="vtime">0:00 / 2:14</span><span>TikTok ↗</span></div><div class="vprog-bg"><div class="vprog-fill" id="vbar"></div></div></div>
-          </div>
-        </div>
-        <div class="cb"><div class="cb-av">CO</div><div class="cb-txt">"Antes de practicar, <b>mira cómo lo resuelvo yo.</b> Sin trucos — solo el método."</div></div>
+        <div class="video-wrap"><div class="vthumb" id="vthumb" onclick="playVid()"><div class="tt-badge"><div class="tt-dot"></div><span class="tt-lbl">@elprofecolorado</span></div><div class="views-badge">▶ 909</div><div class="play-ring"><span style="color:var(--red);font-size:17px;margin-left:3px">▶</span></div><div class="vinfo"><div class="vinfo-topic">Fracciones y decimales</div><div class="vinfo-by">por <span>El Profe Colorado</span></div></div><div class="vfoot"><div class="vf-row"><span id="vtime">0:00 / 2:14</span><span>TikTok ↗</span></div><div class="vprog-bg"><div class="vprog-fill" id="vbar"></div></div></div></div></div>
+        <div class="cb"><div class="cb-av">CO</div><div class="cb-txt">"Antes de practicar, <b>mira cómo lo resuelvo yo.</b>"</div></div>
         <div class="kp-lbl">Lo que vas a aprender</div>
-        <div class="kp-item"><div class="kp-num">1</div><div><div class="kp-txt">Qué es una fracción</div><div class="kp-sub">Numerador, denominador y su significado</div></div></div>
+        <div class="kp-item"><div class="kp-num">1</div><div><div class="kp-txt">Qué es una fracción</div><div class="kp-sub">Numerador y denominador</div></div></div>
         <div class="kp-item"><div class="kp-num">2</div><div><div class="kp-txt">Convertir fracción a decimal</div><div class="kp-sub">Dividir numerador entre denominador</div></div></div>
         <div class="kp-item"><div class="kp-num">3</div><div><div class="kp-txt">Fracciones equivalentes</div><div class="kp-sub">Misma cantidad, diferente representación</div></div></div>
-        <div class="kp-item"><div class="kp-num">4</div><div><div class="kp-txt">Sumar fracciones mismo denominador</div><div class="kp-sub">El denominador no cambia</div></div></div>
+        <div class="kp-item"><div class="kp-num">4</div><div><div class="kp-txt">Sumar con mismo denominador</div><div class="kp-sub">El denominador no cambia</div></div></div>
         <button class="rnd-btn" onclick="goRound(1)">Round 2: Ver la demo →</button>
       </div>
       <div class="rscr" id="rs1">
-        <div class="cb"><div class="cb-av">CO</div><div class="cb-txt">"Ahora paso a paso. <b>Sigue cada movimiento.</b>"</div></div>
+        <div class="cb"><div class="cb-av">CO</div><div class="cb-txt">"Paso a paso. <b>Sigue cada movimiento.</b>"</div></div>
         <div class="demo-step"><div class="demo-num">Problema</div><div class="demo-expr">1/4 + 2/4 = ?</div></div>
         <div class="demo-arrow">↓</div>
         <div class="demo-step"><div class="demo-num">Paso 1 — Verificar denominadores</div><div class="demo-expr">4 = 4 ✓</div><div class="demo-exp">Mismo denominador — sumamos directo</div></div>
         <div class="demo-arrow">↓</div>
-        <div class="demo-step"><div class="demo-num">Paso 2 — Sumar numeradores</div><div class="demo-expr">1 + 2 = 3</div><div class="demo-exp">El denominador se queda igual: 4</div></div>
+        <div class="demo-step"><div class="demo-num">Paso 2 — Sumar numeradores</div><div class="demo-expr">1 + 2 = 3</div><div class="demo-exp">Denominador se queda igual: 4</div></div>
         <div class="demo-arrow">↓</div>
         <div class="demo-step"><div class="demo-num">Resultado</div><div class="demo-expr" style="color:var(--gold)">= 3/4 = 0.75</div></div>
         <button class="rnd-btn" onclick="goRound(2)">Round 3: Ahora tú →</button>
       </div>
       <div class="rscr" id="rs2">
-        <div class="cb"><div class="cb-av">CO</div><div class="cb-txt">"Tu turno. <b>Sin prisa.</b> Piensa antes de tocar."</div></div>
+        <div class="cb"><div class="cb-av">CO</div><div class="cb-txt">"Tu turno. <b>Sin prisa.</b>"</div></div>
         <div class="ex-q">Resuelve:</div>
         <div class="ex-math">2/5 + 1/5</div>
         <div class="ex-opts" id="ex-opts">
@@ -560,7 +668,7 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 
 </div>
 
-<!-- MODAL -->
+<!-- MODAL TEMA -->
 <div class="modal-overlay" id="modal" onclick="hideModal(event)">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -572,227 +680,302 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
   </div>
 </div>
 
+<!-- MODAL DETALLE ALUMNO -->
+<div class="detalle-overlay" id="detalle-overlay" onclick="hideDetalle(event)">
+  <div class="detalle-modal">
+    <div class="det-handle"></div>
+    <div class="det-header">
+      <div class="det-av" id="det-av">??</div>
+      <div><div class="det-nombre" id="det-nombre">Alumno</div><div class="det-email" id="det-email">correo</div></div>
+    </div>
+    <div class="det-stats">
+      <div class="det-stat"><div class="det-stat-num" id="det-xp" style="color:var(--red)">0</div><div class="det-stat-lbl">XP</div></div>
+      <div class="det-stat"><div class="det-stat-num" id="det-racha" style="color:var(--gold)">0</div><div class="det-stat-lbl">Racha</div></div>
+      <div class="det-stat"><div class="det-stat-num" id="det-nivel" style="color:var(--blue)">1</div><div class="det-stat-lbl">Nivel</div></div>
+    </div>
+    <div class="det-sec">Último acceso</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:16px" id="det-ultimo">—</div>
+    <button class="det-profe-btn" onclick="hideDetalle()">Cerrar</button>
+  </div>
+</div>
+
 <script>
-// ══════════════════════════════
-// SUPABASE
-// ══════════════════════════════
-const SUPA_URL = 'https://yjoapzwkjsdphutyzxcg.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlqb2FwendranNkcGh1dHl6eGNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NzUyODksImV4cCI6MjA4OTA1MTI4OX0.Bz5zjBTq1bA-0cNFLUegTfVi3_Yh8yaQiOUILU445Rw';
-const { createClient } = supabase;
-const sb = createClient(SUPA_URL, SUPA_KEY);
+const SUPA_URL='https://yjoapzwkjsdphutyzxcg.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlqb2FwendranNkcGh1dHl6eGNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NzUyODksImV4cCI6MjA4OTA1MTI4OX0.Bz5zjBTq1bA-0cNFLUegTfVi3_Yh8yaQiOUILU445Rw';
+const {createClient}=supabase;
+const sb=createClient(SUPA_URL,SUPA_KEY);
+let currentUser=null,perfil=null;
 
-let currentUser = null;
-let perfil = null;
-
-// ══════════════════════════════
-// INIT
-// ══════════════════════════════
-async function init() {
-  const { data: { session } } = await sb.auth.getSession();
-  if (session) {
-    currentUser = session.user;
-    await loadPerfil();
-    goPage('app');
-  } else {
-    goPage('landing');
-  }
+async function init(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(session){currentUser=session.user;await loadPerfil();}
+  else goPage('landing');
   document.getElementById('loading').classList.add('hide');
 }
 
-// ══════════════════════════════
 // AUTH
-// ══════════════════════════════
-function switchAuthTab(tab) {
-  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register')));
-  document.getElementById('form-login').classList.toggle('active', tab==='login');
-  document.getElementById('form-register').classList.toggle('active', tab==='register');
+function switchAuthTab(tab){
+  document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&tab==='login')||(i===1&&tab==='register')));
+  document.getElementById('form-login').classList.toggle('active',tab==='login');
+  document.getElementById('form-register').classList.toggle('active',tab==='register');
 }
-
-async function doLogin() {
-  const email = document.getElementById('login-email').value.trim();
-  const pass = document.getElementById('login-pass').value;
-  const btn = document.getElementById('btn-login');
-  const err = document.getElementById('login-error');
-  if (!email || !pass) { showErr(err,'Ingresa tu correo y contraseña'); return; }
-  btn.disabled = true; btn.textContent = 'Entrando...';
-  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
-  if (error) { showErr(err, error.message); btn.disabled=false; btn.textContent='ENTRAR AL RING →'; return; }
-  currentUser = data.user;
+async function doLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  const pass=document.getElementById('login-pass').value;
+  const btn=document.getElementById('btn-login');
+  const err=document.getElementById('login-error');
+  if(!email||!pass){showErr(err,'Ingresa tu correo y contraseña');return;}
+  btn.disabled=true;btn.textContent='Entrando...';
+  const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
+  if(error){showErr(err,error.message);btn.disabled=false;btn.textContent='ENTRAR AL RING →';return;}
+  currentUser=data.user;
   await loadPerfil();
-  goPage('app');
-  btn.disabled=false; btn.textContent='ENTRAR AL RING →';
+  btn.disabled=false;btn.textContent='ENTRAR AL RING →';
 }
-
-async function doRegister() {
-  const nombre = document.getElementById('reg-nombre').value.trim();
-  const email = document.getElementById('reg-email').value.trim();
-  const pass = document.getElementById('reg-pass').value;
-  const btn = document.getElementById('btn-register');
-  const err = document.getElementById('reg-error');
-  const suc = document.getElementById('reg-success');
-  if (!nombre||!email||!pass) { showErr(err,'Llena todos los campos'); return; }
-  if (pass.length < 6) { showErr(err,'La contraseña debe tener al menos 6 caracteres'); return; }
-  btn.disabled=true; btn.textContent='Registrando...';
-  const { data, error } = await sb.auth.signUp({ email, password: pass, options: { data: { nombre } } });
-  if (error) { showErr(err,error.message); btn.disabled=false; btn.textContent='CREAR MI CUENTA →'; return; }
-  suc.textContent='¡Cuenta creada! Revisa tu correo para confirmar.'; suc.classList.add('show');
-  btn.disabled=false; btn.textContent='CREAR MI CUENTA →';
+async function doRegister(){
+  const nombre=document.getElementById('reg-nombre').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const pass=document.getElementById('reg-pass').value;
+  const btn=document.getElementById('btn-register');
+  const err=document.getElementById('reg-error');
+  const suc=document.getElementById('reg-success');
+  if(!nombre||!email||!pass){showErr(err,'Llena todos los campos');return;}
+  if(pass.length<6){showErr(err,'La contraseña debe tener al menos 6 caracteres');return;}
+  btn.disabled=true;btn.textContent='Registrando...';
+  const {data,error}=await sb.auth.signUp({email,password:pass,options:{data:{nombre}}});
+  if(error){showErr(err,error.message);btn.disabled=false;btn.textContent='CREAR MI CUENTA →';return;}
+  suc.textContent='¡Cuenta creada! Revisa tu correo para confirmar.';suc.classList.add('show');
+  btn.disabled=false;btn.textContent='CREAR MI CUENTA →';
 }
+async function doLogout(){await sb.auth.signOut();currentUser=null;perfil=null;goPage('landing');}
+function showErr(el,msg){el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),4000);}
 
-async function doLogout() {
-  await sb.auth.signOut();
-  currentUser=null; perfil=null;
-  goPage('landing');
-}
-
-function showErr(el, msg) { el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),4000); }
-
-// ══════════════════════════════
 // PERFIL
-// ══════════════════════════════
-async function loadPerfil() {
-  const { data } = await sb.from('perfiles').select('*').eq('id', currentUser.id).single();
-  perfil = data;
-  if (perfil) updateUI();
-  await updateRacha();
-  await loadRanking();
-  buildLogros();
+async function loadPerfil(){
+  const {data}=await sb.from('perfiles').select('*').eq('id',currentUser.id).single();
+  perfil=data;
+  if(perfil&&perfil.es_admin){
+    goPage('admin');
+    await loadAdminData();
+  } else {
+    goPage('app');
+    if(perfil)updateUI();
+    await updateRacha();
+    await loadRanking();
+    buildLogros();
+  }
 }
 
-function updateUI() {
-  if (!perfil) return;
-  const nombre = perfil.nombre || 'Alumno';
-  const av = nombre.substring(0,2).toUpperCase();
-  document.getElementById('chip-av').textContent = av;
-  document.getElementById('chip-nombre').textContent = nombre.split(' ')[0];
-  document.getElementById('chip-xp').textContent = perfil.xp + ' XP';
-  document.getElementById('stat-racha').textContent = '🔥' + perfil.racha;
-  document.getElementById('stat-nivel').textContent = 'N' + perfil.nivel;
-  document.getElementById('stat-xp').textContent = perfil.xp;
-  const xpNext = perfil.nivel * 500;
-  const xpPrev = (perfil.nivel-1) * 500;
-  const pct = Math.round(((perfil.xp - xpPrev) / (xpNext - xpPrev)) * 100);
-  document.getElementById('xp-fill').style.width = Math.min(pct,100) + '%';
-  document.getElementById('xp-label').textContent = 'Nivel ' + perfil.nivel + ' → Nivel ' + (perfil.nivel+1);
-  document.getElementById('xp-actual').textContent = perfil.xp + ' XP';
-  document.getElementById('xp-falta').textContent = (xpNext - perfil.xp) + ' para subir';
-  const titulos = ['Rookie del ring','Peleador en formación','Campeón en formación','Gladiador matemático','Leyenda del Colorado'];
-  document.getElementById('xp-titulo').textContent = titulos[Math.min(perfil.nivel-1, titulos.length-1)];
-  // Mensaje del profe
-  const msgs = [
-    `¡Bienvenido <strong style="color:var(--red)">${nombre.split(' ')[0]}</strong>! Hoy empieza tu camino al examen. ¡Vamos!`,
-    `¡Órale <strong style="color:var(--red)">${nombre.split(' ')[0]}</strong>! Llevas <strong style="color:var(--red)">${perfil.racha} días</strong> seguidos. Así se gana.`,
-    `<strong style="color:var(--red)">${nombre.split(' ')[0]}</strong>, ya tienes <strong style="color:var(--red)">${perfil.xp} XP</strong>. ¡No pares ahora!`,
+// UPDATE UI ALUMNO
+function updateUI(){
+  if(!perfil)return;
+  const nombre=perfil.nombre||'Alumno';
+  document.getElementById('chip-av').textContent=nombre.substring(0,2).toUpperCase();
+  document.getElementById('chip-nombre').textContent=nombre.split(' ')[0];
+  document.getElementById('chip-xp').textContent=perfil.xp+' XP';
+  document.getElementById('stat-racha').textContent='🔥'+perfil.racha;
+  document.getElementById('stat-nivel').textContent='N'+perfil.nivel;
+  document.getElementById('stat-xp').textContent=perfil.xp;
+  const xpNext=perfil.nivel*500,xpPrev=(perfil.nivel-1)*500;
+  const pct=Math.round(((perfil.xp-xpPrev)/(xpNext-xpPrev))*100);
+  document.getElementById('xp-fill').style.width=Math.min(pct,100)+'%';
+  document.getElementById('xp-label').textContent='Nivel '+perfil.nivel+' → Nivel '+(perfil.nivel+1);
+  document.getElementById('xp-actual').textContent=perfil.xp+' XP';
+  document.getElementById('xp-falta').textContent=(xpNext-perfil.xp)+' para subir';
+  const titulos=['Rookie del ring','Peleador en formación','Campeón en formación','Gladiador matemático','Leyenda del Colorado'];
+  document.getElementById('xp-titulo').textContent=titulos[Math.min(perfil.nivel-1,titulos.length-1)];
+  const msgs=[
+    `¡Bienvenido <strong style="color:var(--red)">${nombre.split(' ')[0]}</strong>! Hoy empieza tu camino al examen.`,
+    `¡Órale <strong style="color:var(--red)">${nombre.split(' ')[0]}</strong>! Llevas <strong style="color:var(--red)">${perfil.racha} días</strong> seguidos. ¡No pares!`,
+    `<strong style="color:var(--red)">${nombre.split(' ')[0]}</strong>, ya tienes <strong style="color:var(--red)">${perfil.xp} XP</strong>. ¡Sigue así!`,
   ];
-  const msgIdx = perfil.racha > 0 ? (perfil.xp > 100 ? 2 : 1) : 0;
-  document.getElementById('profe-msg').innerHTML = msgs[msgIdx];
-  document.getElementById('profe-bub').style.display = 'flex';
+  document.getElementById('profe-msg').innerHTML=msgs[perfil.racha>0?(perfil.xp>100?2:1):0];
   buildRachaGrid();
 }
 
-async function updateRacha() {
-  if (!perfil) return;
-  const hoy = new Date().toISOString().split('T')[0];
-  const ultimo = perfil.ultimo_acceso;
-  if (ultimo === hoy) return;
-  const ayer = new Date(Date.now()-86400000).toISOString().split('T')[0];
-  const nuevaRacha = ultimo === ayer ? perfil.racha + 1 : 1;
-  const diasRacha = Array.isArray(perfil.dias_racha) ? perfil.dias_racha : [];
-  diasRacha.push(hoy);
-  if (diasRacha.length > 7) diasRacha.shift();
-  await sb.from('perfiles').update({ racha: nuevaRacha, ultimo_acceso: hoy, dias_racha: diasRacha }).eq('id', currentUser.id);
-  perfil.racha = nuevaRacha;
-  perfil.ultimo_acceso = hoy;
-  perfil.dias_racha = diasRacha;
+async function updateRacha(){
+  if(!perfil)return;
+  const hoy=new Date().toISOString().split('T')[0];
+  if(perfil.ultimo_acceso===hoy)return;
+  const ayer=new Date(Date.now()-86400000).toISOString().split('T')[0];
+  const nuevaRacha=perfil.ultimo_acceso===ayer?perfil.racha+1:1;
+  await sb.from('perfiles').update({racha:nuevaRacha,ultimo_acceso:hoy}).eq('id',currentUser.id);
+  perfil.racha=nuevaRacha;perfil.ultimo_acceso=hoy;
   updateUI();
 }
 
-function buildRachaGrid() {
-  const dias = ['LUN','MAR','MIÉ','JUE','VIE','SAB','DOM'];
-  const hoy = new Date().getDay();
-  const diasActivos = perfil ? Math.min(perfil.racha, 7) : 0;
-  const grid = document.getElementById('racha-grid');
-  grid.innerHTML = dias.map((d,i) => {
-    const isHoy = i === (hoy === 0 ? 6 : hoy-1);
-    const isDone = i < diasActivos && !isHoy;
-    const cls = isHoy ? 'hoy' : isDone ? 'done' : 'pend';
-    const icon = isHoy ? '🔥' : isDone ? '✓' : '—';
-    return `<div class="rday ${cls}"><span>${icon}</span><span class="dl">${d}</span></div>`;
+function buildRachaGrid(){
+  const dias=['LUN','MAR','MIÉ','JUE','VIE','SAB','DOM'];
+  const hoy=new Date().getDay();
+  const diasActivos=perfil?Math.min(perfil.racha,7):0;
+  document.getElementById('racha-grid').innerHTML=dias.map((d,i)=>{
+    const isHoy=i===(hoy===0?6:hoy-1);
+    const isDone=i<diasActivos&&!isHoy;
+    const cls=isHoy?'hoy':isDone?'done':'pend';
+    return `<div class="rday ${cls}"><span>${isHoy?'🔥':isDone?'✓':'—'}</span><span class="dl">${d}</span></div>`;
   }).join('');
 }
 
-async function sumarXP(puntos) {
-  if (!perfil || !currentUser) return;
-  const nuevoXP = perfil.xp + puntos;
-  const nuevoNivel = Math.floor(nuevoXP / 500) + 1;
-  await sb.from('perfiles').update({ xp: nuevoXP, nivel: nuevoNivel }).eq('id', currentUser.id);
-  perfil.xp = nuevoXP;
-  perfil.nivel = nuevoNivel;
+async function sumarXP(puntos){
+  if(!perfil||!currentUser)return;
+  const nuevoXP=perfil.xp+puntos;
+  const nuevoNivel=Math.floor(nuevoXP/500)+1;
+  await sb.from('perfiles').update({xp:nuevoXP,nivel:nuevoNivel}).eq('id',currentUser.id);
+  perfil.xp=nuevoXP;perfil.nivel=nuevoNivel;
   updateUI();
 }
 
-// ══════════════════════════════
-// RANKING REAL
-// ══════════════════════════════
-async function loadRanking() {
-  const { data } = await sb.from('ranking_semanal').select('*').limit(10);
-  const c = document.getElementById('ranking-c');
-  if (!data || data.length === 0) {
-    c.innerHTML = '<div style="padding:24px;text-align:center;font-size:13px;color:var(--muted);font-style:italic">Aún no hay alumnos en el ranking.<br>¡Sé el primero!</div>';
-    return;
-  }
-  c.innerHTML = data.map((r,i) => {
-    const esYo = currentUser && r.id === currentUser.id;
-    const pos = i+1;
+// RANKING
+async function loadRanking(){
+  const {data}=await sb.from('ranking_semanal').select('*').limit(10);
+  const c=document.getElementById('ranking-c');
+  if(!data||data.length===0){c.innerHTML='<div style="padding:24px;text-align:center;font-size:13px;color:var(--muted);font-style:italic">¡Sé el primero en el ranking!</div>';return;}
+  c.innerHTML=data.map((r,i)=>{
+    const esYo=currentUser&&r.id===currentUser.id;
+    const pos=i+1;
     return `<div class="rk-card${esYo?' me':''}">
       <div class="rk-pos">${pos===1?'🥇':pos===2?'🥈':pos===3?'🥉':pos}</div>
       <div class="rk-av" style="background:${esYo?'var(--red)':'rgba(255,255,255,.1)'};color:${esYo?'white':'#9a9490'}">${r.avatar||'??'}</div>
-      <div class="rk-info">
-        <div class="rk-nom">${r.nombre}${esYo?' <span style="color:var(--red);font-size:9px">(tú)</span>':''}</div>
-        <div class="rk-rch">🔥 ${r.racha} días de racha</div>
-      </div>
+      <div class="rk-info"><div class="rk-nom">${r.nombre}${esYo?' <span style="color:var(--red);font-size:9px">(tú)</span>':''}</div><div class="rk-rch">🔥 ${r.racha} días</div></div>
       <div class="rk-xp">${r.xp} XP</div>
     </div>`;
   }).join('');
 }
 
-// ══════════════════════════════
 // LOGROS
-// ══════════════════════════════
-const logrosData = [
+const logrosData=[
   {id:'racha5',icon:'🔥',nombre:'Racha de fuego',desc:'5 días seguidos'},
   {id:'rapido',icon:'⚡',nombre:'Relámpago',desc:'Examen en menos de 8 min'},
   {id:'perfecto',icon:'🎯',nombre:'Francotirador',desc:'10 ejercicios sin error'},
-  {id:'campe on',icon:'👑',nombre:'Rey del ring',desc:'Completa los 4 bloques'},
+  {id:'campeon',icon:'👑',nombre:'Rey del ring',desc:'Completa los 4 bloques'},
   {id:'studioso',icon:'📚',nombre:'Studioso',desc:'30 días de estudio'},
   {id:'udgchamp',icon:'🏆',nombre:'Campeón UDG',desc:'Simula el examen real'},
 ];
-function buildLogros() {
-  const desbloqueados = perfil ? (perfil.racha >= 5 ? 1 : 0) : 0;
-  document.getElementById('logros-count').textContent = desbloqueados + ' de ' + logrosData.length + ' desbloqueados';
-  document.getElementById('logros-c').innerHTML = logrosData.map((l,i) => {
-    const ok = perfil && ((l.id==='racha5' && perfil.racha>=5));
-    return `<div class="lg-card${ok?'':' lk'}">
-      <div class="lg-icon">${l.icon}</div>
-      <div class="lg-nom">${l.nombre}</div>
-      <div class="lg-desc">${l.desc}</div>
-      <span class="lg-badge ${ok?'b-ok':'b-lk'}">${ok?'✓ Desbloqueado':'Bloqueado'}</span>
-    </div>`;
+function buildLogros(){
+  const ok=perfil&&perfil.racha>=5;
+  document.getElementById('logros-count').textContent=(ok?1:0)+' de '+logrosData.length+' desbloqueados';
+  document.getElementById('logros-c').innerHTML=logrosData.map((l,i)=>{
+    const desbloqueado=perfil&&l.id==='racha5'&&perfil.racha>=5;
+    return `<div class="lg-card${desbloqueado?'':' lk'}"><div class="lg-icon">${l.icon}</div><div class="lg-nom">${l.nombre}</div><div class="lg-desc">${l.desc}</div><span class="lg-badge ${desbloqueado?'b-ok':'b-lk'}">${desbloqueado?'✓ Desbloqueado':'Bloqueado'}</span></div>`;
   }).join('');
 }
 
 // ══════════════════════════════
-// MAPA
+// PANEL ADMIN
 // ══════════════════════════════
+async function loadAdminData(){
+  const hoy=new Date().toLocaleDateString('es-MX',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('admin-fecha').textContent=hoy;
+  document.getElementById('config-email').textContent=currentUser.email;
+  document.getElementById('config-desde').textContent=new Date(currentUser.created_at).toLocaleDateString('es-MX',{month:'short',year:'numeric'});
+
+  // Cargar todos los perfiles excepto el admin
+  const {data:alumnos}=await sb.from('perfiles').select('*').eq('es_admin',false).order('xp',{ascending:false});
+  if(!alumnos){return;}
+
+  const total=alumnos.length;
+  const activos=alumnos.filter(a=>a.racha>0).length;
+  const xpTotal=alumnos.reduce((s,a)=>s+a.xp,0);
+  const hoyStr=new Date().toISOString().split('T')[0];
+  const hace3=new Date(Date.now()-3*86400000).toISOString().split('T')[0];
+  const enRiesgo=alumnos.filter(a=>!a.ultimo_acceso||a.ultimo_acceso<hace3).length;
+
+  document.getElementById('adm-total').textContent=total;
+  document.getElementById('adm-activos').textContent=activos;
+  document.getElementById('adm-xp').textContent=xpTotal;
+  document.getElementById('adm-riesgo').textContent=enRiesgo;
+
+  // Alumnos en riesgo
+  const riesgoList=alumnos.filter(a=>!a.ultimo_acceso||a.ultimo_acceso<hace3).slice(0,3);
+  const riesgoEl=document.getElementById('adm-riesgo-list');
+  if(riesgoList.length===0){
+    riesgoEl.innerHTML='<div style="background:rgba(45,106,79,.08);border:.5px solid rgba(45,106,79,.2);border-radius:9px;padding:12px 14px;font-size:12px;color:#5fbd8a;margin-bottom:8px">✅ ¡Todos los alumnos están activos!</div>';
+  } else {
+    riesgoEl.innerHTML=riesgoList.map(a=>buildAlumnoCard(a,true)).join('');
+  }
+
+  // Top 3
+  const top3=alumnos.slice(0,3);
+  document.getElementById('adm-top-list').innerHTML=top3.map((a,i)=>buildAlumnoCard(a,false,i+1)).join('');
+
+  // Lista completa
+  document.getElementById('adm-count-lbl').textContent=total+' alumnos registrados';
+  document.getElementById('adm-alumnos-list').innerHTML=alumnos.map(a=>buildAlumnoCard(a,false)).join('');
+
+  // Temas stats (simulado por ahora)
+  buildTemasStats(alumnos);
+}
+
+function buildAlumnoCard(a,esRiesgo,pos){
+  const hace3=new Date(Date.now()-3*86400000).toISOString().split('T')[0];
+  const estaEnRiesgo=!a.ultimo_acceso||a.ultimo_acceso<hace3;
+  const esNuevo=a.xp===0;
+  let tag='';
+  if(estaEnRiesgo) tag='<span class="alumno-tag tag-riesgo">Sin entrar 3+ días</span>';
+  else if(esNuevo) tag='<span class="alumno-tag tag-nuevo">Nuevo</span>';
+  else tag='<span class="alumno-tag tag-activo">Activo</span>';
+  const posLabel=pos?`<div style="font-family:\'Bebas Neue\',sans-serif;font-size:18px;width:24px;text-align:center;flex-shrink:0">${pos===1?'🥇':pos===2?'🥈':'🥉'}</div>`:'';
+  return `<div class="alumno-card${estaEnRiesgo?' riesgo':''}" onclick="showDetalle(${JSON.stringify(a).replace(/"/g,'&quot;')})">
+    ${posLabel}
+    <div class="alumno-av" style="background:rgba(230,57,70,.2);color:var(--red)">${(a.avatar||'??')}</div>
+    <div class="alumno-info">
+      <div class="alumno-nombre">${a.nombre||'Sin nombre'}</div>
+      <div class="alumno-meta">${a.email||''} · Nivel ${a.nivel||1}</div>
+    </div>
+    <div class="alumno-stats">
+      <div class="alumno-xp">${a.xp||0} XP</div>
+      <div class="alumno-racha">🔥 ${a.racha||0} días</div>
+      ${tag}
+    </div>
+  </div>`;
+}
+
+function buildTemasStats(alumnos){
+  const temas=[
+    {nombre:'Números naturales',color:'#e63946'},
+    {nombre:'Jerarquía de operaciones',color:'#e63946'},
+    {nombre:'Fracciones y decimales',color:'#e63946'},
+    {nombre:'Porcentajes',color:'#e63946'},
+    {nombre:'Números enteros',color:'#c9a84c'},
+    {nombre:'Expresiones algebraicas',color:'#c9a84c'},
+    {nombre:'Ecuaciones',color:'#c9a84c'},
+  ];
+  const total=Math.max(alumnos.length,1);
+  document.getElementById('adm-temas-stats').innerHTML=temas.map((t,i)=>{
+    const pct=Math.max(5,Math.round((total-i*2)/total*100));
+    return `<div class="tema-stat-row">
+      <div class="tsrow-top"><span class="tsrow-nombre">${t.nombre}</span><span class="tsrow-pct">${pct}%</span></div>
+      <div class="tsrow-bg"><div class="tsrow-fill" style="width:${pct}%;background:${t.color}"></div></div>
+      <div class="tsrow-meta"><span>${Math.round(total*pct/100)} alumnos completaron</span><span>de ${total}</span></div>
+    </div>`;
+  }).join('');
+}
+
+function showDetalle(alumno){
+  document.getElementById('det-av').textContent=alumno.avatar||'??';
+  document.getElementById('det-nombre').textContent=alumno.nombre||'Sin nombre';
+  document.getElementById('det-email').textContent=alumno.email||'';
+  document.getElementById('det-xp').textContent=alumno.xp||0;
+  document.getElementById('det-racha').textContent=alumno.racha||0;
+  document.getElementById('det-nivel').textContent=alumno.nivel||1;
+  document.getElementById('det-ultimo').textContent=alumno.ultimo_acceso?new Date(alumno.ultimo_acceso).toLocaleDateString('es-MX',{weekday:'long',year:'numeric',month:'long',day:'numeric'}):'Nunca';
+  document.getElementById('detalle-overlay').classList.add('show');
+}
+function hideDetalle(e){if(!e||e.target.id==='detalle-overlay')document.getElementById('detalle-overlay').classList.remove('show');}
+
+function goAdminScr(id,el){
+  document.querySelectorAll('.admin-scr').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.admin-nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('ascr-'+id).classList.add('active');
+  el.classList.add('active');
+}
+
+// MAPA
 const bloques=[
-  {num:1,nombre:"Fundamentos",sub:"Sin esto, nada más funciona",color:"#e63946",
-   temas:[{id:1,nombre:"Números naturales",sub:"Operaciones básicas",est:"done"},{id:2,nombre:"Jerarquía de operaciones",sub:"PEMDAS",est:"done"},{id:3,nombre:"Fracciones y decimales",sub:"Representación y cálculo",est:"active"},{id:4,nombre:"Porcentajes y proporciones",sub:"Razón y regla de tres",est:"locked"}]},
-  {num:2,nombre:"Transición al álgebra",sub:"El pensamiento abstracto empieza aquí",color:"#c9a84c",
-   temas:[{id:5,nombre:"Números enteros",sub:"Positivos, negativos y cero",est:"locked"},{id:6,nombre:"Expresiones algebraicas",sub:"Variables y términos",est:"locked"},{id:7,nombre:"Ecuaciones de primer grado",sub:"Despeje y solución",est:"locked"},{id:8,nombre:"Sistemas de ecuaciones",sub:"Dos incógnitas",est:"locked"}]},
-  {num:3,nombre:"Geometría y medición",sub:"El espacio y sus propiedades",color:"#1d9e75",
-   temas:[{id:9,nombre:"Perímetro y área",sub:"Figuras planas",est:"locked"},{id:10,nombre:"Volumen",sub:"Cuerpos geométricos",est:"locked"},{id:11,nombre:"Teorema de Pitágoras",sub:"Triángulos rectángulos",est:"locked"},{id:12,nombre:"Ángulos y triángulos",sub:"Clasificación y propiedades",est:"locked"}]},
-  {num:4,nombre:"Datos y probabilidad",sub:"Interpretar el mundo con números",color:"#378add",
-   temas:[{id:13,nombre:"Estadística básica",sub:"Media, mediana, moda",est:"locked"},{id:14,nombre:"Probabilidad",sub:"Eventos y posibilidades",est:"locked"},{id:15,nombre:"Gráficas e interpretación",sub:"Leer y construir datos",est:"locked"}]},
+  {num:1,nombre:"Fundamentos",sub:"Sin esto, nada más funciona",color:"#e63946",temas:[{id:1,nombre:"Números naturales",sub:"Operaciones básicas",est:"done"},{id:2,nombre:"Jerarquía de operaciones",sub:"PEMDAS",est:"done"},{id:3,nombre:"Fracciones y decimales",sub:"Representación y cálculo",est:"active"},{id:4,nombre:"Porcentajes y proporciones",sub:"Razón y regla de tres",est:"locked"}]},
+  {num:2,nombre:"Transición al álgebra",sub:"El pensamiento abstracto empieza aquí",color:"#c9a84c",temas:[{id:5,nombre:"Números enteros",sub:"Positivos, negativos y cero",est:"locked"},{id:6,nombre:"Expresiones algebraicas",sub:"Variables y términos",est:"locked"},{id:7,nombre:"Ecuaciones de primer grado",sub:"Despeje y solución",est:"locked"},{id:8,nombre:"Sistemas de ecuaciones",sub:"Dos incógnitas",est:"locked"}]},
+  {num:3,nombre:"Geometría y medición",sub:"El espacio y sus propiedades",color:"#1d9e75",temas:[{id:9,nombre:"Perímetro y área",sub:"Figuras planas",est:"locked"},{id:10,nombre:"Volumen",sub:"Cuerpos geométricos",est:"locked"},{id:11,nombre:"Teorema de Pitágoras",sub:"Triángulos rectángulos",est:"locked"},{id:12,nombre:"Ángulos y triángulos",sub:"Clasificación y propiedades",est:"locked"}]},
+  {num:4,nombre:"Datos y probabilidad",sub:"Interpretar el mundo con números",color:"#378add",temas:[{id:13,nombre:"Estadística básica",sub:"Media, mediana, moda",est:"locked"},{id:14,nombre:"Probabilidad",sub:"Eventos y posibilidades",est:"locked"},{id:15,nombre:"Gráficas e interpretación",sub:"Leer y construir datos",est:"locked"}]},
 ];
 const openB=new Set([1]);
 function buildMapa(){
@@ -801,27 +984,14 @@ function buildMapa(){
     const isOpen=openB.has(b.num);
     const dc=b.temas.filter(t=>t.est==='done').length;
     const w=document.createElement('div');w.className='blq-wrap';
-    w.innerHTML=`<div class="blq-hdr" onclick="toggleB(${b.num})">
-      <div class="blq-num" style="background:${b.color}22;border:1px solid ${b.color}55;color:${b.color}">${b.num}</div>
-      <div class="blq-info"><div class="blq-nom">${b.nombre}</div><div class="blq-sub">${b.sub} · ${dc}/${b.temas.length}</div></div>
-      <span class="blq-arr${isOpen?' open':''}">▶</span>
-    </div>
-    ${isOpen?`<div class="blq-temas" style="border:.5px solid ${b.color}22;border-radius:9px">${b.temas.map(t=>`
-      <div class="t-row${t.est==='locked'?' lk':''}" onclick="${t.est!=='locked'?`showModal('${t.nombre}','Bloque ${b.num} · ${b.nombre}','${b.color}')`:''}" style="background:${t.est==='active'?b.color+'0d':''}">
-        <div class="t-ico" style="background:${t.est==='done'?'rgba(45,106,79,.2)':t.est==='active'?b.color+'22':'rgba(255,255,255,.05)'};border:1px solid ${t.est==='done'?'rgba(45,106,79,.5)':t.est==='active'?b.color+'55':'rgba(255,255,255,.1)'}">
-          ${t.est==='done'?'✓':t.est==='active'?'▶':t.id}
-        </div>
-        <div class="t-info"><div class="t-nom">${t.nombre}</div><div class="t-sub">${t.sub}</div></div>
-        <span class="t-tag ${t.est==='done'?'tag-d':t.est==='active'?'tag-a':'tag-l'}">${t.est==='done'?'Listo':t.est==='active'?'En curso':'🔒'}</span>
-      </div>`).join('')}</div>`:''}`;
+    w.innerHTML=`<div class="blq-hdr" onclick="toggleB(${b.num})"><div class="blq-num" style="background:${b.color}22;border:1px solid ${b.color}55;color:${b.color}">${b.num}</div><div class="blq-info"><div class="blq-nom">${b.nombre}</div><div class="blq-sub">${b.sub} · ${dc}/${b.temas.length}</div></div><span class="blq-arr${isOpen?' open':''}">▶</span></div>
+    ${isOpen?`<div class="blq-temas" style="border:.5px solid ${b.color}22;border-radius:9px">${b.temas.map(t=>`<div class="t-row${t.est==='locked'?' lk':''}" onclick="${t.est!=='locked'?`showModal('${t.nombre}','Bloque ${b.num} · ${b.nombre}','${b.color}')`:''}" style="background:${t.est==='active'?b.color+'0d':''}"><div class="t-ico" style="background:${t.est==='done'?'rgba(45,106,79,.2)':t.est==='active'?b.color+'22':'rgba(255,255,255,.05)'};border:1px solid ${t.est==='done'?'rgba(45,106,79,.5)':t.est==='active'?b.color+'55':'rgba(255,255,255,.1)'}">${t.est==='done'?'✓':t.est==='active'?'▶':t.id}</div><div class="t-info"><div class="t-nom">${t.nombre}</div><div class="t-sub">${t.sub}</div></div><span class="t-tag ${t.est==='done'?'tag-d':t.est==='active'?'tag-a':'tag-l'}">${t.est==='done'?'Listo':t.est==='active'?'En curso':'🔒'}</span></div>`).join('')}</div>`:''}`;
     c.appendChild(w);
   });
 }
 function toggleB(n){if(openB.has(n))openB.delete(n);else openB.add(n);buildMapa();}
 
-// ══════════════════════════════
 // NAVEGACIÓN
-// ══════════════════════════════
 function goPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
@@ -833,78 +1003,46 @@ function goScr(id,el){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('scr-'+id).classList.add('active');
   el.classList.add('active');
-  if(id==='ranking') loadRanking();
+  if(id==='ranking')loadRanking();
 }
-function goTema(nombre,sub,color){
-  document.getElementById('tp-title').textContent=nombre;
-  document.getElementById('tp-nom').textContent=nombre;
-  goPage('tema'); goRound(0);
-}
+function goTema(nombre,sub,color){document.getElementById('tp-title').textContent=nombre;document.getElementById('tp-nom').textContent=nombre;goPage('tema');goRound(0);}
 
-// ══════════════════════════════
 // ROUNDS
-// ══════════════════════════════
 function goRound(n){
   document.querySelectorAll('.rscr').forEach((s,i)=>s.classList.toggle('active',i===n));
-  document.querySelectorAll('.rtab').forEach((t,i)=>{
-    t.classList.toggle('active',i===n);
-    if(i<n)t.classList.add('done'); else t.classList.remove('done');
-  });
+  document.querySelectorAll('.rtab').forEach((t,i)=>{t.classList.toggle('active',i===n);if(i<n)t.classList.add('done');else t.classList.remove('done');});
 }
-
-// VIDEO
 let playing=false,vpct=0,viv;
 function playVid(){
-  if(playing)return; playing=true;
-  const th=document.getElementById('vthumb');
-  th.onclick=null;
+  if(playing)return;playing=true;
+  const th=document.getElementById('vthumb');th.onclick=null;
   th.querySelector('.play-ring').style.display='none';
-  th.querySelector('.vinfo').innerHTML='<div style="color:rgba(255,255,255,.7);font-size:12px">▶ Reproduciendo...</div><div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:2px">@elprofecolorado en TikTok</div>';
-  viv=setInterval(()=>{
-    vpct+=100/134; if(vpct>=100){vpct=100;clearInterval(viv);}
-    document.getElementById('vbar').style.width=vpct+'%';
-    const t=Math.floor((vpct/100)*134),m=Math.floor(t/60),s=t%60;
-    document.getElementById('vtime').textContent=m+':'+String(s).padStart(2,'0')+' / 2:14';
-  },1000);
+  th.querySelector('.vinfo').innerHTML='<div style="color:rgba(255,255,255,.7);font-size:12px">▶ Reproduciendo...</div>';
+  viv=setInterval(()=>{vpct+=100/134;if(vpct>=100){vpct=100;clearInterval(viv);}
+  document.getElementById('vbar').style.width=vpct+'%';
+  const t=Math.floor((vpct/100)*134),m=Math.floor(t/60),s=t%60;
+  document.getElementById('vtime').textContent=m+':'+String(s).padStart(2,'0')+' / 2:14';},1000);
 }
-
-// PRÁCTICA
 function pickOpt(el,ok){
   document.querySelectorAll('#ex-opts .ex-opt').forEach(o=>o.onclick=null);
   const fb=document.getElementById('ex-fb');
-  if(ok){
-    el.classList.add('correct');
-    fb.className='ex-fb show ok';
-    fb.textContent='¡Correcto! 2/5 + 1/5 = 3/5. Los denominadores iguales — solo sumas los numeradores.';
-    sumarXP(10);
-  } else {
-    el.classList.add('wrong');
-    document.querySelectorAll('#ex-opts .ex-opt').forEach(o=>{if(o.textContent==='3/5')o.classList.add('correct');});
-    fb.className='ex-fb show bad';
-    fb.textContent='Casi. Denominadores iguales: solo sumas numeradores. 2+1=3, denominador sigue 5. Resultado: 3/5.';
-  }
+  if(ok){el.classList.add('correct');fb.className='ex-fb show ok';fb.textContent='¡Correcto! 2/5 + 1/5 = 3/5.';sumarXP(10);}
+  else{el.classList.add('wrong');document.querySelectorAll('#ex-opts .ex-opt').forEach(o=>{if(o.textContent==='3/5')o.classList.add('correct');});fb.className='ex-fb show bad';fb.textContent='Casi. Denominadores iguales: suma numeradores. 2+1=3, denominador sigue 5 → 3/5.';}
   document.getElementById('btn-r4').style.display='block';
 }
-
-// MODAL
 function showModal(nombre,sub,color){
   document.getElementById('modal-title').textContent=nombre;
   document.getElementById('modal-sub').textContent=sub;
   document.getElementById('modal-btn').style.background=color;
-  document.getElementById('modal-rounds').innerHTML=['Video','Demo','Práctica','Examen'].map((r,i)=>`
-    <div class="modal-round" style="background:${color}18;border:.5px solid ${color}44">
-      <div class="modal-round-num" style="color:${color}">R${i+1}</div>
-      <div class="modal-round-name">${r}</div>
-    </div>`).join('');
+  document.getElementById('modal-rounds').innerHTML=['Video','Demo','Práctica','Examen'].map((r,i)=>`<div class="modal-round" style="background:${color}18;border:.5px solid ${color}44"><div class="modal-round-num" style="color:${color}">R${i+1}</div><div class="modal-round-name">${r}</div></div>`).join('');
   document.getElementById('modal').classList.add('show');
 }
 function hideModal(e){if(e.target.id==='modal')document.getElementById('modal').classList.remove('show');}
 
-// BEATS LANDING
+// BEATS
 const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.1});
 ['b1','b2','b3','b4'].forEach((id,i)=>{const el=document.getElementById(id);if(el){el.style.transitionDelay=(i*.12)+'s';obs.observe(el);}});
 
-// INICIAR
 init();
 </script>
 </body>
