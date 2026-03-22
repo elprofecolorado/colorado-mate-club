@@ -388,16 +388,42 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
         </div>
         <div class="auth-form active" id="form-login">
           <div class="auth-error" id="login-error"></div>
+          <div class="auth-success" id="login-success"></div>
           <div class="auth-field"><div class="auth-label">Correo</div><input class="auth-input" id="login-email" type="email" placeholder="tucorreo@gmail.com"/></div>
-          <div class="auth-field"><div class="auth-label">Contraseña</div><input class="auth-input" id="login-pass" type="password" placeholder="••••••••"/></div>
+          <div class="auth-field">
+            <div class="auth-label">Contraseña</div>
+            <div style="position:relative">
+              <input class="auth-input" id="login-pass" type="password" placeholder="••••••••" style="padding-right:44px"/>
+              <button onclick="togglePass('login-pass','eye-login')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px" id="eye-login">👁</button>
+            </div>
+          </div>
+          <div style="text-align:right;margin-bottom:14px">
+            <span onclick="showForgot()" style="font-size:11px;color:var(--muted);cursor:pointer;text-decoration:underline">¿Olvidaste tu contraseña?</span>
+          </div>
           <button class="auth-btn" id="btn-login" onclick="doLogin()">ENTRAR AL RING →</button>
         </div>
+
+        <div class="auth-form" id="form-forgot">
+          <div class="auth-error" id="forgot-error"></div>
+          <div class="auth-success" id="forgot-success"></div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6">Te mandamos un link a tu correo para que puedas crear una nueva contraseña.</div>
+          <div class="auth-field"><div class="auth-label">Tu correo</div><input class="auth-input" id="forgot-email" type="email" placeholder="tucorreo@gmail.com"/></div>
+          <button class="auth-btn" id="btn-forgot" onclick="doForgot()">ENVIAR LINK →</button>
+          <div style="text-align:center;margin-top:12px"><span onclick="showLogin()" style="font-size:11px;color:var(--muted);cursor:pointer;text-decoration:underline">← Volver al login</span></div>
+        </div>
+
         <div class="auth-form" id="form-register">
           <div class="auth-error" id="reg-error"></div>
           <div class="auth-success" id="reg-success"></div>
           <div class="auth-field"><div class="auth-label">Tu nombre</div><input class="auth-input" id="reg-nombre" type="text" placeholder="¿Cómo te llamas?"/></div>
           <div class="auth-field"><div class="auth-label">Correo</div><input class="auth-input" id="reg-email" type="email" placeholder="tucorreo@gmail.com"/></div>
-          <div class="auth-field"><div class="auth-label">Contraseña</div><input class="auth-input" id="reg-pass" type="password" placeholder="Mínimo 6 caracteres"/></div>
+          <div class="auth-field">
+            <div class="auth-label">Contraseña</div>
+            <div style="position:relative">
+              <input class="auth-input" id="reg-pass" type="password" placeholder="Mínimo 6 caracteres" style="padding-right:44px"/>
+              <button onclick="togglePass('reg-pass','eye-reg')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px" id="eye-reg">👁</button>
+            </div>
+          </div>
           <button class="auth-btn" id="btn-register" onclick="doRegister()">CREAR MI CUENTA →</button>
         </div>
       </div>
@@ -606,9 +632,9 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
     <div class="tema-page">
       <div class="tp-topbar"><button class="tp-back" onclick="goPage('app')">← Volver</button><span class="tp-title" id="tp-title">Tema</span></div>
       <div style="padding:14px 18px 0">
-        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px">Bloque 1 · Fundamentos</div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px" id="tp-bloque">Bloque 1 · Fundamentos</div>
         <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;margin-bottom:3px" id="tp-nom">Fracciones</div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Representación, operaciones y conversión.</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:14px" id="tp-desc">Representación, operaciones y conversión.</div>
       </div>
       <div class="rounds-strip">
         <div class="rtab active" id="rt0" onclick="goRound(0)"><div class="rtab-num">Round 1</div><div class="rtab-name">Video</div><div class="rtab-dot"></div></div>
@@ -617,36 +643,22 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
         <div class="rtab" id="rt3" onclick="goRound(3)"><div class="rtab-num">Round 4</div><div class="rtab-name">Examen</div><div class="rtab-dot"></div></div>
       </div>
       <div class="rscr active" id="rs0">
-        <div class="video-wrap"><div class="vthumb" id="vthumb" onclick="playVid()"><div class="tt-badge"><div class="tt-dot"></div><span class="tt-lbl">@elprofecolorado</span></div><div class="views-badge">▶ 909</div><div class="play-ring"><span style="color:var(--red);font-size:17px;margin-left:3px">▶</span></div><div class="vinfo"><div class="vinfo-topic">Fracciones y decimales</div><div class="vinfo-by">por <span>El Profe Colorado</span></div></div><div class="vfoot"><div class="vf-row"><span id="vtime">0:00 / 2:14</span><span>TikTok ↗</span></div><div class="vprog-bg"><div class="vprog-fill" id="vbar"></div></div></div></div></div>
+        <div class="video-wrap"><div class="vthumb" id="vthumb" onclick="playVid()"><div class="tt-badge"><div class="tt-dot"></div><span class="tt-lbl">@elprofecolorado</span></div><div class="views-badge">▶ 909</div><div class="play-ring" id="vplay"><span style="color:var(--red);font-size:17px;margin-left:3px">▶</span></div><div id="vplay-txt" style="display:none;color:rgba(255,255,255,.7);font-size:12px">▶ Reproduciendo...</div><div class="vinfo"><div class="vinfo-topic" id="vinfo-topic">Fracciones y decimales</div><div class="vinfo-by">por <span>El Profe Colorado</span></div></div><div class="vfoot"><div class="vf-row"><span id="vtime">0:00 / 2:14</span><span id="vviews">▶ 909</span></div><div class="vprog-bg"><div class="vprog-fill" id="vbar"></div></div></div></div></div>
         <div class="cb"><div class="cb-av">CO</div><div class="cb-txt">"Antes de practicar, <b>mira cómo lo resuelvo yo.</b>"</div></div>
         <div class="kp-lbl">Lo que vas a aprender</div>
-        <div class="kp-item"><div class="kp-num">1</div><div><div class="kp-txt">Qué es una fracción</div><div class="kp-sub">Numerador y denominador</div></div></div>
-        <div class="kp-item"><div class="kp-num">2</div><div><div class="kp-txt">Convertir fracción a decimal</div><div class="kp-sub">Dividir numerador entre denominador</div></div></div>
-        <div class="kp-item"><div class="kp-num">3</div><div><div class="kp-txt">Fracciones equivalentes</div><div class="kp-sub">Misma cantidad, diferente representación</div></div></div>
-        <div class="kp-item"><div class="kp-num">4</div><div><div class="kp-txt">Sumar con mismo denominador</div><div class="kp-sub">El denominador no cambia</div></div></div>
+        <div id="kp-list"></div>
         <button class="rnd-btn" onclick="goRound(1)">Round 2: Ver la demo →</button>
       </div>
       <div class="rscr" id="rs1">
         <div class="cb"><div class="cb-av">CO</div><div class="cb-txt">"Paso a paso. <b>Sigue cada movimiento.</b>"</div></div>
-        <div class="demo-step"><div class="demo-num">Problema</div><div class="demo-expr">1/4 + 2/4 = ?</div></div>
-        <div class="demo-arrow">↓</div>
-        <div class="demo-step"><div class="demo-num">Paso 1 — Verificar denominadores</div><div class="demo-expr">4 = 4 ✓</div><div class="demo-exp">Mismo denominador — sumamos directo</div></div>
-        <div class="demo-arrow">↓</div>
-        <div class="demo-step"><div class="demo-num">Paso 2 — Sumar numeradores</div><div class="demo-expr">1 + 2 = 3</div><div class="demo-exp">Denominador se queda igual: 4</div></div>
-        <div class="demo-arrow">↓</div>
-        <div class="demo-step"><div class="demo-num">Resultado</div><div class="demo-expr" style="color:var(--gold)">= 3/4 = 0.75</div></div>
+        <div id="demo-content"></div>
         <button class="rnd-btn" onclick="goRound(2)">Round 3: Ahora tú →</button>
       </div>
       <div class="rscr" id="rs2">
-        <div class="cb"><div class="cb-av">CO</div><div class="cb-txt">"Tu turno. <b>Sin prisa.</b>"</div></div>
-        <div class="ex-q">Resuelve:</div>
-        <div class="ex-math">2/5 + 1/5</div>
-        <div class="ex-opts" id="ex-opts">
-          <div class="ex-opt" onclick="pickOpt(this,false)">2/10</div>
-          <div class="ex-opt" onclick="pickOpt(this,false)">3/10</div>
-          <div class="ex-opt" onclick="pickOpt(this,true)">3/5</div>
-          <div class="ex-opt" onclick="pickOpt(this,false)">2/5</div>
-        </div>
+        <div class="cb"><div class="cb-av">CO</div><div class="cb-txt">"Tu turno. <b>Sin prisa.</b> Piensa antes de tocar."</div></div>
+        <div class="ex-q" id="ex-q">Resuelve:</div>
+        <div class="ex-math" id="ex-math">2/5 + 1/5</div>
+        <div class="ex-opts" id="ex-opts"></div>
         <div class="ex-fb" id="ex-fb"></div>
         <button class="rnd-btn" id="btn-r4" style="display:none" onclick="goRound(3)">Round 4: Al examen →</button>
       </div>
@@ -716,8 +728,38 @@ async function init(){
 // AUTH
 function switchAuthTab(tab){
   document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&tab==='login')||(i===1&&tab==='register')));
-  document.getElementById('form-login').classList.toggle('active',tab==='login');
-  document.getElementById('form-register').classList.toggle('active',tab==='register');
+  ['form-login','form-forgot','form-register'].forEach(id=>document.getElementById(id).classList.remove('active'));
+  document.getElementById(tab==='login'?'form-login':'form-register').classList.add('active');
+}
+function showForgot(){
+  ['form-login','form-forgot','form-register'].forEach(id=>document.getElementById(id).classList.remove('active'));
+  document.getElementById('form-forgot').classList.add('active');
+  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+}
+function showLogin(){
+  ['form-login','form-forgot','form-register'].forEach(id=>document.getElementById(id).classList.remove('active'));
+  document.getElementById('form-login').classList.add('active');
+  document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
+}
+function togglePass(inputId,btnId){
+  const input=document.getElementById(inputId);
+  const btn=document.getElementById(btnId);
+  if(input.type==='password'){input.type='text';btn.textContent='hide';}
+  else{input.type='password';btn.textContent='show';}
+}
+async function doForgot(){
+  const email=document.getElementById('forgot-email').value.trim();
+  const btn=document.getElementById('btn-forgot');
+  const err=document.getElementById('forgot-error');
+  const suc=document.getElementById('forgot-success');
+  if(!email){showErr(err,'Ingresa tu correo');return;}
+  btn.disabled=true;btn.textContent='Enviando...';
+  const {error}=await sb.auth.resetPasswordForEmail(email,{
+    redirectTo:'https://elprofecolorado.github.io/colorado-mate-club'
+  });
+  if(error){showErr(err,error.message);btn.disabled=false;btn.textContent='ENVIAR LINK';return;}
+  suc.textContent='Listo! Revisa tu correo y da click al link.';suc.classList.add('show');
+  btn.disabled=false;btn.textContent='ENVIAR LINK';
 }
 async function doLogin(){
   const email=document.getElementById('login-email').value.trim();
@@ -985,7 +1027,7 @@ function buildMapa(){
     const dc=b.temas.filter(t=>t.est==='done').length;
     const w=document.createElement('div');w.className='blq-wrap';
     w.innerHTML=`<div class="blq-hdr" onclick="toggleB(${b.num})"><div class="blq-num" style="background:${b.color}22;border:1px solid ${b.color}55;color:${b.color}">${b.num}</div><div class="blq-info"><div class="blq-nom">${b.nombre}</div><div class="blq-sub">${b.sub} · ${dc}/${b.temas.length}</div></div><span class="blq-arr${isOpen?' open':''}">▶</span></div>
-    ${isOpen?`<div class="blq-temas" style="border:.5px solid ${b.color}22;border-radius:9px">${b.temas.map(t=>`<div class="t-row${t.est==='locked'?' lk':''}" onclick="${t.est!=='locked'?`showModal('${t.nombre}','Bloque ${b.num} · ${b.nombre}','${b.color}')`:''}" style="background:${t.est==='active'?b.color+'0d':''}"><div class="t-ico" style="background:${t.est==='done'?'rgba(45,106,79,.2)':t.est==='active'?b.color+'22':'rgba(255,255,255,.05)'};border:1px solid ${t.est==='done'?'rgba(45,106,79,.5)':t.est==='active'?b.color+'55':'rgba(255,255,255,.1)'}">${t.est==='done'?'✓':t.est==='active'?'▶':t.id}</div><div class="t-info"><div class="t-nom">${t.nombre}</div><div class="t-sub">${t.sub}</div></div><span class="t-tag ${t.est==='done'?'tag-d':t.est==='active'?'tag-a':'tag-l'}">${t.est==='done'?'Listo':t.est==='active'?'En curso':'🔒'}</span></div>`).join('')}</div>`:''}`;
+    ${isOpen?`<div class="blq-temas" style="border:.5px solid ${b.color}22;border-radius:9px">${b.temas.map(t=>`<div class="t-row${t.est==='locked'?' lk':''}" onclick="${t.est!=='locked'?`showModal(${t.id},'Bloque ${b.num} · ${b.nombre}','${b.color}')`:''}" style="background:${t.est==='active'?b.color+'0d':''}"><div class="t-ico" style="background:${t.est==='done'?'rgba(45,106,79,.2)':t.est==='active'?b.color+'22':'rgba(255,255,255,.05)'};border:1px solid ${t.est==='done'?'rgba(45,106,79,.5)':t.est==='active'?b.color+'55':'rgba(255,255,255,.1)'}">${t.est==='done'?'✓':t.est==='active'?'▶':t.id}</div><div class="t-info"><div class="t-nom">${t.nombre}</div><div class="t-sub">${t.sub}</div></div><span class="t-tag ${t.est==='done'?'tag-d':t.est==='active'?'tag-a':'tag-l'}">${t.est==='done'?'Listo':t.est==='active'?'En curso':'🔒'}</span></div>`).join('')}</div>`:''}`;
     c.appendChild(w);
   });
 }
@@ -1005,7 +1047,52 @@ function goScr(id,el){
   el.classList.add('active');
   if(id==='ranking')loadRanking();
 }
-function goTema(nombre,sub,color){document.getElementById('tp-title').textContent=nombre;document.getElementById('tp-nom').textContent=nombre;goPage('tema');goRound(0);}
+function goTema(nombreOrId,sub,color){
+  let tema;
+  if(typeof nombreOrId==='number'){
+    tema=temasContenido[nombreOrId];
+  } else {
+    tema=Object.values(temasContenido).find(t=>t.nombre===nombreOrId);
+  }
+  if(!tema){goPage('tema');goRound(0);return;}
+  currentTema=tema;
+  document.getElementById('tp-title').textContent=tema.nombre;
+  document.getElementById('tp-nom').textContent=tema.nombre;
+  document.getElementById('tp-bloque').textContent='Bloque '+tema.bloque+' — '+['','Fundamentos','Álgebra','Geometría','Datos'][tema.bloque];
+  document.getElementById('tp-desc').textContent=tema.desc;
+  // Build video
+  document.getElementById('vthumb').onclick=playVid;
+  document.getElementById('vinfo-topic').textContent=tema.nombre;
+  document.getElementById('vviews').textContent='▶ '+tema.video_views;
+  playing=false;vpct=0;
+  document.getElementById('vbar').style.width='0%';
+  document.getElementById('vtime').textContent='0:00 / 2:14';
+  document.getElementById('vplay').style.display='flex';
+  document.getElementById('vplay-txt').style.display='none';
+  // Build puntos clave
+  document.getElementById('kp-list').innerHTML=tema.puntos_clave.map((k,i)=>`<div class="kp-item"><div class="kp-num">${i+1}</div><div><div class="kp-txt">${k.txt}</div><div class="kp-sub">${k.sub}</div></div></div>`).join('');
+  // Build demo
+  buildDemo(tema.demo);
+  // Build ejercicio (primero)
+  currentEjIdx=0;
+  buildEjercicio(tema.ejercicios[currentEjIdx]);
+  goPage('tema');goRound(0);
+}
+let currentTema=null,currentEjIdx=0;
+function buildDemo(demo){
+  const c=document.getElementById('demo-content');
+  c.innerHTML='<div class="demo-step"><div class="demo-num">Problema</div><div class="demo-expr">'+demo.problema+'</div></div>'+
+  demo.pasos.map(p=>'<div class="demo-arrow">↓</div><div class="demo-step"><div class="demo-num">'+p.num+'</div><div class="demo-expr"'+(p.gold?' style="color:var(--gold)"':'')+'>'+p.expr+'</div>'+(p.exp?'<div class="demo-exp">'+p.exp+'</div>':'')+'</div>').join('');
+}
+function buildEjercicio(ej){
+  document.getElementById('ex-q').textContent=ej.q;
+  document.getElementById('ex-math').textContent=ej.expr;
+  document.getElementById('ex-math').style.display=ej.expr?'inline-block':'none';
+  document.getElementById('ex-fb').className='ex-fb';
+  document.getElementById('btn-r4').style.display='none';
+  const opts=document.getElementById('ex-opts');
+  opts.innerHTML=ej.opts.map((o,i)=>`<div class="ex-opt" onclick="pickOpt(this,${i===${ej.correct}},'${ej.exp.replace(/'/g,"\'")}',${ej.correct})">${o}</div>`).join('');
+}
 
 // ROUNDS
 function goRound(n){
@@ -1016,28 +1103,74 @@ let playing=false,vpct=0,viv;
 function playVid(){
   if(playing)return;playing=true;
   const th=document.getElementById('vthumb');th.onclick=null;
-  th.querySelector('.play-ring').style.display='none';
-  th.querySelector('.vinfo').innerHTML='<div style="color:rgba(255,255,255,.7);font-size:12px">▶ Reproduciendo...</div>';
+  document.getElementById('vplay').style.display='none';
+  document.getElementById('vplay-txt').style.display='block';
   viv=setInterval(()=>{vpct+=100/134;if(vpct>=100){vpct=100;clearInterval(viv);}
   document.getElementById('vbar').style.width=vpct+'%';
   const t=Math.floor((vpct/100)*134),m=Math.floor(t/60),s=t%60;
   document.getElementById('vtime').textContent=m+':'+String(s).padStart(2,'0')+' / 2:14';},1000);
 }
-function pickOpt(el,ok){
-  document.querySelectorAll('#ex-opts .ex-opt').forEach(o=>o.onclick=null);
+function pickOpt(el,isOk,exp,correctIdx){
+  const opts=document.querySelectorAll('#ex-opts .ex-opt');
+  opts.forEach(o=>o.onclick=null);
   const fb=document.getElementById('ex-fb');
-  if(ok){el.classList.add('correct');fb.className='ex-fb show ok';fb.textContent='¡Correcto! 2/5 + 1/5 = 3/5.';sumarXP(10);}
-  else{el.classList.add('wrong');document.querySelectorAll('#ex-opts .ex-opt').forEach(o=>{if(o.textContent==='3/5')o.classList.add('correct');});fb.className='ex-fb show bad';fb.textContent='Casi. Denominadores iguales: suma numeradores. 2+1=3, denominador sigue 5 → 3/5.';}
-  document.getElementById('btn-r4').style.display='block';
+  const btn=document.getElementById('btn-r4');
+  if(isOk){
+    el.classList.add('correct');
+    fb.className='ex-fb show ok';
+    fb.innerHTML='<strong>¡Correcto!</strong> '+exp;
+    sumarXP(10);
+  } else {
+    el.classList.add('wrong');
+    opts[correctIdx].classList.add('correct');
+    fb.className='ex-fb show bad';
+    fb.innerHTML='<strong>Casi.</strong> '+exp;
+  }
+  // Next exercise button
+  const hasMore=currentTema&&currentEjIdx<currentTema.ejercicios.length-1;
+  btn.textContent=hasMore?'Siguiente ejercicio →':'Round 4: Al examen →';
+  btn.onclick=hasMore?nextEjercicio:()=>goRound(3);
+  btn.style.display='block';
 }
-function showModal(nombre,sub,color){
+function nextEjercicio(){
+  if(!currentTema)return;
+  currentEjIdx++;
+  if(currentEjIdx<currentTema.ejercicios.length){
+    buildEjercicio(currentTema.ejercicios[currentEjIdx]);
+  } else {
+    goRound(3);
+  }
+}
+function showModal(idOrNombre,sub,color){
+  const tema=typeof idOrNombre==='number'?temasContenido[idOrNombre]:null;
+  const nombre=tema?tema.nombre:idOrNombre;
   document.getElementById('modal-title').textContent=nombre;
   document.getElementById('modal-sub').textContent=sub;
   document.getElementById('modal-btn').style.background=color;
+  window._modalId=idOrNombre;
   document.getElementById('modal-rounds').innerHTML=['Video','Demo','Práctica','Examen'].map((r,i)=>`<div class="modal-round" style="background:${color}18;border:.5px solid ${color}44"><div class="modal-round-num" style="color:${color}">R${i+1}</div><div class="modal-round-name">${r}</div></div>`).join('');
   document.getElementById('modal').classList.add('show');
 }
 function hideModal(e){if(e.target.id==='modal')document.getElementById('modal').classList.remove('show');}
+
+
+const temasContenido = {
+  1:{nombre:"Números naturales y operaciones básicas",desc:"Suma, resta, multiplicación y división de números naturales.",video_views:"1.2 mil",bloque:1,color:"#e63946",puntos_clave:[{txt:"Orden de los números naturales",sub:"Del más pequeño al más grande"},{txt:"Suma y resta",sub:"Operaciones fundamentales"},{txt:"Multiplicación como suma repetida",sub:"3×4 = 4+4+4 = 12"},{txt:"División y residuo",sub:"Dividendo ÷ divisor = cociente"}],demo:{problema:"¿Cuánto es 125 × 4?",pasos:[{num:"Multiplicamos unidades",expr:"5 × 4 = 20",exp:"Escribimos 0, llevamos 2"},{num:"Multiplicamos decenas",expr:"2 × 4 + 2 = 10",exp:"Escribimos 0, llevamos 1"},{num:"Multiplicamos centenas",expr:"1 × 4 + 1 = 5",exp:"Escribimos 5"},{num:"Resultado",expr:"125 × 4 = 500",exp:"",gold:true}]},ejercicios:[{q:"¿Cuánto es 234 + 567?",expr:"234 + 567 = ?",opts:["791","801","811","821"],correct:1,exp:"234 + 567: 4+7=11, 3+6+1=10, 2+5+1=8. Resultado: 801"},{q:"¿Cuánto es 1000 - 347?",expr:"1000 - 347 = ?",opts:["653","643","663","753"],correct:0,exp:"1000 - 347 = 653. Verifica: 347 + 653 = 1000"},{q:"¿Cuánto es 36 × 5?",expr:"36 × 5 = ?",opts:["175","180","185","190"],correct:1,exp:"36 × 5 = 180. También: 36×10÷2 = 360÷2 = 180"},{q:"¿Cuánto es 144 ÷ 12?",expr:"144 ÷ 12 = ?",opts:["10","11","12","13"],correct:2,exp:"144 ÷ 12 = 12. Verifica: 12×12=144 ✓"},{q:"Un chavo ahorra $45 cada semana. ¿Cuánto tiene en 8 semanas?",expr:"45 × 8 = ?",opts:["320","350","360","380"],correct:2,exp:"45×8=360. Estrategia: 40×8+5×8=320+40=360"}]},
+  2:{nombre:"Jerarquía de operaciones",desc:"PEMDAS — el orden correcto para resolver expresiones.",video_views:"909",bloque:1,color:"#e63946",puntos_clave:[{txt:"Paréntesis primero",sub:"Lo que está dentro manda"},{txt:"Exponentes después",sub:"Potencias antes que multiplicar"},{txt:"Multiplicación y división",sub:"De izquierda a derecha"},{txt:"Suma y resta al final",sub:"Los más débiles esperan"}],demo:{problema:"3 + 6 × (5 + 4) ÷ 3 − 7",pasos:[{num:"Paso 1 — Paréntesis",expr:"3 + 6 × 9 ÷ 3 − 7",exp:"5 + 4 = 9"},{num:"Paso 2 — Multiplicación",expr:"3 + 54 ÷ 3 − 7",exp:"6 × 9 = 54"},{num:"Paso 3 — División",expr:"3 + 18 − 7",exp:"54 ÷ 3 = 18"},{num:"Paso 4 — Suma y resta",expr:"= 14",exp:"3+18=21, luego 21-7=14",gold:true}]},ejercicios:[{q:"Resuelve usando el orden correcto:",expr:"2 + 3 × (8 − 2) ÷ 2",opts:["7","11","15","9"],correct:1,exp:"Paréntesis:(8-2)=6, 3×6=18, 18÷2=9, 2+9=11"},{q:"¿Cuánto vale?",expr:"4² − 3 × 2 + 1",opts:["9","11","5","7"],correct:1,exp:"4²=16, 3×2=6, 16-6+1=11"},{q:"Resuelve:",expr:"(12 + 8) ÷ 4 × 2",opts:["5","10","15","20"],correct:1,exp:"12+8=20, 20÷4=5, 5×2=10"},{q:"¿Cuál es el resultado?",expr:"18 − 2 × (3 + 4)",opts:["4","112","32","18"],correct:0,exp:"3+4=7, 2×7=14, 18-14=4"},{q:"Evalúa la expresión:",expr:"5 + 3² × 2 − 10",opts:["13","23","3","18"],correct:0,exp:"3²=9, 9×2=18, 5+18-10=13"}]},
+  3:{nombre:"Fracciones y decimales",desc:"Representación, operaciones y conversión.",video_views:"909",bloque:1,color:"#e63946",puntos_clave:[{txt:"Qué es una fracción",sub:"Numerador sobre denominador"},{txt:"Convertir a decimal",sub:"Dividir numerador entre denominador"},{txt:"Fracciones equivalentes",sub:"Misma cantidad, diferente forma"},{txt:"Sumar mismo denominador",sub:"El denominador no cambia"}],demo:{problema:"1/4 + 2/4 = ?",pasos:[{num:"Verificar denominadores",expr:"4 = 4 ✓",exp:"Mismo denominador"},{num:"Sumar numeradores",expr:"1 + 2 = 3",exp:"Denominador sigue siendo 4"},{num:"Resultado",expr:"3/4 = 0.75",exp:"3 ÷ 4 = 0.75",gold:true}]},ejercicios:[{q:"Resuelve la suma:",expr:"2/5 + 1/5",opts:["2/10","3/10","3/5","2/5"],correct:2,exp:"Mismo denominador: 2+1=3, denominador sigue 5. Resultado: 3/5"},{q:"¿Cuánto es?",expr:"3/4 − 1/4",opts:["2/4","1/2","2/0","1/4"],correct:0,exp:"3/4-1/4=2/4=1/2"},{q:"Convierte a decimal:",expr:"3/8 = ?",opts:["0.325","0.375","0.38","0.3"],correct:1,exp:"3÷8=0.375"},{q:"¿Cuál fracción equivale a 2/3?",expr:"2/3 = ?/9",opts:["4","5","6","3"],correct:2,exp:"2×3=6 y 3×3=9. Es 6/9"},{q:"Suma las fracciones:",expr:"1/2 + 1/4",opts:["2/6","1/4","3/4","2/4"],correct:2,exp:"2/4+1/4=3/4"}]},
+  4:{nombre:"Porcentajes y proporciones",desc:"Cálculo de porcentajes y problemas de proporcionalidad.",video_views:"543",bloque:1,color:"#e63946",puntos_clave:[{txt:"Porcentaje = parte de 100",sub:"25% = 25/100 = 0.25"},{txt:"Calcular el % de un número",sub:"% ÷ 100 × total"},{txt:"Regla de tres directa",sub:"Si A→B entonces C→?"},{txt:"Descuentos y aumentos",sub:"Aplicación real del porcentaje"}],demo:{problema:"¿Cuánto es el 30% de 250?",pasos:[{num:"Convertir porcentaje",expr:"30% = 0.30",exp:"Siempre dividir entre 100"},{num:"Multiplicar",expr:"0.30 × 250",exp:"Porcentaje × total"},{num:"Resultado",expr:"= 75",exp:"El 30% de 250 es 75",gold:true}]},ejercicios:[{q:"¿Cuánto es el 20% de 150?",expr:"20% de 150",opts:["25","30","35","40"],correct:1,exp:"0.20×150=30"},{q:"Un libro de $200 con 15% descuento. ¿Cuánto pagas?",expr:"$200 − 15%",opts:["$160","$170","$175","$180"],correct:1,exp:"15% de 200=30. 200-30=$170"},{q:"Si 3 lápices cuestan $12, ¿cuánto cuestan 7?",expr:"3→$12, 7→?",opts:["$24","$28","$30","$32"],correct:1,exp:"$12÷3=$4 por lápiz. 4×7=$28"},{q:"¿Qué porcentaje es 45 de 180?",expr:"45/180 = ?%",opts:["20%","25%","30%","35%"],correct:1,exp:"45÷180=0.25=25%"},{q:"Un precio subió 10% desde $500. ¿Nuevo precio?",expr:"$500 + 10%",opts:["$505","$510","$550","$600"],correct:2,exp:"10% de 500=50. 500+50=$550"}]},
+  5:{nombre:"Números enteros y negativos",desc:"Operaciones con positivos, negativos y cero.",video_views:"723",bloque:2,color:"#c9a84c",puntos_clave:[{txt:"La recta numérica",sub:"Negativos a la izquierda del cero"},{txt:"Sumar negativos",sub:"Mismo signo: suma y conserva signo"},{txt:"Restar negativos",sub:"Menos por menos = más"},{txt:"Multiplicar y dividir",sub:"Signos iguales=positivo, diferentes=negativo"}],demo:{problema:"(-3) × (-4) + 5",pasos:[{num:"Multiplicación primero",expr:"(-3) × (-4) = 12",exp:"Negativo × Negativo = Positivo"},{num:"Sumar",expr:"12 + 5 = 17",exp:"Resultado final"},{num:"Resultado",expr:"= 17",exp:"",gold:true}]},ejercicios:[{q:"¿Cuánto es?",expr:"(-8) + 3",opts:["-11","-5","5","11"],correct:1,exp:"-8+3=-5. Avanzamos 3 desde -8"},{q:"Resuelve:",expr:"(-5) × (-6)",opts:["-30","-11","11","30"],correct:3,exp:"Negativo×Negativo=Positivo. 5×6=30"},{q:"¿Cuánto es?",expr:"(-20) ÷ 4",opts:["-5","-4","4","5"],correct:0,exp:"Negativo÷Positivo=Negativo. 20÷4=5, con signo: -5"},{q:"Simplifica:",expr:"7 − (−3)",opts:["4","10","-10","-4"],correct:1,exp:"Restar negativo=sumar: 7+3=10"},{q:"¿Cuál es mayor?",expr:"-2 ó -7",opts:["-2 = -7","-2 > -7","-7 > -2","No se puede"],correct:1,exp:"-2 está más cerca del cero, entonces -2>-7"}]},
+  6:{nombre:"Expresiones algebraicas",desc:"Variables, términos y simplificación de expresiones.",video_views:"456",bloque:2,color:"#c9a84c",puntos_clave:[{txt:"Variable y constante",sub:"x es variable, 5 es constante"},{txt:"Términos semejantes",sub:"Solo se suman con misma variable"},{txt:"Simplificar",sub:"3x+2x=5x"},{txt:"Sustituir valores",sub:"Si x=3, entonces 2x+1=7"}],demo:{problema:"Simplifica: 4x + 3 − 2x + 7",pasos:[{num:"Agrupar semejantes",expr:"(4x−2x) + (3+7)",exp:"Variables con variables, números con números"},{num:"Simplificar",expr:"2x + 10",exp:"4x-2x=2x y 3+7=10"},{num:"Resultado",expr:"= 2x + 10",exp:"No se puede simplificar más",gold:true}]},ejercicios:[{q:"Simplifica:",expr:"5x + 2x − 3x",opts:["4x","3x","2x","x"],correct:0,exp:"(5+2-3)x=4x"},{q:"Si x=4, ¿cuánto vale?",expr:"3x − 5",opts:["7","12","17","9"],correct:0,exp:"3(4)-5=12-5=7"},{q:"¿Cuál es el coeficiente de x en?",expr:"7x² + 3x − 2",opts:["7","3","2","1"],correct:1,exp:"El coeficiente de x (no x²) es 3"},{q:"Simplifica:",expr:"2(x + 3) + x",opts:["3x+3","3x+6","2x+6","x+6"],correct:1,exp:"2x+6+x=3x+6"},{q:"¿Cuántos términos tiene?",expr:"4x² − 2x + 7 − x²",opts:["2","3","4","5"],correct:1,exp:"Simplificando: 3x²-2x+7. Son 3 términos"}]},
+  7:{nombre:"Ecuaciones de primer grado",desc:"Resolución de ecuaciones lineales con una incógnita.",video_views:"1.1 mil",bloque:2,color:"#c9a84c",puntos_clave:[{txt:"Aislar la variable",sub:"Lo que pasa de un lado, cambia signo"},{txt:"Operaciones inversas",sub:"Para quitar suma, restamos"},{txt:"Verificar la solución",sub:"Sustituir x en la ecuación original"},{txt:"Ecuaciones con paréntesis",sub:"Primero distribuir, luego despejar"}],demo:{problema:"Resuelve: 2x + 6 = 14",pasos:[{num:"Aislar el término con x",expr:"2x = 14 − 6",exp:"Pasamos 6 restando"},{num:"Simplificar",expr:"2x = 8",exp:"14-6=8"},{num:"Despejar x",expr:"x = 8 ÷ 2",exp:"Dividimos entre el coeficiente"},{num:"Resultado",expr:"x = 4",exp:"Verifica: 2(4)+6=14 ✓",gold:true}]},ejercicios:[{q:"Resuelve para x:",expr:"3x − 7 = 14",opts:["x=5","x=6","x=7","x=8"],correct:2,exp:"3x=14+7=21, x=21÷3=7"},{q:"¿Cuál es el valor de y?",expr:"5y + 10 = 35",opts:["y=4","y=5","y=6","y=7"],correct:1,exp:"5y=35-10=25, y=25÷5=5"},{q:"Resuelve:",expr:"4(x − 2) = 12",opts:["x=3","x=4","x=5","x=6"],correct:2,exp:"4x-8=12, 4x=20, x=5"},{q:"¿Cuánto vale t?",expr:"2t + 5 = t + 9",opts:["t=2","t=3","t=4","t=5"],correct:2,exp:"2t-t=9-5, t=4"},{q:"Resuelve la ecuación:",expr:"x/3 + 2 = 5",opts:["x=6","x=7","x=8","x=9"],correct:3,exp:"x/3=5-2=3, x=3×3=9"}]},
+  8:{nombre:"Sistemas de ecuaciones",desc:"Resolución de sistemas de dos ecuaciones con dos incógnitas.",video_views:"387",bloque:2,color:"#c9a84c",puntos_clave:[{txt:"Sistema 2×2",sub:"Dos ecuaciones, dos incógnitas"},{txt:"Método de sustitución",sub:"Despejas una variable y sustituyes"},{txt:"Método de reducción",sub:"Sumas o restas las ecuaciones"},{txt:"Verificar",sub:"Los valores funcionan en ambas ecuaciones"}],demo:{problema:"x + y = 7 y x − y = 3",pasos:[{num:"Reducción — sumar ecuaciones",expr:"2x = 10",exp:"(x+y)+(x-y)=7+3"},{num:"Despejar x",expr:"x = 5",exp:"10÷2=5"},{num:"Encontrar y",expr:"5 + y = 7",exp:"Sustituimos x=5"},{num:"Resultado",expr:"x=5, y=2",exp:"Verifica: 5+2=7 ✓ y 5-2=3 ✓",gold:true}]},ejercicios:[{q:"Resuelve el sistema:",expr:"x+y=10, x−y=4",opts:["x=6,y=4","x=7,y=3","x=8,y=2","x=5,y=5"],correct:1,exp:"Sumando: 2x=14, x=7. y=10-7=3"},{q:"¿Cuáles son los valores?",expr:"2x+y=11, x+y=7",opts:["x=3,y=4","x=4,y=3","x=5,y=2","x=2,y=5"],correct:1,exp:"Restando: x=4. y=7-4=3"},{q:"Resuelve:",expr:"3x+2y=16, x+2y=8",opts:["x=3,y=2","x=4,y=2","x=2,y=5","x=5,y=2"],correct:1,exp:"Restando: 2x=8, x=4. 4+2y=8, y=2"},{q:"2 tacos y 1 refresco=$50, 1 taco y 1 refresco=$30. ¿Cuánto cuesta un taco?",expr:"2t+r=50, t+r=30",opts:["$15","$20","$25","$30"],correct:1,exp:"Restando: t=20. Un taco cuesta $20"},{q:"Resuelve:",expr:"x+2y=12, 2x+y=9",opts:["x=2,y=5","x=3,y=4","x=4,y=3","x=5,y=2"],correct:0,exp:"x+y=7 y x+2y=12: y=5, x=2"}]},
+  9:{nombre:"Perímetro y área",desc:"Cálculo de perímetro y área de figuras planas.",video_views:"892",bloque:3,color:"#1d9e75",puntos_clave:[{txt:"Perímetro = suma de lados",sub:"La distancia alrededor"},{txt:"Área del cuadrado",sub:"lado²"},{txt:"Área del rectángulo",sub:"base × altura"},{txt:"Área del triángulo",sub:"(base × altura) ÷ 2"}],demo:{problema:"Área de un rectángulo 8cm × 5cm",pasos:[{num:"Fórmula",expr:"A = base × altura",exp:""},{num:"Sustituir",expr:"A = 8 × 5",exp:"base=8cm, altura=5cm"},{num:"Resultado",expr:"A = 40 cm²",exp:"Siempre en unidades cuadradas",gold:true}]},ejercicios:[{q:"¿Cuál es el perímetro de un cuadrado de lado 6cm?",expr:"P = 4 × lado",opts:["20cm","24cm","28cm","36cm"],correct:1,exp:"P=4×6=24cm"},{q:"Área del triángulo:",expr:"base=10cm, altura=6cm",opts:["30cm²","60cm²","16cm²","45cm²"],correct:0,exp:"A=(10×6)÷2=30cm²"},{q:"Un cuadrado tiene área 81cm². ¿Cuánto mide su lado?",expr:"lado² = 81",opts:["7cm","8cm","9cm","10cm"],correct:2,exp:"√81=9cm"},{q:"Perímetro del rectángulo:",expr:"largo=12cm, ancho=5cm",opts:["30cm","34cm","60cm","17cm"],correct:1,exp:"P=2(12+5)=2×17=34cm"},{q:"Terreno de 20m×15m. ¿Cuánto cuesta cercarlo a $50/m?",expr:"P×$50",opts:["$3,500","$15,000","$3,000","$2,500"],correct:0,exp:"P=2(20+15)=70m. 70×$50=$3,500"}]},
+  10:{nombre:"Volumen",desc:"Cálculo del volumen de cuerpos geométricos.",video_views:"312",bloque:3,color:"#1d9e75",puntos_clave:[{txt:"Volumen = espacio interior",sub:"Se mide en unidades cúbicas"},{txt:"Cubo",sub:"lado³"},{txt:"Prisma rectangular",sub:"largo × ancho × alto"},{txt:"Cilindro",sub:"π × radio² × altura"}],demo:{problema:"Caja de 5cm × 3cm × 4cm",pasos:[{num:"Fórmula",expr:"V = l × a × h",exp:""},{num:"Sustituir",expr:"V = 5 × 3 × 4",exp:""},{num:"Resultado",expr:"V = 60 cm³",exp:"Siempre en unidades cúbicas",gold:true}]},ejercicios:[{q:"Volumen del cubo:",expr:"lado = 4cm",opts:["16cm³","32cm³","64cm³","48cm³"],correct:2,exp:"V=4³=64cm³"},{q:"Volumen del prisma:",expr:"6cm × 4cm × 3cm",opts:["52cm³","72cm³","48cm³","36cm³"],correct:1,exp:"V=6×4×3=72cm³"},{q:"Piscina 10m×5m×2m. ¿Cuántos litros? (1m³=1000L)",expr:"V = ?",opts:["100,000L","10,000L","1,000L","50,000L"],correct:0,exp:"V=10×5×2=100m³. 100×1000=100,000L"},{q:"Cilindro (π≈3.14):",expr:"r=3cm, h=10cm",opts:["94.2cm³","282.6cm³","188.4cm³","314cm³"],correct:1,exp:"V=3.14×3²×10=282.6cm³"},{q:"Un cubo tiene volumen 125cm³. ¿Cuánto mide su lado?",expr:"lado³ = 125",opts:["4cm","5cm","6cm","7cm"],correct:1,exp:"∛125=5cm. Verifica: 5³=125 ✓"}]},
+  11:{nombre:"Teorema de Pitágoras",desc:"Relación entre los lados de un triángulo rectángulo.",video_views:"1.5 mil",bloque:3,color:"#1d9e75",puntos_clave:[{txt:"a² + b² = c²",sub:"c es la hipotenusa"},{txt:"Hipotenusa",sub:"Lado opuesto al ángulo recto"},{txt:"Catetos",sub:"Lados que forman el ángulo recto"},{txt:"Ternas pitagóricas",sub:"3-4-5, 5-12-13, 8-15-17"}],demo:{problema:"Catetos 3cm y 4cm. ¿Hipotenusa?",pasos:[{num:"Pitágoras",expr:"c² = a² + b²",exp:"a=3, b=4"},{num:"Sustituir",expr:"c² = 9 + 16 = 25",exp:""},{num:"Resultado",expr:"c = √25 = 5cm",exp:"La terna 3-4-5 ✓",gold:true}]},ejercicios:[{q:"Catetos 6 y 8. ¿Hipotenusa?",expr:"c² = 6² + 8²",opts:["8","10","12","14"],correct:1,exp:"c²=36+64=100, c=10"},{q:"Hipotenusa 13, cateto 5. ¿El otro cateto?",expr:"5² + b² = 13²",opts:["10","11","12","13"],correct:2,exp:"b²=169-25=144, b=12"},{q:"¿Es rectángulo el de lados 9, 12 y 15?",expr:"9²+12²=15²?",opts:["Sí","No","A veces","No se sabe"],correct:0,exp:"81+144=225=15². ¡Sí!"},{q:"Escalera de 5m llega a 4m de altura. ¿Distancia a la pared?",expr:"d²+4²=5²",opts:["2m","3m","4m","5m"],correct:1,exp:"d²=25-16=9, d=3m"},{q:"Diagonal de cuadrado de lado 7cm:",expr:"d²=7²+7²",opts:["7√2","9.8cm","14cm","7cm"],correct:0,exp:"d²=98, d=7√2≈9.9cm"}]},
+  12:{nombre:"Ángulos y triángulos",desc:"Clasificación de ángulos y propiedades de triángulos.",video_views:"445",bloque:3,color:"#1d9e75",puntos_clave:[{txt:"Tipos de ángulos",sub:"Agudo<90°, recto=90°, obtuso>90°"},{txt:"Suma de ángulos del triángulo",sub:"Siempre suman 180°"},{txt:"Tipos de triángulo",sub:"Equilátero, isósceles, escaleno"},{txt:"Complementarios y suplementarios",sub:"Suman 90° o 180°"}],demo:{problema:"Dos ángulos de 60° y 80°. ¿El tercero?",pasos:[{num:"Suma de ángulos",expr:"α + β + γ = 180°",exp:"Siempre en cualquier triángulo"},{num:"Sustituir",expr:"60° + 80° + γ = 180°",exp:""},{num:"Resultado",expr:"γ = 40°",exp:"Verifica: 60+80+40=180 ✓",gold:true}]},ejercicios:[{q:"¿Cuánto mide el ángulo que falta?",expr:"45° + 75° + x = 180°",opts:["55°","60°","65°","70°"],correct:1,exp:"x=180-45-75=60°"},{q:"¿Cómo se llama un triángulo con todos sus lados iguales?",expr:"a = b = c",opts:["Escaleno","Isósceles","Equilátero","Rectángulo"],correct:2,exp:"Equilátero: todos los lados y ángulos (60°) iguales"},{q:"Dos ángulos complementarios. Uno es 35°. ¿El otro?",expr:"35° + x = 90°",opts:["45°","55°","65°","75°"],correct:1,exp:"x=90-35=55°"},{q:"¿Ángulo suplementario de 120°?",expr:"120° + x = 180°",opts:["30°","40°","50°","60°"],correct:3,exp:"x=180-120=60°"},{q:"Triángulo isósceles con base de 40°. ¿Ángulo del vértice?",expr:"40°+40°+v=180°",opts:["90°","100°","110°","120°"],correct:1,exp:"v=180-40-40=100°"}]},
+  13:{nombre:"Estadística básica",desc:"Media, mediana, moda y rango de datos.",video_views:"634",bloque:4,color:"#378add",puntos_clave:[{txt:"Media = promedio",sub:"Suma todos y divide entre cuántos"},{txt:"Mediana = valor central",sub:"Ordena y encuentra el del medio"},{txt:"Moda = el que más se repite",sub:"Puede haber más de una"},{txt:"Rango = máximo − mínimo",sub:"Mide la dispersión"}],demo:{problema:"Datos: 4, 7, 2, 7, 5, 8, 7",pasos:[{num:"Media",expr:"(4+7+2+7+5+8+7)÷7=40÷7≈5.7",exp:"Suma y divide"},{num:"Ordenar para mediana",expr:"2, 4, 5, 7, 7, 7, 8",exp:"El 4° dato es el central"},{num:"Mediana y Moda",expr:"Mediana=7, Moda=7",exp:"El 7 aparece 3 veces",gold:true}]},ejercicios:[{q:"¿Cuál es la media?",expr:"3, 8, 5, 6, 8",opts:["5","6","7","8"],correct:1,exp:"(3+8+5+6+8)÷5=30÷5=6"},{q:"¿Cuál es la mediana?",expr:"12, 5, 8, 3, 9",opts:["5","8","9","12"],correct:1,exp:"Ordenados:3,5,8,9,12. Central=8"},{q:"¿Cuál es la moda?",expr:"2, 5, 3, 5, 8, 5, 2",opts:["2","3","5","8"],correct:2,exp:"El 5 aparece 3 veces"},{q:"¿Cuál es el rango?",expr:"15, 8, 22, 11, 19",opts:["7","11","14","22"],correct:2,exp:"22-8=14"},{q:"Calificaciones: 7,8,9,6,10. ¿Promedio?",expr:"Media = ?",opts:["7.5","8","8.5","9"],correct:1,exp:"(7+8+9+6+10)÷5=40÷5=8"}]},
+  14:{nombre:"Probabilidad",desc:"Cálculo de probabilidades de eventos simples.",video_views:"278",bloque:4,color:"#378add",puntos_clave:[{txt:"P = favorables / posibles",sub:"Siempre entre 0 y 1"},{txt:"P=0 imposible, P=1 seguro",sub:"P=0.5 es 50%"},{txt:"Espacio muestral",sub:"Todos los resultados posibles"},{txt:"Complementarios",sub:"P(A) + P(no A) = 1"}],demo:{problema:"Dado de 6 caras. ¿P(número par)?",pasos:[{num:"Casos favorables",expr:"2,4,6 → 3 casos",exp:"Números pares"},{num:"Casos posibles",expr:"1,2,3,4,5,6 → 6 casos",exp:"Todos los resultados"},{num:"Probabilidad",expr:"P = 3/6 = 1/2 = 50%",exp:"",gold:true}]},ejercicios:[{q:"Bolsa con 3 rojas, 2 azules y 5 verdes. ¿P(roja)?",expr:"P(roja) = ?",opts:["1/5","3/10","1/3","3/5"],correct:1,exp:"P=3/(3+2+5)=3/10"},{q:"Se lanza una moneda. ¿P(cara)?",expr:"P(cara) = ?",opts:["1/4","1/3","1/2","2/3"],correct:2,exp:"P=1/2=0.5"},{q:"Si P(lluvia)=0.3, ¿cuál es P(no lluvia)?",expr:"P(no lluvia) = ?",opts:["0.3","0.5","0.7","1"],correct:2,exp:"1-0.3=0.7"},{q:"Dado. ¿P(número mayor que 4)?",expr:"P(>4) = ?",opts:["1/6","2/6","3/6","4/6"],correct:1,exp:"{5,6}=2 casos. P=2/6=1/3"},{q:"¿Probabilidad de un evento imposible?",expr:"P(imposible) = ?",opts:["0","0.5","1","0.1"],correct:0,exp:"Evento imposible: P=0"}]},
+  15:{nombre:"Gráficas e interpretación de datos",desc:"Lectura e interpretación de tablas y gráficas.",video_views:"512",bloque:4,color:"#378add",puntos_clave:[{txt:"Gráfica de barras",sub:"Compara categorías"},{txt:"Gráfica de líneas",sub:"Muestra cambios en el tiempo"},{txt:"Gráfica de pastel",sub:"Proporciones del 100%"},{txt:"Interpretar ejes",sub:"X=horizontal, Y=vertical"}],demo:{problema:"Ventas: Lun=50,Mar=80,Mié=60,Jue=90,Vie=70",pasos:[{num:"Total de ventas",expr:"50+80+60+90+70=350",exp:""},{num:"Día con más ventas",expr:"Jueves = 90",exp:"El valor más alto"},{num:"Promedio diario",expr:"350÷5=70",exp:"",gold:true}]},ejercicios:[{q:"La barra más alta en una gráfica representa:",expr:"",opts:["El valor mínimo","Lo más frecuente","El valor máximo","El promedio"],correct:2,exp:"La barra más alta = el valor mayor"},{q:"Gráfica de pastel: 40% son hombres en grupo de 200. ¿Cuántos hombres?",expr:"40% de 200",opts:["60","80","100","120"],correct:1,exp:"0.40×200=80"},{q:"Ventas: enero=120, febrero=96. ¿Bajaron cuánto %?",expr:"(120-96)/120×100",opts:["15%","20%","25%","30%"],correct:1,exp:"24÷120×100=20%"},{q:"Tabla: A=30, B=45, C=25. ¿Total?",expr:"30+45+25",opts:["90","95","100","105"],correct:2,exp:"30+45+25=100"},{q:"Una línea que sube de izquierda a derecha indica:",expr:"",opts:["Los datos bajan","Son constantes","Los datos suben","Son cero"],correct:2,exp:"Línea ascendente = valores que aumentan"}]}
+};
 
 // BEATS
 const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.1});
