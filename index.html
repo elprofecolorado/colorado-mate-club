@@ -948,28 +948,37 @@ async function loadAdminData(){
   buildTemasStats(alumnos);
 }
 
+// Store alumnos for detalle
+const alumnosCache={};
 function buildAlumnoCard(a,esRiesgo,pos){
   const hace3=new Date(Date.now()-3*86400000).toISOString().split('T')[0];
   const estaEnRiesgo=!a.ultimo_acceso||a.ultimo_acceso<hace3;
   const esNuevo=a.xp===0;
+  alumnosCache[a.id]=a;
+  const div=document.createElement('div');
+  div.className='alumno-card'+(estaEnRiesgo?' riesgo':'');
+  div.onclick=function(){showDetalle(a);};
+  let posHTML='';
+  if(pos) posHTML='<div style="font-family:sans-serif;font-size:18px;width:24px;text-align:center;flex-shrink:0">'+(pos===1?'🥇':pos===2?'🥈':'🥉')+'</div>';
   let tag='';
   if(estaEnRiesgo) tag='<span class="alumno-tag tag-riesgo">Sin entrar 3+ días</span>';
   else if(esNuevo) tag='<span class="alumno-tag tag-nuevo">Nuevo</span>';
   else tag='<span class="alumno-tag tag-activo">Activo</span>';
-  const posLabel=pos?`<div style="font-family:\'Bebas Neue\',sans-serif;font-size:18px;width:24px;text-align:center;flex-shrink:0">${pos===1?'🥇':pos===2?'🥈':'🥉'}</div>`:'';
-  return `<div class="alumno-card${estaEnRiesgo?' riesgo':''}" onclick="showDetalle(${JSON.stringify(a).replace(/"/g,'&quot;')})">
-    ${posLabel}
-    <div class="alumno-av" style="background:rgba(230,57,70,.2);color:var(--red)">${(a.avatar||'??')}</div>
-    <div class="alumno-info">
-      <div class="alumno-nombre">${a.nombre||'Sin nombre'}</div>
-      <div class="alumno-meta">${a.email||''} · Nivel ${a.nivel||1}</div>
-    </div>
-    <div class="alumno-stats">
-      <div class="alumno-xp">${a.xp||0} XP</div>
-      <div class="alumno-racha">🔥 ${a.racha||0} días</div>
-      ${tag}
-    </div>
-  </div>`;
+  div.innerHTML=posHTML
+    +'<div class="alumno-av" style="background:rgba(230,57,70,.2);color:var(--red)">'+(a.avatar||'??')+'</div>'
+    +'<div class="alumno-info">'
+    +'<div class="alumno-nombre">'+(a.nombre||'Sin nombre')+'</div>'
+    +'<div class="alumno-meta">'+(a.email||'')+' &middot; Nivel '+(a.nivel||1)+'</div>'
+    +'</div>'
+    +'<div class="alumno-stats">'
+    +'<div class="alumno-xp">'+(a.xp||0)+' XP</div>'
+    +'<div class="alumno-racha">🔥 '+(a.racha||0)+' días</div>'
+    +tag+'</div>';
+  return div.outerHTML;
+}
+function showDetalleById(id){
+  const a=alumnosCache[id];
+  if(a) showDetalle(a);
 }
 
 function buildTemasStats(alumnos){
@@ -1021,13 +1030,36 @@ const bloques=[
 ];
 const openB=new Set([1]);
 function buildMapa(){
-  const c=document.getElementById('mapa-c');c.innerHTML='';
-  bloques.forEach(b=>{
+  const c=document.getElementById('mapa-c');
+  c.innerHTML='';
+  bloques.forEach(function(b){
     const isOpen=openB.has(b.num);
-    const dc=b.temas.filter(t=>t.est==='done').length;
-    const w=document.createElement('div');w.className='blq-wrap';
-    w.innerHTML=`<div class="blq-hdr" onclick="toggleB(${b.num})"><div class="blq-num" style="background:${b.color}22;border:1px solid ${b.color}55;color:${b.color}">${b.num}</div><div class="blq-info"><div class="blq-nom">${b.nombre}</div><div class="blq-sub">${b.sub} · ${dc}/${b.temas.length}</div></div><span class="blq-arr${isOpen?' open':''}">▶</span></div>
-    ${isOpen?`<div class="blq-temas" style="border:.5px solid ${b.color}22;border-radius:9px">${b.temas.map(t=>`<div class="t-row${t.est==='locked'?' lk':''}" onclick="${t.est!=='locked'?`showModal(${t.id},'Bloque ${b.num} · ${b.nombre}','${b.color}')`:''}" style="background:${t.est==='active'?b.color+'0d':''}"><div class="t-ico" style="background:${t.est==='done'?'rgba(45,106,79,.2)':t.est==='active'?b.color+'22':'rgba(255,255,255,.05)'};border:1px solid ${t.est==='done'?'rgba(45,106,79,.5)':t.est==='active'?b.color+'55':'rgba(255,255,255,.1)'}">${t.est==='done'?'✓':t.est==='active'?'▶':t.id}</div><div class="t-info"><div class="t-nom">${t.nombre}</div><div class="t-sub">${t.sub}</div></div><span class="t-tag ${t.est==='done'?'tag-d':t.est==='active'?'tag-a':'tag-l'}">${t.est==='done'?'Listo':t.est==='active'?'En curso':'🔒'}</span></div>`).join('')}</div>`:''}`;
+    const dc=b.temas.filter(function(t){return t.est==='done';}).length;
+    const w=document.createElement('div');
+    w.className='blq-wrap';
+    let temasHTML='';
+    if(isOpen){
+      temasHTML='<div class="blq-temas" style="border:.5px solid '+b.color+'22;border-radius:9px">';
+      b.temas.forEach(function(t){
+        const clickFn=t.est!=='locked'?'showModal('+t.id+')':'';
+        const bg=t.est==='active'?b.color+'0d':'';
+        const icoBg=t.est==='done'?'rgba(45,106,79,.2)':t.est==='active'?b.color+'22':'rgba(255,255,255,.05)';
+        const icoBorder=t.est==='done'?'rgba(45,106,79,.5)':t.est==='active'?b.color+'55':'rgba(255,255,255,.1)';
+        const icoTxt=t.est==='done'?'✓':t.est==='active'?'▶':t.id;
+        const tagCls=t.est==='done'?'tag-d':t.est==='active'?'tag-a':'tag-l';
+        const tagTxt=t.est==='done'?'Listo':t.est==='active'?'En curso':'🔒';
+        const rowCls='t-row'+(t.est==='locked'?' lk':'');
+        temasHTML+='<div class="'+rowCls+'" onclick="'+clickFn+'" style="background:'+bg+'">';
+        temasHTML+='<div class="t-ico" style="background:'+icoBg+';border:1px solid '+icoBorder+'">'+icoTxt+'</div>';
+        temasHTML+='<div class="t-info"><div class="t-nom">'+t.nombre+'</div><div class="t-sub">'+t.sub+'</div></div>';
+        temasHTML+='<span class="t-tag '+tagCls+'">'+tagTxt+'</span></div>';
+      });
+      temasHTML+='</div>';
+    }
+    w.innerHTML='<div class="blq-hdr" onclick="toggleB('+b.num+')">'
+      +'<div class="blq-num" style="background:'+b.color+'22;border:1px solid '+b.color+'55;color:'+b.color+'">'+b.num+'</div>'
+      +'<div class="blq-info"><div class="blq-nom">'+b.nombre+'</div><div class="blq-sub">'+b.sub+' · '+dc+'/'+b.temas.length+'</div></div>'
+      +'<span class="blq-arr'+(isOpen?' open':'')+'">▶</span></div>'+temasHTML;
     c.appendChild(w);
   });
 }
@@ -1091,7 +1123,11 @@ function buildEjercicio(ej){
   document.getElementById('ex-fb').className='ex-fb';
   document.getElementById('btn-r4').style.display='none';
   const opts=document.getElementById('ex-opts');
-  opts.innerHTML=ej.opts.map((o,i)=>`<div class="ex-opt" onclick="pickOpt(this,${i===${ej.correct}},'${ej.exp.replace(/'/g,"\'")}',${ej.correct})">${o}</div>`).join('');
+  opts.innerHTML=ej.opts.map(function(o,i){
+    const isOk=(i===ej.correct);
+    const safeExp=ej.exp.replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    return '<div class="ex-opt" onclick="pickOpt(this,'+isOk+',' + JSON.stringify(ej.exp) + ','+ej.correct+')">'+o+'</div>';
+  }).join('');
 }
 
 // ROUNDS
@@ -1142,8 +1178,10 @@ function nextEjercicio(){
   }
 }
 function showModal(idOrNombre,sub,color){
-  const tema=typeof idOrNombre==='number'?temasContenido[idOrNombre]:null;
-  const nombre=tema?tema.nombre:idOrNombre;
+  color=color||'#e63946';
+  const tema=temasContenido[idOrNombre]||null;
+  const nombre=tema?tema.nombre:(idOrNombre||'Tema');
+  const color2=tema?tema.color:(color||'#e63946');
   document.getElementById('modal-title').textContent=nombre;
   document.getElementById('modal-sub').textContent=sub;
   document.getElementById('modal-btn').style.background=color;
