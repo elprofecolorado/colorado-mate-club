@@ -490,6 +490,7 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
         <div class="admin-logo"><div class="admin-logo-g">🥊</div><span class="admin-logo-t">Colorado Mate Club</span></div>
         <div style="display:flex;align-items:center;gap:8px;">
           <span class="admin-badge">PROFE</span>
+          <button class="admin-logout" style="background:rgba(230,57,70,.15);border:.5px solid rgba(230,57,70,.3);color:var(--red);" onclick="verComoAlumno()">👁 Ver app</button>
           <button class="admin-logout" onclick="doLogout()">Salir</button>
         </div>
       </div>
@@ -573,10 +574,13 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
   <div class="page" id="page-app">
     <div class="topbar">
       <div class="t-logo"><div class="t-logo-g">🥊</div><span class="t-logo-t">Colorado Mate Club</span></div>
-      <div class="chip" onclick="doLogout()">
-        <div class="chip-av" id="chip-av">CT</div>
-        <span class="chip-n" id="chip-nombre">Alumno</span>
-        <span class="chip-xp" id="chip-xp">0 XP</span>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <button id="btn-volver-panel" style="display:none;font-size:11px;color:var(--gold);background:rgba(201,168,76,.15);border:.5px solid rgba(201,168,76,.3);padding:4px 10px;border-radius:6px;cursor:pointer;" onclick="volverPanel()">⬅ Mi panel</button>
+        <div class="chip" onclick="doLogout()">
+          <div class="chip-av" id="chip-av">CT</div>
+          <span class="chip-n" id="chip-nombre">Alumno</span>
+          <span class="chip-xp" id="chip-xp">0 XP</span>
+        </div>
       </div>
     </div>
     <div class="screens">
@@ -790,6 +794,33 @@ async function doRegister(){
   btn.disabled=false;btn.textContent='CREAR MI CUENTA →';
 }
 async function doLogout(){await sb.auth.signOut();currentUser=null;perfil=null;goPage('landing');}
+function verComoAlumno(){
+  // Show app as alumno without logging out
+  document.getElementById('btn-volver-panel').style.display='flex';
+  // Load dummy UI for admin preview
+  document.getElementById('chip-av').textContent='PC';
+  document.getElementById('chip-nombre').textContent='Profe';
+  document.getElementById('chip-xp').textContent='PROFE';
+  // Set racha/xp display
+  document.getElementById('stat-racha').textContent='🔥5';
+  document.getElementById('stat-nivel').textContent='N3';
+  document.getElementById('stat-xp').textContent='1240';
+  document.getElementById('xp-fill').style.width='83%';
+  document.getElementById('xp-label').textContent='Nivel 3 → Nivel 4';
+  document.getElementById('xp-titulo').textContent='Campeón en formación';
+  document.getElementById('xp-actual').textContent='1240 XP';
+  document.getElementById('xp-falta').textContent='260 para subir';
+  document.getElementById('profe-msg').innerHTML='¡Así ve la app tu alumno, Profe! <strong style="color:var(--red)">Modo preview.</strong>';
+  buildRachaGrid();
+  buildMapa();
+  buildLogros();
+  goPage('app');
+  goScr('inicio', document.querySelector('.nav-item'));
+}
+function volverPanel(){
+  document.getElementById('btn-volver-panel').style.display='none';
+  goPage('admin');
+}
 function showErr(el,msg){el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),4000);}
 
 // PERFIL
