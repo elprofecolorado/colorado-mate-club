@@ -602,7 +602,7 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
           <div class="tema-nom">Fracciones y decimales</div>
           <div class="rnd-pips"><div class="rpip done"></div><div class="rpip active"></div><div class="rpip pend"></div><div class="rpip pend"></div></div>
           <div class="tema-meta"><span class="tema-mt">Round 2 de 4 — Demo</span><span class="tema-mt">Bloque 1</span></div>
-          <button class="tema-btn">ENTRAR AL ROUND →</button>
+          <button class="tema-btn" onclick="goTema(3)">ENTRAR AL ROUND →</button>
         </div>
       </div>
       <div class="scr" id="scr-mapa">
@@ -687,7 +687,7 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
     <div class="modal-title" id="modal-title"></div>
     <div class="modal-sub" id="modal-sub"></div>
     <div class="modal-rounds" id="modal-rounds"></div>
-    <button class="modal-btn" id="modal-btn" onclick="goPage('tema');document.getElementById('modal').classList.remove('show')">ENTRAR AL TEMA →</button>
+    <button class="modal-btn" id="modal-btn" onclick="if(window._modalId)goTema(window._modalId);document.getElementById('modal').classList.remove('show')">ENTRAR AL TEMA →</button>
     <button class="modal-cancel" onclick="document.getElementById('modal').classList.remove('show')">Cerrar</button>
   </div>
 </div>
