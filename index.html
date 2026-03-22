@@ -1023,12 +1023,12 @@ function goAdminScr(id,el){
 
 // MAPA
 const bloques=[
-  {num:1,nombre:"Fundamentos",sub:"Sin esto, nada más funciona",color:"#e63946",temas:[{id:1,nombre:"Números naturales",sub:"Operaciones básicas",est:"done"},{id:2,nombre:"Jerarquía de operaciones",sub:"PEMDAS",est:"done"},{id:3,nombre:"Fracciones y decimales",sub:"Representación y cálculo",est:"active"},{id:4,nombre:"Porcentajes y proporciones",sub:"Razón y regla de tres",est:"locked"}]},
-  {num:2,nombre:"Transición al álgebra",sub:"El pensamiento abstracto empieza aquí",color:"#c9a84c",temas:[{id:5,nombre:"Números enteros",sub:"Positivos, negativos y cero",est:"locked"},{id:6,nombre:"Expresiones algebraicas",sub:"Variables y términos",est:"locked"},{id:7,nombre:"Ecuaciones de primer grado",sub:"Despeje y solución",est:"locked"},{id:8,nombre:"Sistemas de ecuaciones",sub:"Dos incógnitas",est:"locked"}]},
-  {num:3,nombre:"Geometría y medición",sub:"El espacio y sus propiedades",color:"#1d9e75",temas:[{id:9,nombre:"Perímetro y área",sub:"Figuras planas",est:"locked"},{id:10,nombre:"Volumen",sub:"Cuerpos geométricos",est:"locked"},{id:11,nombre:"Teorema de Pitágoras",sub:"Triángulos rectángulos",est:"locked"},{id:12,nombre:"Ángulos y triángulos",sub:"Clasificación y propiedades",est:"locked"}]},
-  {num:4,nombre:"Datos y probabilidad",sub:"Interpretar el mundo con números",color:"#378add",temas:[{id:13,nombre:"Estadística básica",sub:"Media, mediana, moda",est:"locked"},{id:14,nombre:"Probabilidad",sub:"Eventos y posibilidades",est:"locked"},{id:15,nombre:"Gráficas e interpretación",sub:"Leer y construir datos",est:"locked"}]},
+  {num:1,nombre:"Fundamentos",sub:"Sin esto, nada más funciona",color:"#e63946",temas:[{id:1,nombre:"Números naturales",sub:"Operaciones básicas",est:"done"},{id:2,nombre:"Jerarquía de operaciones",sub:"PEMDAS",est:"done"},{id:3,nombre:"Fracciones y decimales",sub:"Representación y cálculo",est:"active"},{id:4,nombre:"Porcentajes y proporciones",sub:"Razón y regla de tres",est:"active"}]},
+  {num:2,nombre:"Transición al álgebra",sub:"El pensamiento abstracto empieza aquí",color:"#c9a84c",temas:[{id:5,nombre:"Números enteros",sub:"Positivos, negativos y cero",est:"active"},{id:6,nombre:"Expresiones algebraicas",sub:"Variables y términos",est:"active"},{id:7,nombre:"Ecuaciones de primer grado",sub:"Despeje y solución",est:"active"},{id:8,nombre:"Sistemas de ecuaciones",sub:"Dos incógnitas",est:"active"}]},
+  {num:3,nombre:"Geometría y medición",sub:"El espacio y sus propiedades",color:"#1d9e75",temas:[{id:9,nombre:"Perímetro y área",sub:"Figuras planas",est:"active"},{id:10,nombre:"Volumen",sub:"Cuerpos geométricos",est:"active"},{id:11,nombre:"Teorema de Pitágoras",sub:"Triángulos rectángulos",est:"active"},{id:12,nombre:"Ángulos y triángulos",sub:"Clasificación y propiedades",est:"active"}]},
+  {num:4,nombre:"Datos y probabilidad",sub:"Interpretar el mundo con números",color:"#378add",temas:[{id:13,nombre:"Estadística básica",sub:"Media, mediana, moda",est:"active"},{id:14,nombre:"Probabilidad",sub:"Eventos y posibilidades",est:"active"},{id:15,nombre:"Gráficas e interpretación",sub:"Leer y construir datos",est:"active"}]},
 ];
-const openB=new Set([1]);
+const openB=new Set([1,2,3,4]);
 function buildMapa(){
   const c=document.getElementById('mapa-c');
   c.innerHTML='';
@@ -1041,7 +1041,7 @@ function buildMapa(){
     if(isOpen){
       temasHTML='<div class="blq-temas" style="border:.5px solid '+b.color+'22;border-radius:9px">';
       b.temas.forEach(function(t){
-        const clickFn=t.est!=='locked'?'showModal('+t.id+')':'';
+        const clickFn=t.est!=='locked'?'goTema('+t.id+')':'';
         const bg=t.est==='active'?b.color+'0d':'';
         const icoBg=t.est==='done'?'rgba(45,106,79,.2)':t.est==='active'?b.color+'22':'rgba(255,255,255,.05)';
         const icoBorder=t.est==='done'?'rgba(45,106,79,.5)':t.est==='active'?b.color+'55':'rgba(255,255,255,.1)';
