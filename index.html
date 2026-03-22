@@ -1123,11 +1123,14 @@ function buildEjercicio(ej){
   document.getElementById('ex-fb').className='ex-fb';
   document.getElementById('btn-r4').style.display='none';
   const opts=document.getElementById('ex-opts');
-  opts.innerHTML=ej.opts.map(function(o,i){
-    const isOk=(i===ej.correct);
-    const safeExp=ej.exp.replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-    return '<div class="ex-opt" onclick="pickOpt(this,'+isOk+',' + JSON.stringify(ej.exp) + ','+ej.correct+')">'+o+'</div>';
-  }).join('');
+  opts.innerHTML='';
+  ej.opts.forEach(function(o,i){
+    const div=document.createElement('div');
+    div.className='ex-opt';
+    div.textContent=o;
+    div.onclick=function(){pickOpt(div, i===ej.correct, ej.exp, ej.correct);};
+    opts.appendChild(div);
+  });
 }
 
 // ROUNDS
