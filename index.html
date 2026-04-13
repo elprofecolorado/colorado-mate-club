@@ -3,91 +3,104 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-<title>Colorado Mate Club</title>
+<title>Prepa UDG — Admisión</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-:root{--red:#e63946;--dark:#0d0d14;--dark2:#16161f;--cream:#f5f0e8;--muted:#9a9490;--gold:#c9a84c;--green:#2d6a4f;--blue:#378add;}
+:root{
+  --azul:#1a56db;--azul2:#1e40af;--dark:#0a0e1a;--dark2:#111827;
+  --cream:#f0f4ff;--muted:#6b7280;--gold:#f59e0b;--green:#10b981;
+  --red:#ef4444;--blue:#3b82f6;
+}
 html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;color:var(--cream);overflow:hidden;}
 .app{max-width:430px;margin:0 auto;height:100vh;display:flex;flex-direction:column;background:var(--dark);position:relative;}
 
-/* ── LOADING ── */
+/* LOADING */
 #loading{position:fixed;inset:0;background:var(--dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:14px;}
 #loading.hide{display:none;}
-.ld-logo{width:70px;height:70px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;animation:pulse 1.2s ease-in-out infinite;}
-.ld-txt{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:var(--muted);}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.ld-logo{width:72px;height:72px;background:var(--azul);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:36px;animation:pulse 1.2s ease-in-out infinite;}
+.ld-txt{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--muted);}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 
-/* ── SCREENS ── */
+/* SCREENS */
 .screen{display:none;flex:1;flex-direction:column;overflow:hidden;}
 .screen.active{display:flex;}
 .scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 
-/* ── AUTH ── */
-#auth{align-items:center;justify-content:center;padding:24px;background:var(--dark2);}
-.auth-logo{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:28px;}
-.auth-glove{width:64px;height:64px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;}
-.auth-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;}
-.auth-quote{font-size:12px;color:var(--muted);font-style:italic;}
-.auth-card{width:100%;max-width:360px;background:var(--dark);border:.5px solid rgba(255,255,255,.1);border-radius:14px;padding:22px;}
-.auth-tabs{display:flex;border-bottom:.5px solid rgba(255,255,255,.08);margin-bottom:20px;}
+/* AUTH */
+#auth{align-items:center;justify-content:center;padding:20px;background:var(--dark2);overflow-y:auto;}
+.auth-logo{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:22px;}
+.auth-icon{width:68px;height:68px;background:linear-gradient(135deg,var(--azul),#7c3aed);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:34px;}
+.auth-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:var(--cream);}
+.auth-sub{font-size:11px;color:var(--muted);text-align:center;}
+.auth-card{width:100%;max-width:360px;background:var(--dark);border:.5px solid rgba(255,255,255,.1);border-radius:14px;padding:20px;}
+.auth-tabs{display:flex;border-bottom:.5px solid rgba(255,255,255,.08);margin-bottom:18px;}
 .auth-tab{flex:1;text-align:center;padding:9px;font-size:13px;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);transition:all .2s;}
-.auth-tab.on{color:var(--cream);border-bottom-color:var(--red);}
-.af{display:none;}
-.af.on{display:block;}
-.field{margin-bottom:13px;}
+.auth-tab.on{color:var(--cream);border-bottom-color:var(--azul);}
+.af{display:none;}.af.on{display:block;}
+.field{margin-bottom:12px;}
 .field label{font-size:10px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;display:block;margin-bottom:4px;}
 .field-wrap{position:relative;}
-.field input{width:100%;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.12);border-radius:8px;padding:11px 14px;font-size:14px;color:var(--cream);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
-.field input:focus{border-color:var(--red);}
+.field input,.field select{width:100%;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.12);border-radius:8px;padding:11px 14px;font-size:14px;color:var(--cream);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
+.field input:focus,.field select:focus{border-color:var(--azul);}
 .field input::placeholder{color:var(--muted);}
 .eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;padding:4px;}
-.auth-submit{width:100%;padding:13px;background:var(--red);color:white;border:none;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;cursor:pointer;margin-top:4px;}
+.auth-submit{width:100%;padding:13px;background:var(--azul);color:white;border:none;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;cursor:pointer;margin-top:4px;}
 .auth-submit:disabled{opacity:.5;cursor:not-allowed;}
 .forgot-link{text-align:right;margin-bottom:10px;}
 .forgot-link span{font-size:11px;color:var(--muted);cursor:pointer;text-decoration:underline;}
 .auth-msg{border-radius:8px;padding:9px 12px;font-size:12px;margin-bottom:10px;display:none;}
 .auth-msg.on{display:block;}
-.auth-msg.err{background:rgba(230,57,70,.15);color:#f09595;border:.5px solid rgba(230,57,70,.3);}
-.auth-msg.ok{background:rgba(45,106,79,.15);color:#5fbd8a;border:.5px solid rgba(45,106,79,.3);}
+.auth-msg.err{background:rgba(239,68,68,.15);color:#fca5a5;border:.5px solid rgba(239,68,68,.3);}
+.auth-msg.ok{background:rgba(16,185,129,.15);color:#6ee7b7;border:.5px solid rgba(16,185,129,.3);}
 
-/* ── TOP BAR ── */
-.topbar{background:var(--dark2);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid rgba(255,255,255,.06);flex-shrink:0;}
+/* Avatar picker */
+.avatar-picker{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:6px;}
+.av-opt{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.06);border:2px solid transparent;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;transition:all .15s;}
+.av-opt.selected{border-color:var(--azul);background:rgba(26,86,219,.2);}
+.av-input-wrap{display:flex;gap:8px;align-items:center;margin-top:6px;}
+.av-preview{width:44px;height:44px;border-radius:50%;background:var(--azul);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden;}
+.av-preview img{width:100%;height:100%;object-fit:cover;}
+.av-file-btn{flex:1;padding:9px 12px;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.15);border-radius:8px;font-size:11px;color:var(--muted);cursor:pointer;text-align:center;}
+
+/* TOP BAR */
+.topbar{background:var(--dark2);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid rgba(255,255,255,.06);flex-shrink:0;}
 .tb-logo{display:flex;align-items:center;gap:7px;}
-.tb-g{width:26px;height:26px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;}
+.tb-icon{width:26px;height:26px;background:linear-gradient(135deg,var(--azul),#7c3aed);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;}
 .tb-t{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;}
 .tb-right{display:flex;align-items:center;gap:6px;}
 .tb-chip{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.05);padding:4px 10px;border-radius:20px;cursor:pointer;}
-.tb-av{width:20px;height:20px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:500;}
+.tb-av{width:22px;height:22px;border-radius:50%;background:var(--azul);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;overflow:hidden;flex-shrink:0;}
+.tb-av img{width:100%;height:100%;object-fit:cover;}
 .tb-name{font-size:11px;}
 .tb-xp{font-size:10px;color:var(--gold);font-family:'Bebas Neue',sans-serif;}
-.tb-preview{font-size:10px;color:var(--gold);background:rgba(201,168,76,.15);border:.5px solid rgba(201,168,76,.3);padding:4px 9px;border-radius:6px;cursor:pointer;display:none;}
+.tb-preview{font-size:10px;color:var(--gold);background:rgba(245,158,11,.15);border:.5px solid rgba(245,158,11,.3);padding:4px 9px;border-radius:6px;cursor:pointer;display:none;}
 
-/* ── BOTTOM NAV ── */
+/* BOTTOM NAV */
 .bottom-nav{background:var(--dark2);border-top:.5px solid rgba(255,255,255,.07);display:flex;flex-shrink:0;}
-.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 0 5px;cursor:pointer;gap:2px;}
-.bn-icon{font-size:20px;}
-.bn-lbl{font-size:9px;color:var(--muted);letter-spacing:.3px;}
-.bn-item.on .bn-lbl{color:var(--red);}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:7px 0 4px;cursor:pointer;gap:1px;}
+.bn-icon{font-size:19px;}
+.bn-lbl{font-size:8px;color:var(--muted);letter-spacing:.3px;}
+.bn-item.on .bn-lbl{color:var(--azul);}
 
-/* ── TABS ── */
+/* TABS */
 .tab{display:none;flex:1;flex-direction:column;overflow:hidden;}
 .tab.on{display:flex;}
 
-/* ── INICIO ── */
-.profe-card{margin:12px 16px;border-radius:12px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start;}
-.profe-card.motivar{background:rgba(230,57,70,.08);border:1px solid rgba(230,57,70,.25);}
-.profe-card.reganar{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.3);}
-.pc-av{width:38px;height:38px;border-radius:50%;background:var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
-.pc-av span:first-child{font-size:14px;}
-.pc-av span:last-child{font-family:'Bebas Neue',sans-serif;font-size:7px;letter-spacing:1px;color:white;}
+/* INICIO */
+.profe-card{margin:10px 14px;border-radius:12px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start;}
+.profe-card.motivar{background:rgba(26,86,219,.08);border:1px solid rgba(26,86,219,.25);}
+.profe-card.reganar{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);}
+.pc-av{width:36px;height:36px;border-radius:50%;background:var(--azul);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.pc-av img{width:100%;height:100%;object-fit:cover;}
+.pc-av span{font-size:16px;}
 .pc-body{flex:1;}
 .pc-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
 .pc-msg{font-size:12px;line-height:1.6;}
 .pc-close{font-size:14px;color:var(--muted);cursor:pointer;padding:0 2px;}
 
-.stats-row{display:flex;gap:8px;padding:0 16px;margin-bottom:12px;}
+.stats-row{display:flex;gap:8px;padding:0 14px;margin-bottom:10px;}
 .stat{flex:1;background:var(--dark2);border-radius:9px;padding:10px 6px;text-align:center;}
 .stat-n{font-family:'Bebas Neue',sans-serif;font-size:20px;line-height:1;}
 .stat-n.r{color:var(--red);}
@@ -95,42 +108,41 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .stat-n.b{color:var(--blue);}
 .stat-l{font-size:9px;color:var(--muted);margin-top:2px;}
 
-.xp-card{margin:0 16px 12px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:11px;padding:12px 14px;}
+.xp-card{margin:0 14px 10px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:11px;padding:12px 14px;}
 .xp-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
 .xp-lbl{font-size:10px;color:var(--muted);}
-.xp-titulo{font-family:'Bebas Neue',sans-serif;font-size:12px;color:var(--red);letter-spacing:1px;}
+.xp-titulo{font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--azul);letter-spacing:1px;}
 .xp-bar{height:7px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;margin-bottom:4px;}
-.xp-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:4px;transition:width .6s;}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--azul),var(--gold));border-radius:4px;transition:width .6s;}
 .xp-sub{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);}
 
-.racha-wrap{padding:0 16px;margin-bottom:12px;}
-.sec-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
-.racha-row{display:flex;gap:5px;}
-.rday{flex:1;height:34px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;}
-.rday.done{background:rgba(45,106,79,.2);border:.5px solid rgba(45,106,79,.5);color:#5fbd8a;}
-.rday.hoy{background:var(--red);border:.5px solid var(--red);color:white;}
+.racha-wrap{padding:0 14px;margin-bottom:10px;}
+.sec-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+.racha-row{display:flex;gap:4px;}
+.rday{flex:1;height:32px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;}
+.rday.done{background:rgba(16,185,129,.2);border:.5px solid rgba(16,185,129,.5);color:#6ee7b7;}
+.rday.hoy{background:var(--azul);border:.5px solid var(--azul);color:white;}
 .rday.pend{background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.07);color:var(--muted);}
 .rday-icon{font-size:10px;}
 .rday-lbl{font-size:7px;opacity:.7;}
 
-.continue-card{margin:0 16px 12px;background:rgba(230,57,70,.06);border:1px solid rgba(230,57,70,.2);border-radius:11px;padding:14px;cursor:pointer;}
-.cc-ey{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;}
-.cc-nom{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;margin-bottom:8px;}
+.continue-card{margin:0 14px 10px;background:rgba(26,86,219,.06);border:1px solid rgba(26,86,219,.2);border-radius:11px;padding:13px;cursor:pointer;}
+.cc-ey{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--azul);margin-bottom:4px;}
+.cc-nom{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:1px;margin-bottom:8px;}
 .cc-pips{display:flex;gap:5px;margin-bottom:8px;}
 .pip{flex:1;height:4px;border-radius:2px;}
 .pip.done{background:var(--green);}
-.pip.active{background:var(--red);}
+.pip.active{background:var(--azul);}
 .pip.pend{background:rgba(255,255,255,.08);}
 .cc-meta{display:flex;justify-content:space-between;margin-bottom:10px;}
 .cc-mt{font-size:10px;color:var(--muted);}
-.cc-btn{width:100%;padding:11px;background:var(--red);color:white;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;cursor:pointer;}
+.cc-btn{width:100%;padding:11px;background:var(--azul);color:white;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;cursor:pointer;}
 
-/* ── MAPA ── */
-.mapa-header{padding:16px 16px 8px;}
-.mapa-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;}
+/* MAPA */
+.mapa-header{padding:14px 14px 8px;}
+.mapa-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;}
 .mapa-sub{font-size:11px;color:var(--muted);margin-top:2px;}
-
-.bloque{margin:0 16px 8px;}
+.bloque{margin:0 14px 7px;}
 .bloque-hdr{display:flex;align-items:center;gap:9px;padding:11px 12px;cursor:pointer;border-radius:9px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);}
 .bloque-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:12px;flex-shrink:0;}
 .bloque-info{flex:1;}
@@ -143,64 +155,61 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .tema-row:last-child{border-bottom:none;}
 .tema-row:active{background:rgba(255,255,255,.05);}
 .tema-row.locked{opacity:.35;cursor:default;}
-.tema-row.active-tema{border-left-color:var(--red);}
+.tema-row.active-tema{border-left-color:var(--azul);}
 .tema-row.done-tema{border-left-color:var(--green);}
 .t-ico{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;}
 .t-info{flex:1;}
 .t-nom{font-size:12px;}
 .t-sub{font-size:9px;color:var(--muted);margin-top:1px;}
 .t-badge{font-size:9px;font-weight:500;padding:2px 7px;border-radius:10px;white-space:nowrap;}
-.tb-done{background:rgba(45,106,79,.2);color:#5fbd8a;border:.5px solid rgba(45,106,79,.4);}
-.tb-active{background:rgba(230,57,70,.15);color:var(--red);border:.5px solid rgba(230,57,70,.3);}
+.tb-done{background:rgba(16,185,129,.2);color:#6ee7b7;border:.5px solid rgba(16,185,129,.4);}
+.tb-active{background:rgba(26,86,219,.15);color:var(--azul);border:.5px solid rgba(26,86,219,.3);}
 .tb-lock{background:rgba(255,255,255,.05);color:var(--muted);}
 
-/* ── TEMA DETAIL ── */
+/* TEMA DETAIL */
 #tema-detail{background:var(--dark);}
-.td-topbar{background:var(--dark2);padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:.5px solid rgba(255,255,255,.06);flex-shrink:0;}
+.td-topbar{background:var(--dark2);padding:11px 14px;display:flex;align-items:center;gap:10px;border-bottom:.5px solid rgba(255,255,255,.06);flex-shrink:0;}
 .td-back{background:none;border:.5px solid rgba(255,255,255,.1);color:var(--muted);padding:5px 11px;border-radius:6px;cursor:pointer;font-size:12px;}
 .td-title{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;flex:1;}
-
-.rounds-bar{display:flex;padding:0 16px;border-bottom:.5px solid rgba(255,255,255,.06);flex-shrink:0;}
+.rounds-bar{display:flex;padding:0 14px;border-bottom:.5px solid rgba(255,255,255,.06);flex-shrink:0;}
 .round-tab{flex:1;text-align:center;padding:9px 3px;border-bottom:2px solid transparent;cursor:pointer;}
-.round-tab.on{border-bottom-color:var(--red);}
-.round-tab.done-r .rt-num{color:#5fbd8a;}
+.round-tab.on{border-bottom-color:var(--azul);}
+.round-tab.done-r .rt-num{color:#6ee7b7;}
 .rt-num{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-family:'Bebas Neue',sans-serif;}
-.round-tab.on .rt-num{color:var(--red);}
+.round-tab.on .rt-num{color:var(--azul);}
 .rt-name{font-size:10px;color:var(--muted);margin-top:1px;}
 .round-tab.on .rt-name{color:var(--cream);}
 .rt-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.1);margin:3px auto 0;}
-.round-tab.on .rt-dot{background:var(--red);}
-.round-tab.done-r .rt-dot{background:#2d6a4f;}
-
-.round-screen{display:none;flex:1;overflow-y:auto;padding:14px 16px 24px;}
+.round-tab.on .rt-dot{background:var(--azul);}
+.round-tab.done-r .rt-dot{background:var(--green);}
+.round-screen{display:none;flex:1;overflow-y:auto;padding:14px 14px 24px;}
 .round-screen.on{display:block;}
 
 /* Video */
 .video-section{margin-bottom:14px;}
 .video-box{border-radius:10px;overflow:hidden;background:var(--dark2);border:.5px solid rgba(255,255,255,.08);}
-.video-thumb{width:100%;aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;position:relative;background:#0d0d14;}
+.video-thumb{width:100%;aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;background:#0a0e1a;}
 .video-no-url{text-align:center;padding:20px;}
-.video-no-url p{font-size:13px;color:var(--muted);margin-bottom:8px;}
-.video-no-url .link-url{font-size:11px;color:var(--red);}
-.play-circle{width:50px;height:50px;border-radius:50%;border:2px solid var(--red);display:flex;align-items:center;justify-content:center;}
-.play-tri{width:0;height:0;border-top:9px solid transparent;border-bottom:9px solid transparent;border-left:15px solid var(--red);margin-left:3px;}
+.video-no-url p{font-size:13px;color:var(--muted);margin-bottom:6px;}
+.play-circle{width:50px;height:50px;border-radius:50%;border:2px solid var(--azul);display:flex;align-items:center;justify-content:center;}
+.play-tri{width:0;height:0;border-top:9px solid transparent;border-bottom:9px solid transparent;border-left:15px solid var(--azul);margin-left:3px;}
 .video-info-txt{text-align:center;}
 .video-info-txt p{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;}
 .video-info-txt span{font-size:10px;color:var(--muted);}
-.video-info-txt span em{color:var(--red);font-style:normal;}
 .video-footer{padding:10px 12px;display:flex;justify-content:space-between;align-items:center;}
 .video-footer span{font-size:11px;color:var(--muted);}
-.video-open-btn{font-size:11px;color:var(--red);background:rgba(230,57,70,.1);border:.5px solid rgba(230,57,70,.3);padding:4px 10px;border-radius:6px;cursor:pointer;text-decoration:none;}
+.video-open-btn{font-size:11px;color:var(--azul);background:rgba(26,86,219,.1);border:.5px solid rgba(26,86,219,.3);padding:4px 10px;border-radius:6px;cursor:pointer;text-decoration:none;}
 
-.cb{background:rgba(230,57,70,.08);border:.5px solid rgba(230,57,70,.2);border-radius:9px;padding:10px 12px;margin-bottom:12px;display:flex;gap:8px;align-items:flex-start;}
-.cb-av{width:26px;height:26px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:white;flex-shrink:0;}
+.cb{background:rgba(26,86,219,.08);border:.5px solid rgba(26,86,219,.2);border-radius:9px;padding:10px 12px;margin-bottom:12px;display:flex;gap:8px;align-items:flex-start;}
+.cb-av{width:28px;height:28px;border-radius:50%;background:var(--azul);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;overflow:hidden;}
+.cb-av img{width:100%;height:100%;object-fit:cover;}
 .cb-txt{font-style:italic;font-size:12px;line-height:1.6;}
-.cb-txt b{font-style:normal;color:var(--red);font-weight:500;}
+.cb-txt b{font-style:normal;color:var(--azul);font-weight:500;}
 
 .kp-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
 .kp-item{display:flex;gap:8px;padding:7px 0;border-bottom:.5px solid rgba(255,255,255,.05);}
 .kp-item:last-child{border-bottom:none;}
-.kp-num{font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--red);width:14px;flex-shrink:0;}
+.kp-num{font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--azul);width:14px;flex-shrink:0;}
 .kp-txt{font-size:12px;line-height:1.4;}
 .kp-sub{font-size:10px;color:var(--muted);margin-top:1px;}
 
@@ -210,7 +219,7 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .demo-expr{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;margin-bottom:4px;}
 .demo-expr.gold{color:var(--gold);}
 .demo-exp{font-size:11px;color:var(--muted);line-height:1.5;}
-.demo-arrow{text-align:center;color:var(--red);font-size:14px;margin:3px 0;}
+.demo-arrow{text-align:center;color:var(--azul);font-size:14px;margin:3px 0;}
 
 /* Ejercicios */
 .ej-progress{font-size:10px;color:var(--muted);margin-bottom:12px;}
@@ -219,12 +228,12 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .ej-opts{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px;}
 .ej-opt{border:.5px solid rgba(255,255,255,.1);border-radius:9px;padding:13px;text-align:center;font-size:14px;font-weight:500;cursor:pointer;color:var(--cream);background:rgba(255,255,255,.03);transition:all .15s;-webkit-tap-highlight-color:transparent;}
 .ej-opt:active{background:rgba(255,255,255,.08);}
-.ej-opt.correct{background:rgba(45,106,79,.2);border-color:#2d6a4f;color:#5fbd8a;}
-.ej-opt.wrong{background:rgba(161,35,35,.2);border-color:#a12323;color:#f09595;}
+.ej-opt.correct{background:rgba(16,185,129,.2);border-color:#10b981;color:#6ee7b7;}
+.ej-opt.wrong{background:rgba(239,68,68,.2);border-color:#ef4444;color:#fca5a5;}
 .ej-feedback{border-radius:9px;padding:10px 12px;font-size:12px;line-height:1.5;margin-bottom:12px;display:none;}
 .ej-feedback.on{display:block;}
-.ej-feedback.ok{background:rgba(45,106,79,.15);color:#5fbd8a;}
-.ej-feedback.bad{background:rgba(161,35,35,.15);color:#f09595;}
+.ej-feedback.ok{background:rgba(16,185,129,.15);color:#6ee7b7;}
+.ej-feedback.bad{background:rgba(239,68,68,.15);color:#fca5a5;}
 
 /* Examen */
 .exam-intro{text-align:center;padding:20px 0;}
@@ -234,17 +243,13 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .exam-stat{background:rgba(255,255,255,.04);border-radius:7px;padding:10px;text-align:center;}
 .exam-stat-n{font-family:'Bebas Neue',sans-serif;font-size:20px;}
 .exam-stat-l{font-size:9px;color:var(--muted);margin-top:1px;}
-
-/* Examen activo */
-.exam-timer{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--red);text-align:center;margin-bottom:12px;letter-spacing:2px;}
+.exam-timer{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--azul);text-align:center;margin-bottom:12px;letter-spacing:2px;}
 .exam-timer.warn{color:var(--gold);}
 .exam-timer.danger{animation:blink .6s infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
 .exam-prog{font-size:10px;color:var(--muted);text-align:center;margin-bottom:14px;}
 .exam-prog-bar{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;margin-bottom:14px;}
-.exam-prog-fill{height:100%;background:var(--red);border-radius:2px;transition:width .3s;}
-
-/* Resultado examen */
+.exam-prog-fill{height:100%;background:var(--azul);border-radius:2px;transition:width .3s;}
 .exam-result{text-align:center;padding:20px 0;}
 .result-circle{width:90px;height:90px;border-radius:50%;margin:0 auto 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .result-score{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;}
@@ -256,126 +261,185 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .rs-n{font-family:'Bebas Neue',sans-serif;font-size:20px;}
 .rs-l{font-size:9px;color:var(--muted);margin-top:1px;}
 
-/* Ranking */
-.ranking-header{padding:16px 16px 8px;}
-.rk-item{display:flex;align-items:center;gap:10px;padding:10px 14px;margin:0 16px 7px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:9px;}
-.rk-item.me{background:rgba(230,57,70,.07);border-color:rgba(230,57,70,.3);}
+/* RANKING */
+.ranking-header{padding:14px 14px 8px;}
+.rk-item{display:flex;align-items:center;gap:10px;padding:10px 14px;margin:0 14px 7px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:9px;}
+.rk-item.me{background:rgba(26,86,219,.07);border-color:rgba(26,86,219,.3);}
 .rk-pos{font-family:'Bebas Neue',sans-serif;font-size:16px;width:22px;text-align:center;flex-shrink:0;}
-.rk-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;}
+.rk-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;overflow:hidden;}
+.rk-av img{width:100%;height:100%;object-fit:cover;}
 .rk-info{flex:1;}
 .rk-nom{font-size:12px;}
 .rk-racha{font-size:9px;color:var(--muted);margin-top:1px;}
-.rk-xp{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--red);}
-.rk-empty{text-align:center;padding:32px 16px;font-size:13px;color:var(--muted);font-style:italic;}
+.rk-xp{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--azul);}
 
-/* Logros */
-.logros-header{padding:16px 16px 8px;}
-.logros-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 16px;}
+/* LOGROS */
+.logros-header{padding:14px 14px 8px;}
+.logros-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 14px;}
 .logro{background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:9px;padding:13px;}
 .logro.locked{opacity:.35;}
 .logro-icon{font-size:24px;margin-bottom:6px;}
 .logro-nom{font-size:11px;font-weight:500;margin-bottom:2px;}
 .logro-desc{font-size:9px;color:var(--muted);line-height:1.4;}
 .logro-badge{display:inline-block;margin-top:6px;font-size:9px;font-weight:500;padding:2px 8px;border-radius:10px;}
-.lb-ok{background:rgba(45,106,79,.2);color:#5fbd8a;border:.5px solid rgba(45,106,79,.4);}
+.lb-ok{background:rgba(16,185,129,.2);color:#6ee7b7;border:.5px solid rgba(16,185,129,.4);}
 .lb-lock{background:rgba(255,255,255,.05);color:var(--muted);}
 
-/* ── ADMIN ── */
+/* CHAT */
+.chat-header{padding:12px 14px 8px;background:var(--dark2);border-bottom:.5px solid rgba(255,255,255,.07);flex-shrink:0;}
+.chat-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;}
+.chat-sub{font-size:10px;color:var(--muted);}
+.chat-feed{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:12px;}
+.chat-post{background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:12px;overflow:hidden;}
+.cp-head{display:flex;align-items:center;gap:8px;padding:10px 12px 8px;}
+.cp-av{width:32px;height:32px;border-radius:50%;background:var(--azul);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;overflow:hidden;}
+.cp-av img{width:100%;height:100%;object-fit:cover;}
+.cp-info{flex:1;}
+.cp-nom{font-size:12px;font-weight:500;}
+.cp-time{font-size:9px;color:var(--muted);}
+.cp-opts{position:relative;}
+.cp-menu-btn{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px 8px;font-size:14px;}
+.cp-menu{position:absolute;right:0;top:100%;background:#1f2937;border:.5px solid rgba(255,255,255,.1);border-radius:9px;overflow:hidden;z-index:10;min-width:120px;display:none;}
+.cp-menu.on{display:block;}
+.cp-menu-item{padding:9px 14px;font-size:12px;cursor:pointer;color:var(--cream);}
+.cp-menu-item:hover{background:rgba(255,255,255,.05);}
+.cp-menu-item.danger{color:#fca5a5;}
+.cp-txt{font-size:13px;line-height:1.6;padding:0 12px 8px;}
+.cp-img{width:100%;max-height:280px;object-fit:cover;display:block;}
+.cp-reactions{display:flex;align-items:center;gap:8px;padding:8px 12px;border-top:.5px solid rgba(255,255,255,.06);}
+.cp-react-btn{background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);border-radius:20px;padding:4px 10px;font-size:12px;cursor:pointer;color:var(--cream);display:flex;align-items:center;gap:4px;transition:all .15s;}
+.cp-react-btn.mine{background:rgba(26,86,219,.2);border-color:rgba(26,86,219,.4);color:var(--azul);}
+.cp-react-count{font-size:11px;color:var(--muted);}
+.cp-react-who{font-size:10px;color:var(--muted);cursor:pointer;}
+.cp-comments{border-top:.5px solid rgba(255,255,255,.06);padding:8px 12px;}
+.cp-comment{display:flex;gap:7px;margin-bottom:7px;}
+.cc-av{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;overflow:hidden;}
+.cc-av img{width:100%;height:100%;object-fit:cover;}
+.cc-body{flex:1;background:rgba(255,255,255,.04);border-radius:8px;padding:7px 10px;}
+.cc-nom{font-size:10px;font-weight:500;margin-bottom:2px;color:var(--azul);}
+.cc-txt{font-size:11px;line-height:1.5;}
+.cc-time{font-size:9px;color:var(--muted);margin-top:3px;}
+.add-comment-row{display:flex;gap:7px;align-items:center;padding-top:6px;}
+.add-comment-row input{flex:1;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);border-radius:20px;padding:7px 13px;font-size:12px;color:var(--cream);font-family:'DM Sans',sans-serif;outline:none;}
+.add-comment-row input:focus{border-color:var(--azul);}
+.send-comment{background:var(--azul);border:none;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;flex-shrink:0;}
+.chat-compose{background:var(--dark2);border-top:.5px solid rgba(255,255,255,.07);padding:10px 14px;flex-shrink:0;}
+.compose-row{display:flex;gap:8px;align-items:flex-end;}
+.compose-av{width:30px;height:30px;border-radius:50%;background:var(--azul);display:flex;align-items:center;justify-content:center;font-size:13px;overflow:hidden;flex-shrink:0;}
+.compose-av img{width:100%;height:100%;object-fit:cover;}
+.compose-box{flex:1;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);border-radius:20px;padding:8px 13px;font-size:13px;color:var(--cream);font-family:'DM Sans',sans-serif;outline:none;resize:none;max-height:80px;overflow-y:auto;}
+.compose-box:focus{border-color:var(--azul);}
+.compose-actions{display:flex;gap:6px;margin-top:6px;justify-content:flex-end;align-items:center;}
+.compose-img-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:2px;}
+.compose-send{background:var(--azul);color:white;border:none;border-radius:8px;padding:7px 16px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;}
+.compose-img-preview{margin-top:7px;position:relative;display:inline-block;}
+.compose-img-preview img{max-height:80px;border-radius:8px;}
+.compose-img-remove{position:absolute;top:-6px;right:-6px;width:18px;height:18px;background:var(--red);border:none;border-radius:50%;color:white;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+/* PERFIL */
+.perfil-wrap{padding:16px 14px;}
+.perfil-av-big{width:80px;height:80px;border-radius:50%;background:var(--azul);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:38px;overflow:hidden;border:3px solid rgba(26,86,219,.4);}
+.perfil-av-big img{width:100%;height:100%;object-fit:cover;}
+.perfil-nom{font-family:'Bebas Neue',sans-serif;font-size:22px;text-align:center;letter-spacing:1px;}
+.perfil-email{font-size:11px;color:var(--muted);text-align:center;margin-bottom:16px;}
+.perfil-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;}
+.perfil-stat{background:var(--dark2);border-radius:9px;padding:12px;text-align:center;}
+.perfil-stat-n{font-family:'Bebas Neue',sans-serif;font-size:22px;}
+.perfil-stat-l{font-size:9px;color:var(--muted);}
+.perfil-sec{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.perfil-edit-btn{width:100%;padding:11px;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);border-radius:9px;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;margin-bottom:8px;}
+.logout-btn{width:100%;padding:11px;background:rgba(239,68,68,.1);border:.5px solid rgba(239,68,68,.3);border-radius:9px;color:#fca5a5;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;}
+
+/* ADMIN */
 #admin-screen{background:var(--dark);}
-.admin-topbar{background:#1a1a2e;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid rgba(255,255,255,.07);flex-shrink:0;}
+.admin-topbar{background:#0f172a;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid rgba(255,255,255,.07);flex-shrink:0;}
 .at-logo{display:flex;align-items:center;gap:7px;}
-.at-g{width:24px;height:24px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;}
+.at-g{width:24px;height:24px;background:linear-gradient(135deg,var(--azul),#7c3aed);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;}
 .at-t{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;}
 .at-right{display:flex;align-items:center;gap:6px;}
-.at-badge{background:rgba(201,168,76,.2);border:.5px solid rgba(201,168,76,.4);border-radius:20px;padding:3px 9px;font-size:9px;font-weight:500;color:var(--gold);letter-spacing:1px;}
+.at-badge{background:rgba(245,158,11,.2);border:.5px solid rgba(245,158,11,.4);border-radius:20px;padding:3px 9px;font-size:9px;font-weight:500;color:var(--gold);letter-spacing:1px;}
 .at-btn{font-size:11px;color:var(--muted);background:none;border:.5px solid rgba(255,255,255,.1);padding:4px 9px;border-radius:6px;cursor:pointer;}
-.at-btn.preview{color:var(--red);background:rgba(230,57,70,.1);border-color:rgba(230,57,70,.3);}
-
-.admin-tabs{display:flex;background:#1a1a2e;border-bottom:.5px solid rgba(255,255,255,.07);flex-shrink:0;}
-.admin-tab{flex:1;text-align:center;padding:10px 4px;cursor:pointer;border-bottom:2px solid transparent;}
+.at-btn.preview{color:var(--azul);background:rgba(26,86,219,.1);border-color:rgba(26,86,219,.3);}
+.admin-tabs{display:flex;background:#0f172a;border-bottom:.5px solid rgba(255,255,255,.07);flex-shrink:0;}
+.admin-tab{flex:1;text-align:center;padding:9px 4px;cursor:pointer;border-bottom:2px solid transparent;}
 .admin-tab.on{border-bottom-color:var(--gold);}
 .admin-tab .at-icon{font-size:16px;}
 .admin-tab .at-lbl{font-size:9px;color:var(--muted);margin-top:1px;}
 .admin-tab.on .at-lbl{color:var(--gold);}
-
 .admin-panel{display:none;flex:1;overflow-y:auto;}
 .admin-panel.on{display:block;}
-
-/* Admin Inicio */
-.admin-hero{background:#1a1a2e;padding:16px;margin-bottom:0;}
-.admin-stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:14px 16px;}
-.adm-stat{background:var(--dark2);border-radius:10px;padding:13px;}
-.adm-stat-n{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;}
+.admin-hero{background:#0f172a;padding:14px;}
+.admin-stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:12px 14px;}
+.adm-stat{background:var(--dark2);border-radius:10px;padding:12px;}
+.adm-stat-n{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;}
 .adm-stat-l{font-size:10px;color:var(--muted);margin-top:2px;}
-.adm-stat-s{font-size:9px;color:var(--muted);margin-top:1px;opacity:.7;}
-
-.admin-sec{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);padding:0 16px;margin-bottom:8px;}
-
-/* Admin Alumnos */
-.alumno-item{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:0 16px 7px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:9px;cursor:pointer;}
-.alumno-item.riesgo{border-color:rgba(230,57,70,.3);background:rgba(230,57,70,.04);}
-.alum-av{width:34px;height:34px;border-radius:50%;background:rgba(230,57,70,.2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--red);flex-shrink:0;}
+.admin-sec{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);padding:0 14px;margin-bottom:8px;}
+.alumno-item{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:0 14px 7px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:9px;cursor:pointer;}
+.alumno-item.riesgo{border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.04);}
+.alum-av{width:34px;height:34px;border-radius:50%;background:rgba(26,86,219,.2);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--azul);flex-shrink:0;overflow:hidden;}
+.alum-av img{width:100%;height:100%;object-fit:cover;}
 .alum-info{flex:1;}
 .alum-nom{font-size:12px;font-weight:500;}
 .alum-meta{font-size:10px;color:var(--muted);margin-top:1px;}
 .alum-right{text-align:right;}
-.alum-xp{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--red);}
+.alum-xp{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--azul);}
 .alum-racha{font-size:9px;color:var(--muted);margin-top:1px;}
 .alum-tag{font-size:9px;font-weight:500;padding:1px 6px;border-radius:8px;margin-top:2px;display:inline-block;}
-.tag-activo{background:rgba(45,106,79,.2);color:#5fbd8a;}
-.tag-riesgo{background:rgba(230,57,70,.15);color:var(--red);}
-.tag-nuevo{background:rgba(55,138,221,.15);color:var(--blue);}
-
-/* Admin Videos */
-.video-admin-item{margin:0 16px 9px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:10px;padding:13px;}
+.tag-activo{background:rgba(16,185,129,.2);color:#6ee7b7;}
+.tag-riesgo{background:rgba(239,68,68,.15);color:var(--red);}
+.tag-nuevo{background:rgba(59,130,246,.15);color:var(--blue);}
+.video-admin-item{margin:0 14px 9px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:10px;padding:13px;}
 .vai-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
 .vai-nom{font-size:12px;font-weight:500;}
 .vai-bloque{font-size:9px;color:var(--muted);}
 .vai-input-wrap{display:flex;gap:7px;}
 .vai-input{flex:1;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);border-radius:7px;padding:9px 11px;font-size:12px;color:var(--cream);font-family:'DM Sans',sans-serif;outline:none;}
-.vai-input:focus{border-color:var(--red);}
+.vai-input:focus{border-color:var(--azul);}
 .vai-input::placeholder{color:var(--muted);}
-.vai-save{background:var(--red);color:white;border:none;border-radius:7px;padding:9px 14px;font-size:12px;cursor:pointer;white-space:nowrap;font-weight:500;}
+.vai-save{background:var(--azul);color:white;border:none;border-radius:7px;padding:9px 14px;font-size:12px;cursor:pointer;white-space:nowrap;font-weight:500;}
 .vai-current{font-size:10px;color:var(--muted);margin-top:6px;}
-.vai-current a{color:var(--red);}
-
-/* Admin Config */
-.config-section{margin:0 16px 14px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:10px;padding:14px;}
+.vai-current a{color:var(--azul);}
+.config-section{margin:0 14px 14px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:10px;padding:14px;}
 .config-title{font-size:12px;font-weight:500;margin-bottom:4px;}
 .config-desc{font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:10px;}
 .config-input{width:100%;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);border-radius:7px;padding:9px 11px;font-size:12px;color:var(--cream);font-family:'DM Sans',sans-serif;outline:none;margin-bottom:7px;}
-.config-btn{width:100%;padding:11px;background:var(--red);color:white;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;}
+.config-btn{width:100%;padding:11px;background:var(--azul);color:white;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;}
 .config-btn.danger{background:rgba(255,255,255,.05);color:var(--muted);border:.5px solid rgba(255,255,255,.1);}
 
+/* Códigos admin */
+.codigo-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin:0 14px 6px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:9px;}
+.codigo-val{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:var(--gold);}
+.codigo-status{font-size:10px;padding:2px 8px;border-radius:10px;}
+.cs-libre{background:rgba(16,185,129,.2);color:#6ee7b7;}
+.cs-usado{background:rgba(255,255,255,.05);color:var(--muted);}
+
 /* Shared */
-.rnd-btn{width:100%;padding:12px;background:var(--red);color:white;border:none;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;margin-top:12px;}
+.rnd-btn{width:100%;padding:12px;background:var(--azul);color:white;border:none;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;margin-top:12px;}
 .rnd-btn.secondary{background:rgba(255,255,255,.05);color:var(--cream);border:.5px solid rgba(255,255,255,.1);}
 .empty-state{text-align:center;padding:32px 16px;font-size:13px;color:var(--muted);font-style:italic;}
-
-/* Detalle alumno modal */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:flex-end;justify-content:center;}
 .overlay.on{display:flex;animation:fadeIn .2s;}
-.bottom-sheet{background:var(--dark2);border-radius:18px 18px 0 0;padding:20px;width:100%;max-width:430px;border:.5px solid rgba(255,255,255,.1);max-height:80vh;overflow-y:auto;}
+.bottom-sheet{background:#1f2937;border-radius:18px 18px 0 0;padding:20px;width:100%;max-width:430px;border:.5px solid rgba(255,255,255,.1);max-height:80vh;overflow-y:auto;}
 .bs-handle{width:34px;height:3px;background:rgba(255,255,255,.15);border-radius:2px;margin:0 auto 16px;}
 .bs-close{width:100%;padding:10px;background:none;color:var(--muted);border:.5px solid rgba(255,255,255,.1);border-radius:9px;font-size:12px;cursor:pointer;margin-top:8px;}
-
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 .slideup{animation:slideUp .3s ease;}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--dark2);border:.5px solid rgba(255,255,255,.15);padding:10px 18px;border-radius:20px;font-size:12px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;}
+.toast.on{opacity:1;}
 </style>
 </head>
 <body>
 
-<div id="loading"><div class="ld-logo">🥊</div><div class="ld-txt">Colorado Mate Club</div></div>
-
+<div id="loading"><div class="ld-logo">🎓</div><div class="ld-txt">Prepa UDG</div></div>
 <div class="app">
 
 <!-- ── AUTH ── -->
 <div class="screen" id="auth">
   <div class="auth-logo">
-    <div class="auth-glove">🥊</div>
-    <div class="auth-title">Colorado Mate Club</div>
-    <div class="auth-quote">"La cochera ahora está en tu celular"</div>
+    <div class="auth-icon">🎓</div>
+    <div class="auth-title">Prepa UDG</div>
+    <div class="auth-sub">Preparación para el examen de admisión</div>
   </div>
   <div class="auth-card">
     <div class="auth-tabs">
@@ -393,18 +457,27 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
         </div>
       </div>
       <div class="forgot-link"><span onclick="showForgot()">¿Olvidaste tu contraseña?</span></div>
-      <button class="auth-submit" onclick="doLogin()">ENTRAR AL RING →</button>
+      <button class="auth-submit" onclick="doLogin()">ENTRAR →</button>
     </div>
     <!-- Register -->
     <div class="af" id="af-register">
       <div class="auth-msg" id="reg-msg"></div>
-      <div class="field"><label>Tu nombre</label><input id="r-nombre" type="text" placeholder="¿Cómo te llamas?"/></div>
+      <div class="field"><label>Tu nombre completo</label><input id="r-nombre" type="text" placeholder="¿Cómo te llamas?"/></div>
       <div class="field"><label>Correo</label><input id="r-email" type="email" placeholder="tucorreo@gmail.com"/></div>
-      <div class="field"><label>Contraseña</label>
+      <div class="field"><label>Contraseña (mín. 6 caracteres)</label>
         <div class="field-wrap">
-          <input id="r-pass" type="password" placeholder="Mínimo 6 caracteres" style="padding-right:40px"/>
+          <input id="r-pass" type="password" placeholder="••••••••" style="padding-right:40px"/>
           <button class="eye-btn" onclick="toggleEye('r-pass',this)">👁</button>
         </div>
+      </div>
+      <div class="field"><label>Código de acceso (te lo da tu maestro)</label><input id="r-codigo" type="text" placeholder="Ej: UDG-2025" style="text-transform:uppercase;letter-spacing:2px"/></div>
+      <div class="field"><label>Foto de perfil</label>
+        <div class="av-input-wrap">
+          <div class="av-preview" id="reg-av-preview"><span id="reg-av-emoji">🙂</span></div>
+          <label class="av-file-btn">📷 Subir foto<input type="file" accept="image/*" style="display:none" onchange="previewRegAvatar(this)"/></label>
+        </div>
+        <div style="margin-top:8px;font-size:10px;color:var(--muted);margin-bottom:6px">O elige un emoji:</div>
+        <div class="avatar-picker" id="avatar-picker"></div>
       </div>
       <button class="auth-submit" onclick="doRegister()">CREAR MI CUENTA →</button>
     </div>
@@ -422,26 +495,24 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 <!-- ── APP ALUMNO ── -->
 <div class="screen" id="app-screen">
   <div class="topbar">
-    <div class="tb-logo"><div class="tb-g">🥊</div><span class="tb-t">Colorado Mate Club</span></div>
+    <div class="tb-logo"><div class="tb-icon">🎓</div><span class="tb-t">Prepa UDG</span></div>
     <div class="tb-right">
       <button class="tb-preview" id="btn-volver" onclick="volverAdmin()">⬅ Mi panel</button>
-      <div class="tb-chip" onclick="doLogout()">
-        <div class="tb-av" id="chip-av">?</div>
+      <div class="tb-chip" onclick="goTab('perfil',document.querySelectorAll('.bn-item')[4])">
+        <div class="tb-av" id="chip-av"><span id="chip-av-inner">?</span></div>
         <span class="tb-name" id="chip-name">Alumno</span>
         <span class="tb-xp" id="chip-xp">0 XP</span>
       </div>
     </div>
   </div>
-
-  <!-- Tabs content -->
   <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
 
-    <!-- INICIO TAB -->
+    <!-- INICIO -->
     <div class="tab on" id="tab-inicio">
       <div class="scroll">
         <div class="profe-card motivar" id="profe-card">
-          <div class="pc-av"><span>🥊</span><span>PROFE</span></div>
-          <div class="pc-body"><div class="pc-label">El Profe Colorado dice</div><div class="pc-msg" id="profe-msg">¡Bienvenido al ring!</div></div>
+          <div class="pc-av" id="profe-av-card"><span>👨‍🏫</span></div>
+          <div class="pc-body"><div class="pc-label">Tu Maestro dice</div><div class="pc-msg" id="profe-msg">¡Bienvenido!</div></div>
           <span class="pc-close" onclick="document.getElementById('profe-card').style.display='none'">✕</span>
         </div>
         <div class="stats-row">
@@ -450,7 +521,7 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
           <div class="stat"><div class="stat-n b" id="s-xp">0</div><div class="stat-l">XP</div></div>
         </div>
         <div class="xp-card">
-          <div class="xp-top"><span class="xp-lbl" id="xp-lbl">Nivel 1 → 2</span><span class="xp-titulo" id="xp-titulo">Rookie del ring</span></div>
+          <div class="xp-top"><span class="xp-lbl" id="xp-lbl">Nivel 1 → 2</span><span class="xp-titulo" id="xp-titulo">Estudiante nuevo</span></div>
           <div class="xp-bar"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
           <div class="xp-sub"><span id="xp-actual">0 XP</span><span id="xp-falta">500 para subir</span></div>
         </div>
@@ -458,58 +529,105 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
           <div class="sec-lbl">Racha semanal</div>
           <div class="racha-row" id="racha-row"></div>
         </div>
-        <div class="continue-card" onclick="abrirTema(3)">
+        <div class="continue-card" id="continue-card" onclick="abrirUltimoTema()">
           <div class="cc-ey">continuar donde lo dejaste</div>
-          <div class="cc-nom" id="continue-nom">Fracciones y decimales</div>
-          <div class="cc-pips">
-            <div class="pip done"></div><div class="pip active"></div><div class="pip pend"></div><div class="pip pend"></div>
-          </div>
-          <div class="cc-meta"><span class="cc-mt">Round 2 de 4</span><span class="cc-mt">Bloque 1</span></div>
+          <div class="cc-nom" id="continue-nom">Aritmética básica</div>
+          <div class="cc-pips"><div class="pip done"></div><div class="pip active"></div><div class="pip pend"></div><div class="pip pend"></div></div>
+          <div class="cc-meta"><span class="cc-mt">Round 2 de 4</span><span class="cc-mt" id="continue-bloque">Bloque 1</span></div>
           <button class="cc-btn">CONTINUAR →</button>
         </div>
       </div>
     </div>
 
-    <!-- MAPA TAB -->
+    <!-- MAPA -->
     <div class="tab" id="tab-mapa">
       <div class="scroll">
         <div class="mapa-header">
-          <div class="mapa-title">Ruta crítica</div>
-          <div class="mapa-sub">15 temas · 4 bloques · Examen UDG</div>
+          <div class="mapa-title">Ruta de estudio</div>
+          <div class="mapa-sub">6 temas · Examen UDG</div>
         </div>
         <div id="mapa-container"></div>
       </div>
     </div>
 
-    <!-- RANKING TAB -->
+    <!-- RANKING -->
     <div class="tab" id="tab-ranking">
       <div class="scroll">
         <div class="ranking-header">
-          <div class="mapa-title">Ranking semanal</div>
+          <div class="mapa-title">Ranking general</div>
           <div class="mapa-sub" id="ranking-sub">Cargando...</div>
         </div>
         <div id="ranking-list"></div>
       </div>
     </div>
 
-    <!-- LOGROS TAB -->
+    <!-- LOGROS -->
     <div class="tab" id="tab-logros">
       <div class="scroll">
         <div class="logros-header">
-          <div class="mapa-title">Tus logros</div>
-          <div class="mapa-sub" id="logros-sub">0 desbloqueados</div>
+          <div class="mapa-title">Insignias</div>
+          <div class="mapa-sub" id="logros-sub">0 desbloqueadas</div>
         </div>
         <div class="logros-grid" id="logros-grid"></div>
       </div>
     </div>
 
-  </div>
+    <!-- CHAT -->
+    <div class="tab" id="tab-chat">
+      <div class="chat-header">
+        <div class="chat-title">💬 Grupo de estudio</div>
+        <div class="chat-sub">Comparte dudas, tips y avances con tus compañeros</div>
+      </div>
+      <div class="chat-feed" id="chat-feed"><div class="empty-state">Cargando mensajes...</div></div>
+      <div class="chat-compose">
+        <div class="compose-row">
+          <div class="compose-av" id="compose-av"><span id="compose-av-inner">?</span></div>
+          <textarea class="compose-box" id="compose-txt" placeholder="Escribe algo al grupo..." rows="1" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+        </div>
+        <div class="compose-actions">
+          <div id="compose-img-preview" style="display:none">
+            <div class="compose-img-preview">
+              <img id="compose-preview-img" src="" alt=""/>
+              <button class="compose-img-remove" onclick="quitarImagenPost()">✕</button>
+            </div>
+          </div>
+          <label class="compose-img-btn" title="Agregar foto">🖼<input type="file" accept="image/*" style="display:none" id="compose-img-input" onchange="previewPostImage(this)"/></label>
+          <button class="compose-send" onclick="publicarPost()">Publicar</button>
+        </div>
+      </div>
+    </div>
 
+    <!-- PERFIL -->
+    <div class="tab" id="tab-perfil">
+      <div class="scroll">
+        <div class="perfil-wrap">
+          <div class="perfil-av-big" id="perfil-av-big"><span id="perfil-av-inner">?</span></div>
+          <div class="perfil-nom" id="perfil-nom">Alumno</div>
+          <div class="perfil-email" id="perfil-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="82e1edf0f0e7edc2e7efe3ebeeace1edef">[email&#160;protected]</a></div>
+          <div class="perfil-grid">
+            <div class="perfil-stat"><div class="perfil-stat-n" style="color:var(--gold)" id="p-xp">0</div><div class="perfil-stat-l">XP</div></div>
+            <div class="perfil-stat"><div class="perfil-stat-n" style="color:var(--green)" id="p-nivel">1</div><div class="perfil-stat-l">Nivel</div></div>
+            <div class="perfil-stat"><div class="perfil-stat-n" style="color:var(--red)" id="p-racha">0</div><div class="perfil-stat-l">🔥 Racha</div></div>
+          </div>
+          <div class="perfil-sec">Cambiar foto de perfil</div>
+          <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center">
+            <label style="flex:1;padding:10px;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);border-radius:9px;text-align:center;font-size:12px;cursor:pointer;color:var(--muted)">📷 Subir foto<input type="file" accept="image/*" style="display:none" onchange="cambiarFotoPerfil(this)"/></label>
+          </div>
+          <div class="perfil-sec">Emojis</div>
+          <div class="avatar-picker" id="avatar-picker-perfil" style="margin-bottom:16px"></div>
+          <button class="logout-btn" onclick="doLogout()">Cerrar sesión</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
   <div class="bottom-nav">
     <div class="bn-item on" onclick="goTab('inicio',this)"><div class="bn-icon">🏠</div><div class="bn-lbl">Inicio</div></div>
-    <div class="bn-item" onclick="goTab('mapa',this)"><div class="bn-icon">🗺️</div><div class="bn-lbl">Mapa</div></div>
+    <div class="bn-item" onclick="goTab('mapa',this)"><div class="bn-icon">🗺️</div><div class="bn-lbl">Temas</div></div>
     <div class="bn-item" onclick="goTab('ranking',this)"><div class="bn-icon">🏆</div><div class="bn-lbl">Ranking</div></div>
-    <div class="bn-item" onclick="goTab('logros',this)"><div class="bn-icon">⭐</div><div class="bn-lbl">Logros</div></div>
+    <div class="bn-item" onclick="goTab('logros',this)"><div class="bn-icon">⭐</div><div class="bn-lbl">Insignias</div></div>
+    <div class="bn-item" onclick="goTab('chat',this);cargarChat()"><div class="bn-icon">💬</div><div class="bn-lbl">Chat</div></div>
+    <div class="bn-item" onclick="goTab('perfil',this);buildPerfil()"><div class="bn-icon">👤</div><div class="bn-lbl">Perfil</div></div>
   </div>
 </div>
 
@@ -520,12 +638,11 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
     <span class="td-title" id="td-title">Tema</span>
   </div>
   <div class="rounds-bar">
-    <div class="round-tab on" id="rt0" onclick="goRound(0)"><div class="rt-num">Round 1</div><div class="rt-name">Video</div><div class="rt-dot"></div></div>
-    <div class="round-tab" id="rt1" onclick="goRound(1)"><div class="rt-num">Round 2</div><div class="rt-name">Demo</div><div class="rt-dot"></div></div>
-    <div class="round-tab" id="rt2" onclick="goRound(2)"><div class="rt-num">Round 3</div><div class="rt-name">Práctica</div><div class="rt-dot"></div></div>
-    <div class="round-tab" id="rt3" onclick="goRound(3)"><div class="rt-num">Round 4</div><div class="rt-name">Examen</div><div class="rt-dot"></div></div>
+    <div class="round-tab on" onclick="goRound(0)"><div class="rt-num">Round 1</div><div class="rt-name">Video</div><div class="rt-dot"></div></div>
+    <div class="round-tab" onclick="goRound(1)"><div class="rt-num">Round 2</div><div class="rt-name">Demo</div><div class="rt-dot"></div></div>
+    <div class="round-tab" onclick="goRound(2)"><div class="rt-num">Round 3</div><div class="rt-name">Práctica</div><div class="rt-dot"></div></div>
+    <div class="round-tab" onclick="goRound(3)"><div class="rt-num">Round 4</div><div class="rt-name">Examen</div><div class="rt-dot"></div></div>
   </div>
-  <!-- Round screens -->
   <div class="round-screen on" id="rs0"></div>
   <div class="round-screen" id="rs1"></div>
   <div class="round-screen" id="rs2"></div>
@@ -535,9 +652,9 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 <!-- ── ADMIN ── -->
 <div class="screen" id="admin-screen">
   <div class="admin-topbar">
-    <div class="at-logo"><div class="at-g">🥊</div><span class="at-t">Colorado Mate Club</span></div>
+    <div class="at-logo"><div class="at-g">🎓</div><span class="at-t">Prepa UDG — Maestro</span></div>
     <div class="at-right">
-      <span class="at-badge">PROFE</span>
+      <span class="at-badge">MAESTRO</span>
       <button class="at-btn preview" onclick="verComoAlumno()">👁 Ver app</button>
       <button class="at-btn" onclick="doLogout()">Salir</button>
     </div>
@@ -545,194 +662,126 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
   <div class="admin-tabs">
     <div class="admin-tab on" onclick="goAdmin('inicio',this)"><div class="at-icon">🏠</div><div class="at-lbl">Inicio</div></div>
     <div class="admin-tab" onclick="goAdmin('alumnos',this)"><div class="at-icon">👥</div><div class="at-lbl">Alumnos</div></div>
+    <div class="admin-tab" onclick="goAdmin('codigos',this)"><div class="at-icon">🔑</div><div class="at-lbl">Códigos</div></div>
     <div class="admin-tab" onclick="goAdmin('videos',this)"><div class="at-icon">🎥</div><div class="at-lbl">Videos</div></div>
     <div class="admin-tab" onclick="goAdmin('config',this)"><div class="at-icon">⚙️</div><div class="at-lbl">Config</div></div>
   </div>
   <div class="admin-panel on" id="ap-inicio"></div>
   <div class="admin-panel" id="ap-alumnos"></div>
+  <div class="admin-panel" id="ap-codigos"></div>
   <div class="admin-panel" id="ap-videos"></div>
   <div class="admin-panel" id="ap-config"></div>
 </div>
 
 </div><!-- .app -->
 
-<!-- Overlay detalle alumno -->
+<!-- Overlays -->
 <div class="overlay" id="overlay-alumno" onclick="if(event.target===this)this.classList.remove('on')">
-  <div class="bottom-sheet">
-    <div class="bs-handle"></div>
-    <div id="bs-content"></div>
-    <button class="bs-close" onclick="document.getElementById('overlay-alumno').classList.remove('on')">Cerrar</button>
-  </div>
+  <div class="bottom-sheet"><div class="bs-handle"></div><div id="bs-content"></div>
+  <button class="bs-close" onclick="document.getElementById('overlay-alumno').classList.remove('on')">Cerrar</button></div>
 </div>
+<div class="overlay" id="overlay-reacciones" onclick="if(event.target===this)this.classList.remove('on')">
+  <div class="bottom-sheet"><div class="bs-handle"></div><div id="bs-react-content"></div>
+  <button class="bs-close" onclick="document.getElementById('overlay-reacciones').classList.remove('on')">Cerrar</button></div>
+</div>
+<div id="toast-el" class="toast"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ══════════════════════════
-// SUPABASE
+// SUPABASE — CAMBIA ESTOS VALORES
 // ══════════════════════════
-const SURL='https://yjoapzwkjsdphutyzxcg.supabase.co';
-const SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlqb2FwendranNkcGh1dHl6eGNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NzUyODksImV4cCI6MjA4OTA1MTI4OX0.Bz5zjBTq1bA-0cNFLUegTfVi3_Yh8yaQiOUILU445Rw';
+const SURL = 'https://yjoapzwkjsdphutyzxcg.supabase.co';
+const SKEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlqb2FwendranNkcGh1dHl6eGNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NzUyODksImV4cCI6MjA4OTA1MTI4OX0.Bz5zjBTq1bA-0cNFLUegTfVi3_Yh8yaQiOUILU445Rw';
 const sb = supabase.createClient(SURL, SKEY);
 let CU=null, perfil=null, esAdmin=false, enPreview=false;
+let videoLinks={}, ultimoTema=1;
+let postImageFile=null, regAvatarFile=null, selectedEmoji='🙂';
 
 // ══════════════════════════
-// TEMAS DATA
+// EMOJIS DISPONIBLES
+// ══════════════════════════
+const EMOJIS = ['🙂','😎','🤓','😄','🙃','😤','🔥','💪','🧠','🎯'];
+
+function buildEmojiPicker(containerId, onSelect){
+  const c = document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML = EMOJIS.map(e=>
+    `<div class="av-opt${selectedEmoji===e?' selected':''}" onclick="selectEmoji('${e}','${containerId}',${onSelect?'true':'false'})">${e}</div>`
+  ).join('');
+}
+
+function selectEmoji(emoji, containerId, updateProfile){
+  selectedEmoji = emoji;
+  document.getElementById(containerId).querySelectorAll('.av-opt').forEach(el=>{
+    el.classList.toggle('selected', el.textContent===emoji);
+  });
+  // Update preview
+  const prev = document.getElementById('reg-av-preview');
+  if(prev) { prev.innerHTML=''; const s=document.createElement('span'); s.textContent=emoji; prev.appendChild(s); }
+  if(updateProfile && perfil && CU){
+    sb.from('perfiles').update({avatar:emoji,avatar_url:null}).eq('id',CU.id).then(()=>{
+      perfil.avatar=emoji; perfil.avatar_url=null; updateUI(); buildPerfil();
+    });
+  }
+}
+
+function previewRegAvatar(input){
+  const f = input.files[0]; if(!f) return;
+  regAvatarFile = f;
+  const url = URL.createObjectURL(f);
+  const prev = document.getElementById('reg-av-preview');
+  prev.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;
+}
+
+// ══════════════════════════
+// TEMAS DATA — UDG
 // ══════════════════════════
 const BLOQUES = [
-  {num:1, nombre:'Fundamentos', sub:'Sin esto nada más funciona', color:'#e63946',
-   temas:[
-    {id:1, nombre:'Números naturales', sub:'Operaciones básicas'},
-    {id:2, nombre:'Jerarquía de operaciones', sub:'PEMDAS'},
-    {id:3, nombre:'Fracciones y decimales', sub:'Representación y cálculo'},
-    {id:4, nombre:'Porcentajes y proporciones', sub:'Razón y regla de tres'},
-  ]},
-  {num:2, nombre:'Álgebra', sub:'El pensamiento abstracto empieza aquí', color:'#c9a84c',
-   temas:[
-    {id:5, nombre:'Números enteros', sub:'Positivos, negativos y cero'},
-    {id:6, nombre:'Expresiones algebraicas', sub:'Variables y términos'},
-    {id:7, nombre:'Ecuaciones de primer grado', sub:'Despeje y solución'},
-    {id:8, nombre:'Sistemas de ecuaciones', sub:'Dos incógnitas'},
-  ]},
-  {num:3, nombre:'Geometría', sub:'El espacio y sus propiedades', color:'#1d9e75',
-   temas:[
-    {id:9,  nombre:'Perímetro y área', sub:'Figuras planas'},
-    {id:10, nombre:'Volumen', sub:'Cuerpos geométricos'},
-    {id:11, nombre:'Teorema de Pitágoras', sub:'Triángulos rectángulos'},
-    {id:12, nombre:'Ángulos y triángulos', sub:'Clasificación y propiedades'},
-  ]},
-  {num:4, nombre:'Datos y probabilidad', sub:'Interpretar el mundo con números', color:'#378add',
-   temas:[
-    {id:13, nombre:'Estadística básica', sub:'Media, mediana, moda'},
-    {id:14, nombre:'Probabilidad', sub:'Eventos y posibilidades'},
-    {id:15, nombre:'Gráficas e interpretación', sub:'Leer y construir datos'},
-  ]},
+  {num:1, nombre:'Aritmética', sub:'La base de todo', color:'#1a56db',
+   temas:[{id:1, nombre:'Aritmética básica', sub:'Operaciones y problemas'}]},
+  {num:2, nombre:'PEMDAS', sub:'Orden de operaciones', color:'#7c3aed',
+   temas:[{id:2, nombre:'Jerarquía de operaciones', sub:'PEMDAS / PAMDAS'}]},
+  {num:3, nombre:'Fracciones', sub:'Numeradores y denominadores', color:'#0891b2',
+   temas:[{id:3, nombre:'Fracciones y decimales', sub:'Operaciones y conversiones'}]},
+  {num:4, nombre:'Proporciones', sub:'Razones y regla de tres', color:'#059669',
+   temas:[{id:4, nombre:'Proporciones y razones', sub:'Directa e inversa'}]},
+  {num:5, nombre:'Porcentajes', sub:'Partes de 100', color:'#d97706',
+   temas:[{id:5, nombre:'Porcentajes', sub:'Cálculos y aplicaciones'}]},
+  {num:6, nombre:'Álgebra', sub:'Variables y ecuaciones', color:'#dc2626',
+   temas:[{id:6, nombre:'Álgebra básica', sub:'Expresiones y ecuaciones'}]},
 ];
 
 const TEMAS_CONTENIDO = {
-  1:{puntos:[{t:'Orden de los números naturales',s:'Del más pequeño al más grande'},{t:'Suma y resta',s:'Operaciones fundamentales'},{t:'Multiplicación',s:'3×4 = 4+4+4 = 12'},{t:'División y residuo',s:'Dividendo ÷ divisor = cociente'}],
-     demo:{prob:'¿Cuánto es 125 × 4?',pasos:[{n:'Multiplicamos unidades',e:'5×4=20',x:'Escribimos 0, llevamos 2'},{n:'Multiplicamos decenas',e:'2×4+2=10',x:'Escribimos 0, llevamos 1'},{n:'Resultado',e:'125×4 = 500',x:'',gold:true}]},
-     ejs:[{q:'¿Cuánto es 234 + 567?',ex:'234 + 567',opts:['791','801','811','821'],ok:1,exp:'4+7=11, 3+6+1=10, 2+5+1=8 → 801'},
-          {q:'¿Cuánto es 1000 - 347?',ex:'1000 - 347',opts:['653','643','663','753'],ok:0,exp:'1000-347=653. Verifica: 347+653=1000 ✓'},
-          {q:'¿Cuánto es 36 × 5?',ex:'36 × 5',opts:['175','180','185','190'],ok:1,exp:'36×5=180. También: 36×10÷2=180'},
-          {q:'¿Cuánto es 144 ÷ 12?',ex:'144 ÷ 12',opts:['10','11','12','13'],ok:2,exp:'144÷12=12. Verifica: 12×12=144 ✓'},
-          {q:'Un chavo ahorra $45 cada semana. ¿Cuánto tiene en 8 semanas?',ex:'45 × 8',opts:['$320','$350','$360','$380'],ok:2,exp:'45×8=360. Estrategia: 40×8+5×8=320+40=360'}]},
-  2:{puntos:[{t:'Paréntesis primero',s:'Lo que está dentro manda'},{t:'Exponentes después',s:'Potencias antes que multiplicar'},{t:'Multiplicación y división',s:'De izquierda a derecha'},{t:'Suma y resta al final',s:'Los más débiles esperan'}],
-     demo:{prob:'3 + 6 × (5 + 4) ÷ 3 − 7',pasos:[{n:'Paréntesis',e:'3 + 6 × 9 ÷ 3 − 7',x:'5+4=9'},{n:'Multiplicación',e:'3 + 54 ÷ 3 − 7',x:'6×9=54'},{n:'División',e:'3 + 18 − 7',x:'54÷3=18'},{n:'Suma y resta',e:'= 14',x:'3+18=21, 21-7=14',gold:true}]},
-     ejs:[{q:'Resuelve usando el orden correcto:',ex:'2 + 3 × (8 − 2) ÷ 2',opts:['7','11','15','9'],ok:1,exp:'(8-2)=6, 3×6=18, 18÷2=9, 2+9=11'},
-          {q:'¿Cuánto vale?',ex:'4² − 3 × 2 + 1',opts:['9','11','5','7'],ok:1,exp:'4²=16, 3×2=6, 16-6+1=11'},
-          {q:'Resuelve:',ex:'(12 + 8) ÷ 4 × 2',opts:['5','10','15','20'],ok:1,exp:'12+8=20, 20÷4=5, 5×2=10'},
-          {q:'¿Cuál es el resultado?',ex:'18 − 2 × (3 + 4)',opts:['4','112','32','18'],ok:0,exp:'3+4=7, 2×7=14, 18-14=4'},
-          {q:'Evalúa:',ex:'5 + 3² × 2 − 10',opts:['13','23','3','18'],ok:0,exp:'3²=9, 9×2=18, 5+18-10=13'}]},
-  3:{puntos:[{t:'Qué es una fracción',s:'Numerador sobre denominador'},{t:'Convertir a decimal',s:'Dividir numerador entre denominador'},{t:'Fracciones equivalentes',s:'Misma cantidad, diferente forma'},{t:'Sumar mismo denominador',s:'El denominador no cambia'}],
-     demo:{prob:'1/4 + 2/4 = ?',pasos:[{n:'Verificar denominadores',e:'4 = 4 ✓',x:'Mismo denominador'},{n:'Sumar numeradores',e:'1 + 2 = 3',x:'Denominador sigue 4'},{n:'Resultado',e:'3/4 = 0.75',x:'3÷4=0.75',gold:true}]},
-     ejs:[{q:'Resuelve la suma:',ex:'2/5 + 1/5',opts:['2/10','3/10','3/5','2/5'],ok:2,exp:'Mismo denominador: 2+1=3, denominador sigue 5 → 3/5'},
-          {q:'¿Cuánto es?',ex:'3/4 − 1/4',opts:['2/4','1/2','2/0','1/4'],ok:0,exp:'3/4-1/4=2/4=1/2 simplificada'},
-          {q:'Convierte a decimal:',ex:'3/8 = ?',opts:['0.325','0.375','0.38','0.3'],ok:1,exp:'3÷8=0.375'},
-          {q:'¿Cuál fracción equivale a 2/3?',ex:'2/3 = ?/9',opts:['4','5','6','3'],ok:2,exp:'2×3=6 y 3×3=9 → 6/9'},
-          {q:'Suma:',ex:'1/2 + 1/4',opts:['2/6','1/4','3/4','2/4'],ok:2,exp:'2/4+1/4=3/4'}]},
-  4:{puntos:[{t:'Porcentaje = parte de 100',s:'25% = 25/100 = 0.25'},{t:'Calcular % de un número',s:'% ÷ 100 × total'},{t:'Regla de tres directa',s:'Si A→B entonces C→?'},{t:'Descuentos y aumentos',s:'Aplicación real'}],
-     demo:{prob:'¿Cuánto es el 30% de 250?',pasos:[{n:'Convertir %',e:'30% = 0.30',x:'Dividir entre 100'},{n:'Multiplicar',e:'0.30 × 250',x:'% × total'},{n:'Resultado',e:'= 75',x:'El 30% de 250 es 75',gold:true}]},
-     ejs:[{q:'¿Cuánto es el 20% de 150?',ex:'20% de 150',opts:['25','30','35','40'],ok:1,exp:'0.20×150=30'},
-          {q:'Libro de $200 con 15% descuento. ¿Cuánto pagas?',ex:'$200 − 15%',opts:['$160','$170','$175','$180'],ok:1,exp:'15% de 200=30. 200-30=$170'},
-          {q:'Si 3 lápices cuestan $12, ¿cuánto cuestan 7?',ex:'3→$12, 7→?',opts:['$24','$28','$30','$32'],ok:1,exp:'$12÷3=$4 por lápiz. 4×7=$28'},
-          {q:'¿Qué porcentaje es 45 de 180?',ex:'45/180 = ?%',opts:['20%','25%','30%','35%'],ok:1,exp:'45÷180=0.25=25%'},
-          {q:'Precio subió 10% desde $500. ¿Nuevo precio?',ex:'$500 + 10%',opts:['$505','$510','$550','$600'],ok:2,exp:'10% de 500=50. 500+50=$550'}]},
-  5:{puntos:[{t:'La recta numérica',s:'Negativos a la izquierda del cero'},{t:'Sumar negativos',s:'Mismo signo: suma y conserva'},{t:'Restar negativos',s:'Menos por menos = más'},{t:'Multiplicar y dividir',s:'Iguales=positivo, diferentes=negativo'}],
-     demo:{prob:'(-3) × (-4) + 5',pasos:[{n:'Multiplicación primero',e:'(-3)×(-4)=12',x:'Neg×Neg=Positivo'},{n:'Sumar',e:'12 + 5 = 17',x:''},{n:'Resultado',e:'= 17',x:'',gold:true}]},
-     ejs:[{q:'¿Cuánto es?',ex:'(-8) + 3',opts:['-11','-5','5','11'],ok:1,exp:'-8+3=-5. Avanzamos 3 desde -8'},
-          {q:'Resuelve:',ex:'(-5) × (-6)',opts:['-30','-11','11','30'],ok:3,exp:'Neg×Neg=Positivo. 5×6=30'},
-          {q:'¿Cuánto es?',ex:'(-20) ÷ 4',opts:['-5','-4','4','5'],ok:0,exp:'Neg÷Pos=Neg. 20÷4=5 → -5'},
-          {q:'Simplifica:',ex:'7 − (−3)',opts:['4','10','-10','-4'],ok:1,exp:'Restar negativo=sumar: 7+3=10'},
-          {q:'¿Cuál es mayor?',ex:'-2 ó -7',opts:['-2=-7','-2>-7','-7>-2','No se puede'],ok:1,exp:'-2 está más cerca del cero → -2>-7'}]},
-  6:{puntos:[{t:'Variable y constante',s:'x es variable, 5 es constante'},{t:'Términos semejantes',s:'Solo se suman con misma variable'},{t:'Simplificar',s:'3x+2x=5x'},{t:'Sustituir valores',s:'Si x=3, entonces 2x+1=7'}],
-     demo:{prob:'Simplifica: 4x + 3 − 2x + 7',pasos:[{n:'Agrupar semejantes',e:'(4x−2x) + (3+7)',x:'Variables con variables'},{n:'Simplificar',e:'2x + 10',x:'4x-2x=2x y 3+7=10'},{n:'Resultado',e:'= 2x + 10',x:'No se simplifica más',gold:true}]},
-     ejs:[{q:'Simplifica:',ex:'5x + 2x − 3x',opts:['4x','3x','2x','x'],ok:0,exp:'(5+2-3)x=4x'},
-          {q:'Si x=4, ¿cuánto vale?',ex:'3x − 5',opts:['7','12','17','9'],ok:0,exp:'3(4)-5=12-5=7'},
-          {q:'¿Cuál es el coeficiente de x?',ex:'7x² + 3x − 2',opts:['7','3','2','1'],ok:1,exp:'El coeficiente de x (no x²) es 3'},
-          {q:'Simplifica:',ex:'2(x + 3) + x',opts:['3x+3','3x+6','2x+6','x+6'],ok:1,exp:'2x+6+x=3x+6'},
-          {q:'¿Cuántos términos tiene?',ex:'4x² − 2x + 7 − x²',opts:['2','3','4','5'],ok:1,exp:'3x²-2x+7 → 3 términos'}]},
-  7:{puntos:[{t:'Aislar la variable',s:'Lo que pasa de lado, cambia signo'},{t:'Operaciones inversas',s:'Para quitar suma, restamos'},{t:'Verificar la solución',s:'Sustituir x en la ecuación'},{t:'Con paréntesis',s:'Primero distribuir, luego despejar'}],
-     demo:{prob:'Resuelve: 2x + 6 = 14',pasos:[{n:'Aislar x',e:'2x = 14 − 6',x:'Pasamos 6 restando'},{n:'Simplificar',e:'2x = 8',x:'14-6=8'},{n:'Despejar',e:'x = 8 ÷ 2',x:'Dividimos entre 2'},{n:'Resultado',e:'x = 4',x:'Verifica: 2(4)+6=14 ✓',gold:true}]},
-     ejs:[{q:'Resuelve:',ex:'3x − 7 = 14',opts:['x=5','x=6','x=7','x=8'],ok:2,exp:'3x=14+7=21, x=7'},
-          {q:'¿Cuál es el valor de y?',ex:'5y + 10 = 35',opts:['y=4','y=5','y=6','y=7'],ok:1,exp:'5y=35-10=25, y=5'},
-          {q:'Resuelve:',ex:'4(x − 2) = 12',opts:['x=3','x=4','x=5','x=6'],ok:2,exp:'4x-8=12, 4x=20, x=5'},
-          {q:'¿Cuánto vale t?',ex:'2t + 5 = t + 9',opts:['t=2','t=3','t=4','t=5'],ok:2,exp:'2t-t=9-5, t=4'},
-          {q:'Resuelve:',ex:'x/3 + 2 = 5',opts:['x=6','x=7','x=8','x=9'],ok:3,exp:'x/3=3, x=9'}]},
-  8:{puntos:[{t:'Sistema 2×2',s:'Dos ecuaciones, dos incógnitas'},{t:'Método de sustitución',s:'Despejas y sustituyes'},{t:'Método de reducción',s:'Sumas o restas las ecuaciones'},{t:'Verificar',s:'Los valores funcionan en ambas'}],
-     demo:{prob:'x + y = 7  y  x − y = 3',pasos:[{n:'Sumar ecuaciones',e:'2x = 10',x:'(x+y)+(x-y)=7+3'},{n:'Despejar x',e:'x = 5',x:'10÷2=5'},{n:'Encontrar y',e:'5 + y = 7',x:'Sustituimos x=5'},{n:'Resultado',e:'x=5, y=2',x:'Verifica ✓',gold:true}]},
-     ejs:[{q:'Resuelve:',ex:'x+y=10, x−y=4',opts:['x=6,y=4','x=7,y=3','x=8,y=2','x=5,y=5'],ok:1,exp:'2x=14, x=7. y=10-7=3'},
-          {q:'¿Cuáles son los valores?',ex:'2x+y=11, x+y=7',opts:['x=3,y=4','x=4,y=3','x=5,y=2','x=2,y=5'],ok:1,exp:'Restando: x=4. y=7-4=3'},
-          {q:'Resuelve:',ex:'3x+2y=16, x+2y=8',opts:['x=3,y=2','x=4,y=2','x=2,y=5','x=5,y=2'],ok:1,exp:'Restando: 2x=8, x=4. 4+2y=8, y=2'},
-          {q:'2 tacos y 1 refresco=$50, 1 taco y 1 refresco=$30. ¿Cuánto cuesta un taco?',ex:'2t+r=50, t+r=30',opts:['$15','$20','$25','$30'],ok:1,exp:'Restando: t=20'},
-          {q:'Resuelve:',ex:'x+2y=12, 2x+y=9',opts:['x=2,y=5','x=3,y=4','x=4,y=3','x=5,y=2'],ok:0,exp:'y=5, x=2'}]},
-  9:{puntos:[{t:'Perímetro = suma de lados',s:'Distancia alrededor'},{t:'Área del cuadrado',s:'lado²'},{t:'Área del rectángulo',s:'base × altura'},{t:'Área del triángulo',s:'(base × altura) ÷ 2'}],
-     demo:{prob:'Área de rectángulo 8cm × 5cm',pasos:[{n:'Fórmula',e:'A = base × altura',x:''},{n:'Sustituir',e:'A = 8 × 5',x:'base=8, altura=5'},{n:'Resultado',e:'A = 40 cm²',x:'Siempre en unidades cuadradas',gold:true}]},
-     ejs:[{q:'Perímetro de cuadrado de lado 6cm:',ex:'P = 4 × lado',opts:['20cm','24cm','28cm','36cm'],ok:1,exp:'P=4×6=24cm'},
-          {q:'Área del triángulo:',ex:'base=10, altura=6',opts:['30cm²','60cm²','16cm²','45cm²'],ok:0,exp:'A=(10×6)÷2=30cm²'},
-          {q:'Cuadrado con área 81cm². ¿Cuánto mide su lado?',ex:'lado² = 81',opts:['7cm','8cm','9cm','10cm'],ok:2,exp:'√81=9cm'},
-          {q:'Perímetro del rectángulo:',ex:'largo=12, ancho=5',opts:['30cm','34cm','60cm','17cm'],ok:1,exp:'P=2(12+5)=34cm'},
-          {q:'Terreno 20m×15m. ¿Cuánto cuesta cercarlo a $50/m?',ex:'Perímetro × $50',opts:['$3,500','$15,000','$3,000','$2,500'],ok:0,exp:'P=2(20+15)=70m. 70×$50=$3,500'}]},
-  10:{puntos:[{t:'Volumen = espacio interior',s:'Se mide en unidades cúbicas'},{t:'Cubo',s:'lado³'},{t:'Prisma rectangular',s:'largo × ancho × alto'},{t:'Cilindro',s:'π × radio² × altura'}],
-      demo:{prob:'Caja de 5cm × 3cm × 4cm',pasos:[{n:'Fórmula',e:'V = l × a × h',x:''},{n:'Sustituir',e:'V = 5 × 3 × 4',x:''},{n:'Resultado',e:'V = 60 cm³',x:'Siempre en unidades cúbicas',gold:true}]},
-      ejs:[{q:'Volumen del cubo:',ex:'lado = 4cm',opts:['16cm³','32cm³','64cm³','48cm³'],ok:2,exp:'V=4³=64cm³'},
-           {q:'Volumen del prisma:',ex:'6×4×3',opts:['52cm³','72cm³','48cm³','36cm³'],ok:1,exp:'V=6×4×3=72cm³'},
-           {q:'Piscina 10m×5m×2m. ¿Cuántos litros? (1m³=1000L)',ex:'V=?',opts:['100,000L','10,000L','1,000L','50,000L'],ok:0,exp:'V=100m³. 100×1000=100,000L'},
-           {q:'Cilindro (π≈3.14):',ex:'r=3cm, h=10cm',opts:['94.2cm³','282.6cm³','188.4cm³','314cm³'],ok:1,exp:'V=3.14×9×10=282.6cm³'},
-           {q:'Cubo con volumen 125cm³. ¿Cuánto mide su lado?',ex:'lado³ = 125',opts:['4cm','5cm','6cm','7cm'],ok:1,exp:'∛125=5cm'}]},
-  11:{puntos:[{t:'a² + b² = c²',s:'c es la hipotenusa'},{t:'Hipotenusa',s:'Lado opuesto al ángulo recto'},{t:'Catetos',s:'Los dos lados del ángulo recto'},{t:'Ternas pitagóricas',s:'3-4-5, 5-12-13, 8-15-17'}],
-      demo:{prob:'Catetos 3cm y 4cm. ¿Hipotenusa?',pasos:[{n:'Pitágoras',e:'c² = a² + b²',x:'a=3, b=4'},{n:'Sustituir',e:'c² = 9 + 16 = 25',x:''},{n:'Resultado',e:'c = 5cm',x:'Terna 3-4-5 ✓',gold:true}]},
-      ejs:[{q:'Catetos 6 y 8. ¿Hipotenusa?',ex:'c²=6²+8²',opts:['8','10','12','14'],ok:1,exp:'c²=36+64=100, c=10'},
-           {q:'Hipotenusa 13, cateto 5. ¿El otro cateto?',ex:'5²+b²=13²',opts:['10','11','12','13'],ok:2,exp:'b²=169-25=144, b=12'},
-           {q:'¿Es rectángulo el triángulo 9-12-15?',ex:'9²+12²=15²?',opts:['Sí','No','A veces','No se sabe'],ok:0,exp:'81+144=225=15². ¡Sí!'},
-           {q:'Escalera de 5m llega a 4m de altura. ¿Distancia a la pared?',ex:'d²+4²=5²',opts:['2m','3m','4m','5m'],ok:1,exp:'d²=9, d=3m'},
-           {q:'Diagonal de cuadrado de lado 7cm:',ex:'d²=7²+7²',opts:['7√2','9.9cm','14cm','7cm'],ok:0,exp:'d²=98, d=7√2≈9.9cm'}]},
-  12:{puntos:[{t:'Tipos de ángulos',s:'Agudo<90°, recto=90°, obtuso>90°'},{t:'Suma de ángulos del triángulo',s:'Siempre suman 180°'},{t:'Tipos de triángulo',s:'Equilátero, isósceles, escaleno'},{t:'Complementarios y suplementarios',s:'Suman 90° o 180°'}],
-      demo:{prob:'Dos ángulos de 60° y 80°. ¿El tercero?',pasos:[{n:'Suma en triángulo',e:'α+β+γ=180°',x:''},{n:'Sustituir',e:'60°+80°+γ=180°',x:''},{n:'Resultado',e:'γ = 40°',x:'Verifica: 60+80+40=180 ✓',gold:true}]},
-      ejs:[{q:'¿El ángulo que falta?',ex:'45°+75°+x=180°',opts:['55°','60°','65°','70°'],ok:1,exp:'x=180-45-75=60°'},
-           {q:'Triángulo con todos sus lados iguales:',ex:'a=b=c',opts:['Escaleno','Isósceles','Equilátero','Rectángulo'],ok:2,exp:'Equilátero: lados y ángulos iguales (60°)'},
-           {q:'Complementario de 35°:',ex:'35°+x=90°',opts:['45°','55°','65°','75°'],ok:1,exp:'x=90-35=55°'},
-           {q:'Suplementario de 120°:',ex:'120°+x=180°',opts:['30°','40°','50°','60°'],ok:3,exp:'x=180-120=60°'},
-           {q:'Triángulo isósceles con base 40°. ¿Ángulo del vértice?',ex:'40°+40°+v=180°',opts:['90°','100°','110°','120°'],ok:1,exp:'v=180-80=100°'}]},
-  13:{puntos:[{t:'Media = promedio',s:'Suma todos y divide entre cuántos'},{t:'Mediana = valor central',s:'Ordena y encuentra el del medio'},{t:'Moda = el que más se repite',s:'Puede haber más de una'},{t:'Rango = máximo − mínimo',s:'Mide la dispersión'}],
-      demo:{prob:'Datos: 4, 7, 2, 7, 5, 8, 7',pasos:[{n:'Media',e:'(4+7+2+7+5+8+7)÷7≈5.7',x:''},{n:'Ordenar para mediana',e:'2,4,5,7,7,7,8',x:'El 4° dato es el central'},{n:'Mediana y Moda',e:'Med=7, Moda=7',x:'El 7 aparece 3 veces',gold:true}]},
-      ejs:[{q:'¿Cuál es la media?',ex:'3, 8, 5, 6, 8',opts:['5','6','7','8'],ok:1,exp:'(3+8+5+6+8)÷5=30÷5=6'},
-           {q:'¿Cuál es la mediana?',ex:'12, 5, 8, 3, 9',opts:['5','8','9','12'],ok:1,exp:'Ordenados:3,5,8,9,12. Central=8'},
-           {q:'¿Cuál es la moda?',ex:'2,5,3,5,8,5,2',opts:['2','3','5','8'],ok:2,exp:'El 5 aparece 3 veces'},
-           {q:'¿Cuál es el rango?',ex:'15,8,22,11,19',opts:['7','11','14','22'],ok:2,exp:'22-8=14'},
-           {q:'Calificaciones: 7,8,9,6,10. ¿Promedio?',ex:'Media=?',opts:['7.5','8','8.5','9'],ok:1,exp:'40÷5=8'}]},
-  14:{puntos:[{t:'P = favorables / posibles',s:'Siempre entre 0 y 1'},{t:'P=0 imposible, P=1 seguro',s:'P=0.5 es 50%'},{t:'Espacio muestral',s:'Todos los resultados posibles'},{t:'Complementarios',s:'P(A)+P(noA)=1'}],
-      demo:{prob:'Dado de 6 caras. ¿P(número par)?',pasos:[{n:'Casos favorables',e:'2,4,6 → 3 casos',x:''},{n:'Casos posibles',e:'1,2,3,4,5,6 → 6',x:''},{n:'Probabilidad',e:'P=3/6=1/2=50%',x:'',gold:true}]},
-      ejs:[{q:'Bolsa: 3 rojas, 2 azules, 5 verdes. ¿P(roja)?',ex:'P(roja)=?',opts:['1/5','3/10','1/3','3/5'],ok:1,exp:'P=3/10'},
-           {q:'Se lanza moneda. ¿P(cara)?',ex:'P(cara)=?',opts:['1/4','1/3','1/2','2/3'],ok:2,exp:'P=1/2=0.5'},
-           {q:'Si P(lluvia)=0.3, ¿P(no lluvia)?',ex:'P(no lluvia)=?',opts:['0.3','0.5','0.7','1'],ok:2,exp:'1-0.3=0.7'},
-           {q:'Dado. ¿P(mayor que 4)?',ex:'P(>4)=?',opts:['1/6','2/6','3/6','4/6'],ok:1,exp:'{5,6}=2 casos. P=2/6=1/3'},
-           {q:'¿Probabilidad de un evento imposible?',ex:'P=?',opts:['0','0.5','1','0.1'],ok:0,exp:'Evento imposible: P=0'}]},
-  15:{puntos:[{t:'Gráfica de barras',s:'Compara categorías'},{t:'Gráfica de líneas',s:'Cambios en el tiempo'},{t:'Gráfica de pastel',s:'Proporciones del 100%'},{t:'Interpretar ejes',s:'X=horizontal, Y=vertical'}],
-      demo:{prob:'Ventas: L=50,M=80,X=60,J=90,V=70',pasos:[{n:'Total',e:'50+80+60+90+70=350',x:''},{n:'Día con más ventas',e:'Jueves=90',x:'El valor más alto'},{n:'Promedio',e:'350÷5=70',x:'',gold:true}]},
-      ejs:[{q:'La barra más alta en una gráfica representa:',ex:'',opts:['Valor mínimo','Lo más frecuente','Valor máximo','El promedio'],ok:2,exp:'La barra más alta = el valor mayor'},
-           {q:'Gráfica pastel: 40% hombres en grupo de 200. ¿Cuántos hombres?',ex:'40% de 200',opts:['60','80','100','120'],ok:1,exp:'0.40×200=80'},
-           {q:'Ventas: enero=120, febrero=96. ¿Bajaron cuánto %?',ex:'(120-96)/120×100',opts:['15%','20%','25%','30%'],ok:1,exp:'24÷120×100=20%'},
-           {q:'Tabla: A=30, B=45, C=25. ¿Total?',ex:'30+45+25',opts:['90','95','100','105'],ok:2,exp:'100'},
-           {q:'Línea que sube de izquierda a derecha indica:',ex:'',opts:['Datos bajan','Son constantes','Datos suben','Son cero'],ok:2,exp:'Línea ascendente = valores que aumentan'}]}
+  1:{puntos:[{t:'Operaciones con números naturales',s:'Suma, resta, multiplicación, división'},{t:'Jerarquía básica',s:'Respetar el orden'},{t:'Problemas de aplicación',s:'Contexto real → operación'},{t:'Divisibilidad y MCM/MCD',s:'Factores y múltiplos'}],
+     demo:{prob:'Si Juan ahorra $45 por semana, ¿cuánto tendrá en 8 semanas?',pasos:[{n:'Identificar operación',e:'Ahorro semanal × semanas',x:'Es multiplicación'},{n:'Calcular',e:'45 × 8 = 360',x:'45×8: (40×8)+(5×8)=320+40'},{n:'Resultado',e:'$360 en 8 semanas',x:'',gold:true}]},
+     ejs:[{q:'¿Cuánto es?',ex:'234 + 567',opts:['791','801','811','821'],ok:1,exp:'234+567=801'},{q:'¿Cuánto es?',ex:'1000 − 347',opts:['653','643','663','753'],ok:0,exp:'1000-347=653'},{q:'¿Cuánto es?',ex:'36 × 5',opts:['175','180','185','190'],ok:1,exp:'36×5=180'},{q:'¿Cuánto es?',ex:'144 ÷ 12',opts:['10','11','12','13'],ok:2,exp:'144÷12=12'},{q:'Ana tiene $280. Gasta $75 en lunes y $48 en martes. ¿Cuánto le queda?',ex:'280−75−48',opts:['$147','$157','$163','$167'],ok:1,exp:'280-75=205, 205-48=157'}]},
+  2:{puntos:[{t:'P — Paréntesis primero',s:'Lo de adentro manda siempre'},{t:'E — Exponentes',s:'Potencias antes que ×÷'},{t:'MD — Multiplicación y División',s:'De izquierda a derecha'},{t:'AS — Adición y Sustracción',s:'Al último, de izq a der'}],
+     demo:{prob:'3 + 6 × (5 + 4) ÷ 3 − 7',pasos:[{n:'Paréntesis',e:'3 + 6 × 9 ÷ 3 − 7',x:'5+4=9'},{n:'Multiplicación',e:'3 + 54 ÷ 3 − 7',x:'6×9=54'},{n:'División',e:'3 + 18 − 7',x:'54÷3=18'},{n:'Suma/Resta',e:'= 14',x:'3+18-7=14',gold:true}]},
+     ejs:[{q:'Resuelve:',ex:'2 + 3 × (8 − 2) ÷ 2',opts:['7','11','15','9'],ok:1,exp:'(8-2)=6, 3×6=18, 18÷2=9, 2+9=11'},{q:'¿Cuánto vale?',ex:'4² − 3 × 2 + 1',opts:['9','11','5','7'],ok:1,exp:'16-6+1=11'},{q:'Resuelve:',ex:'(12 + 8) ÷ 4 × 2',opts:['5','10','15','20'],ok:1,exp:'20÷4=5, 5×2=10'},{q:'¿Cuál es el resultado?',ex:'18 − 2 × (3 + 4)',opts:['4','112','32','18'],ok:0,exp:'2×7=14, 18-14=4'},{q:'Evalúa:',ex:'5 + 3² × 2 − 10',opts:['13','23','3','18'],ok:0,exp:'9×2=18, 5+18-10=13'}]},
+  3:{puntos:[{t:'Fracción = parte de un todo',s:'Numerador ÷ Denominador'},{t:'Convertir a decimal',s:'Divide el numerador entre el denominador'},{t:'Fracciones equivalentes',s:'Misma cantidad, diferente forma'},{t:'Operaciones con fracciones',s:'Común denominador para sumar/restar'}],
+     demo:{prob:'1/4 + 2/4 = ?',pasos:[{n:'Verificar denominadores',e:'4 = 4 ✓',x:'Mismo denominador'},{n:'Sumar numeradores',e:'1 + 2 = 3',x:'Denominador no cambia'},{n:'Resultado',e:'3/4 = 0.75',x:'3÷4=0.75',gold:true}]},
+     ejs:[{q:'Resuelve:',ex:'2/5 + 1/5',opts:['2/10','3/10','3/5','2/5'],ok:2,exp:'2+1=3, denominador 5 → 3/5'},{q:'¿Cuánto es?',ex:'3/4 − 1/4',opts:['2/4','1/2','2/0','1/4'],ok:0,exp:'3/4-1/4=2/4=1/2'},{q:'Convierte:',ex:'3/8 = ?',opts:['0.325','0.375','0.38','0.3'],ok:1,exp:'3÷8=0.375'},{q:'¿Cuál fracción equivale a 2/3?',ex:'2/3 = ?/9',opts:['4','5','6','3'],ok:2,exp:'2×3=6, 3×3=9 → 6/9'},{q:'Suma:',ex:'1/2 + 1/4',opts:['2/6','1/4','3/4','2/4'],ok:2,exp:'2/4+1/4=3/4'}]},
+  4:{puntos:[{t:'Razón = comparación',s:'a:b o a/b'},{t:'Proporción = igualdad de razones',s:'a/b = c/d'},{t:'Regla de tres directa',s:'Más de uno → más del otro'},{t:'Regla de tres inversa',s:'Más de uno → menos del otro'}],
+     demo:{prob:'Si 3 lápices cuestan $12, ¿cuánto cuestan 7?',pasos:[{n:'Regla de tres',e:'3 → $12',x:'Relación directa'},{n:'Calcular precio unitario',e:'$12 ÷ 3 = $4',x:'Precio por lápiz'},{n:'Resultado',e:'7 × $4 = $28',x:'',gold:true}]},
+     ejs:[{q:'Si 5 kg cuestan $35, ¿cuánto cuestan 8 kg?',ex:'5→$35, 8→?',opts:['$54','$56','$58','$60'],ok:1,exp:'$35÷5=$7/kg. 7×8=$56'},{q:'Un automóvil recorre 240 km en 3 horas. ¿Cuánto recorre en 5 horas?',ex:'3h→240, 5h→?',opts:['350km','380km','400km','420km'],ok:2,exp:'240÷3=80km/h. 80×5=400km'},{q:'Si 2 trabajadores hacen una tarea en 6 días, ¿cuánto tardan 4 trabajadores?',ex:'Inversa: 2→6, 4→?',opts:['2','3','4','5'],ok:1,exp:'Inversa: 2×6=4×x. x=3 días'},{q:'La razón de hombres a mujeres es 3:2 y hay 15 hombres. ¿Cuántas mujeres?',ex:'3:2 = 15:?',opts:['8','9','10','12'],ok:2,exp:'3/2=15/x → x=10'},{q:'¿Qué porcentaje es 45 de 180?',ex:'45/180 = ?%',opts:['20%','25%','30%','35%'],ok:1,exp:'45÷180=0.25=25%'}]},
+  5:{puntos:[{t:'Porcentaje = partes de 100',s:'25% = 25/100 = 0.25'},{t:'Calcular % de un número',s:'% ÷ 100 × total'},{t:'Descuento',s:'Precio − (% × precio)'},{t:'Aumento',s:'Precio + (% × precio)'}],
+     demo:{prob:'¿Cuánto es el 30% de 250?',pasos:[{n:'Convertir %',e:'30% = 0.30',x:'÷100'},{n:'Multiplicar',e:'0.30 × 250 = 75',x:'% × total'},{n:'Resultado',e:'El 30% de 250 = 75',x:'',gold:true}]},
+     ejs:[{q:'¿Cuánto es el 20% de 150?',ex:'20% de 150',opts:['25','30','35','40'],ok:1,exp:'0.20×150=30'},{q:'Libro de $200 con 15% descuento. ¿Cuánto pagas?',ex:'$200 − 15%',opts:['$160','$170','$175','$180'],ok:1,exp:'15% de 200=30. 200-30=$170'},{q:'Precio subió 10% desde $500. ¿Nuevo precio?',ex:'$500 + 10%',opts:['$505','$510','$550','$600'],ok:2,exp:'10% de 500=50. 500+50=$550'},{q:'¿Qué porcentaje es 30 de 120?',ex:'30/120 = ?%',opts:['20%','25%','30%','35%'],ok:1,exp:'30÷120=0.25=25%'},{q:'Un artículo de $350 tiene 8% de IVA. ¿Precio final?',ex:'$350 + 8%',opts:['$370','$378','$385','$390'],ok:1,exp:'8% de 350=28. 350+28=$378'}]},
+  6:{puntos:[{t:'Variable = número desconocido',s:'x es una "caja" con un número'},{t:'Términos semejantes',s:'Solo sumas 3x+2x, no 3x+2'},{t:'Despeje de ecuaciones',s:'Lo que haces a un lado, al otro'},{t:'Verificar la solución',s:'Sustituye x y comprueba'}],
+     demo:{prob:'Resuelve: 2x + 6 = 14',pasos:[{n:'Aislar el término con x',e:'2x = 14 − 6',x:'Restamos 6 en ambos lados'},{n:'Simplificar',e:'2x = 8',x:'14-6=8'},{n:'Despejar x',e:'x = 8 ÷ 2 = 4',x:'Dividimos entre 2'},{n:'Verificar',e:'2(4)+6=14 ✓',x:'',gold:true}]},
+     ejs:[{q:'Simplifica:',ex:'5x + 3x − 2x',opts:['4x','6x','8x','5x'],ok:1,exp:'(5+3-2)x=6x'},{q:'Resuelve:',ex:'3x − 7 = 14',opts:['x=5','x=6','x=7','x=8'],ok:2,exp:'3x=21, x=7'},{q:'Si x=4, ¿cuánto vale?',ex:'3x − 5',opts:['7','12','17','9'],ok:0,exp:'3(4)-5=7'},{q:'Resuelve:',ex:'4(x − 2) = 12',opts:['x=3','x=4','x=5','x=6'],ok:2,exp:'4x-8=12, 4x=20, x=5'},{q:'Resuelve:',ex:'2x + 5 = x + 9',opts:['x=2','x=3','x=4','x=5'],ok:2,exp:'2x-x=9-5, x=4'}]},
 };
-
-// Video links storage (loaded from Supabase)
-let videoLinks = {};
 
 // ══════════════════════════
 // INIT
 // ══════════════════════════
 async function init(){
-  try {
+  buildEmojiPicker('avatar-picker', false);
+  try{
     const {data:{session}} = await sb.auth.getSession();
-    if(session){
-      CU = session.user;
-      await cargarPerfil();
-    } else {
-      mostrar('auth');
-    }
-  } catch(e){
-    mostrar('auth');
-  }
+    if(session){ CU=session.user; await cargarPerfil(); }
+    else mostrar('auth');
+  }catch(e){ mostrar('auth'); }
   document.getElementById('loading').classList.add('hide');
 }
 
@@ -741,27 +790,25 @@ async function init(){
 // ══════════════════════════
 function mostrar(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  const el = document.getElementById(id);
-  if(el) el.classList.add('active');
+  document.getElementById(id)?.classList.add('active');
 }
-
-function goTab(id, el){
+function goTab(id,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
   document.querySelectorAll('.bn-item').forEach(n=>n.classList.remove('on'));
-  document.getElementById('tab-'+id).classList.add('on');
+  document.getElementById('tab-'+id)?.classList.add('on');
   if(el) el.classList.add('on');
   if(id==='ranking') cargarRanking();
   if(id==='mapa') buildMapa();
 }
-
-function goAdmin(id, el){
+function goAdmin(id,el){
   document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('on'));
-  document.getElementById('ap-'+id).classList.add('on');
+  document.getElementById('ap-'+id)?.classList.add('on');
   if(el) el.classList.add('on');
   if(id==='alumnos') cargarAlumnos();
   if(id==='videos') buildAdminVideos();
   if(id==='config') buildAdminConfig();
+  if(id==='codigos') cargarCodigos();
 }
 
 // ══════════════════════════
@@ -770,61 +817,77 @@ function goAdmin(id, el){
 function authTab(t){
   document.querySelectorAll('.auth-tab').forEach((el,i)=>el.classList.toggle('on',(i===0&&t==='login')||(i===1&&t==='register')));
   document.querySelectorAll('.af').forEach(el=>el.classList.remove('on'));
-  document.getElementById('af-'+t).classList.add('on');
+  document.getElementById('af-'+t)?.classList.add('on');
 }
 function showForgot(){
   document.querySelectorAll('.af').forEach(el=>el.classList.remove('on'));
-  document.getElementById('af-forgot').classList.add('on');
+  document.getElementById('af-forgot')?.classList.add('on');
   document.querySelectorAll('.auth-tab').forEach(el=>el.classList.remove('on'));
 }
-function toggleEye(id, btn){
-  const inp = document.getElementById(id);
-  inp.type = inp.type==='password'?'text':'password';
-  btn.textContent = inp.type==='password'?'👁':'🙈';
+function toggleEye(id,btn){
+  const inp=document.getElementById(id);
+  inp.type=inp.type==='password'?'text':'password';
+  btn.textContent=inp.type==='password'?'👁':'🙈';
 }
-function showAuthMsg(id, txt, tipo){
-  const el = document.getElementById(id);
-  el.textContent = txt;
-  el.className = 'auth-msg on '+tipo;
+function showAuthMsg(id,txt,tipo){
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.textContent=txt; el.className='auth-msg on '+tipo;
 }
 async function doLogin(){
-  const email = document.getElementById('l-email').value.trim();
-  const pass = document.getElementById('l-pass').value;
+  const email=document.getElementById('l-email').value.trim();
+  const pass=document.getElementById('l-pass').value;
   if(!email||!pass){showAuthMsg('login-msg','Ingresa tu correo y contraseña','err');return;}
-  const btn = document.querySelector('#af-login .auth-submit');
+  const btn=document.querySelector('#af-login .auth-submit');
   btn.disabled=true; btn.textContent='Entrando...';
-  const {data,error} = await sb.auth.signInWithPassword({email,password:pass});
-  btn.disabled=false; btn.textContent='ENTRAR AL RING →';
-  if(error){showAuthMsg('login-msg',error.message,'err');return;}
-  CU = data.user;
-  await cargarPerfil();
+  const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
+  btn.disabled=false; btn.textContent='ENTRAR →';
+  if(error){showAuthMsg('login-msg',error.message==='Invalid login credentials'?'Correo o contraseña incorrectos':error.message,'err');return;}
+  CU=data.user; await cargarPerfil();
 }
 async function doRegister(){
-  const nombre = document.getElementById('r-nombre').value.trim();
-  const email = document.getElementById('r-email').value.trim();
-  const pass = document.getElementById('r-pass').value;
-  if(!nombre||!email||!pass){showAuthMsg('reg-msg','Llena todos los campos','err');return;}
+  const nombre=document.getElementById('r-nombre').value.trim();
+  const email=document.getElementById('r-email').value.trim();
+  const pass=document.getElementById('r-pass').value;
+  const codigo=document.getElementById('r-codigo').value.trim().toUpperCase();
+  if(!nombre||!email||!pass||!codigo){showAuthMsg('reg-msg','Llena todos los campos','err');return;}
   if(pass.length<6){showAuthMsg('reg-msg','Contraseña mínimo 6 caracteres','err');return;}
-  const btn = document.querySelector('#af-register .auth-submit');
+  // Verificar código
+  const {data:cod,error:cerr}=await sb.from('codigos_acceso').select('*').eq('codigo',codigo).eq('usado',false).single();
+  if(cerr||!cod){showAuthMsg('reg-msg','Código inválido o ya usado. Pide uno nuevo a tu maestro.','err');return;}
+  const btn=document.querySelector('#af-register .auth-submit');
   btn.disabled=true; btn.textContent='Registrando...';
-  const {data,error} = await sb.auth.signUp({email,password:pass,options:{data:{nombre}}});
+  const {data,error}=await sb.auth.signUp({email,password:pass,options:{data:{nombre}}});
   btn.disabled=false; btn.textContent='CREAR MI CUENTA →';
   if(error){showAuthMsg('reg-msg',error.message,'err');return;}
-  showAuthMsg('reg-msg','¡Cuenta creada! Ya puedes entrar.','ok');
-  // Auto login
-  const {data:d2} = await sb.auth.signInWithPassword({email,password:pass});
+  // Subir foto si hay
+  let avatarUrl=null;
+  if(regAvatarFile && data.user){
+    const ext=regAvatarFile.name.split('.').pop();
+    const path=`avatars/${data.user.id}.${ext}`;
+    const {error:uerr}=await sb.storage.from('avatars').upload(path,regAvatarFile,{upsert:true});
+    if(!uerr){const{data:pd}=sb.storage.from('avatars').getPublicUrl(path);avatarUrl=pd.publicUrl;}
+  }
+  // Crear perfil
+  if(data.user){
+    await sb.from('perfiles').upsert({id:data.user.id,nombre,email,avatar:selectedEmoji,avatar_url:avatarUrl,xp:0,nivel:1,racha:0,es_admin:false,codigo_usado:codigo});
+    // Marcar código como usado
+    await sb.from('codigos_acceso').update({usado:true,usado_por:data.user.id}).eq('codigo',codigo);
+  }
+  showAuthMsg('reg-msg','¡Cuenta creada! Entrando...','ok');
+  const {data:d2}=await sb.auth.signInWithPassword({email,password:pass});
   if(d2.user){CU=d2.user; await cargarPerfil();}
 }
 async function doForgot(){
-  const email = document.getElementById('f-email').value.trim();
+  const email=document.getElementById('f-email').value.trim();
   if(!email){showAuthMsg('forgot-msg','Ingresa tu correo','err');return;}
-  const {error} = await sb.auth.resetPasswordForEmail(email,{redirectTo:'https://elprofecolorado.github.io/colorado-mate-club'});
+  const {error}=await sb.auth.resetPasswordForEmail(email);
   if(error){showAuthMsg('forgot-msg',error.message,'err');return;}
-  showAuthMsg('forgot-msg','¡Listo! Revisa tu correo.','ok');
+  showAuthMsg('forgot-msg','¡Listo! Revisa tu correo (puede tardar unos minutos).','ok');
 }
 async function doLogout(){
   await sb.auth.signOut();
-  CU=null; perfil=null; esAdmin=false; enPreview=false;
+  CU=null;perfil=null;esAdmin=false;enPreview=false;
   mostrar('auth');
 }
 
@@ -832,126 +895,155 @@ async function doLogout(){
 // PERFIL
 // ══════════════════════════
 async function cargarPerfil(){
-  const {data} = await sb.from('perfiles').select('*').eq('id',CU.id).single();
-  perfil = data;
-  // Load video links
-  const {data:vids} = await sb.from('perfiles').select('id').limit(1);
   await cargarVideoLinks();
-  if(perfil && perfil.es_admin){
-    esAdmin = true;
-    buildAdminInicio();
-    mostrar('admin-screen');
+  const {data}=await sb.from('perfiles').select('*').eq('id',CU.id).single();
+  perfil=data;
+  if(!perfil){
+    // Crear perfil si no existe (admin)
+    await sb.from('perfiles').insert({id:CU.id,nombre:CU.email.split('@')[0],email:CU.email,xp:0,nivel:1,racha:0,es_admin:false});
+    const {data:d2}=await sb.from('perfiles').select('*').eq('id',CU.id).single();
+    perfil=d2;
+  }
+  if(perfil?.es_admin){
+    esAdmin=true; buildAdminInicio(); mostrar('admin-screen');
   } else {
-    mostrar('app-screen');
-    updateUI();
-    await updateRacha();
-    buildMapa();
-    buildLogros();
+    mostrar('app-screen'); updateUI(); await updateRacha(); buildMapa(); buildLogros();
   }
 }
-
 async function cargarVideoLinks(){
-  try {
-    const {data} = await sb.from('video_links').select('*');
-    if(data) data.forEach(v=>{ videoLinks[v.tema_id]=v.url; });
-  } catch(e){}
+  try{const{data}=await sb.from('video_links').select('*');if(data)data.forEach(v=>{videoLinks[v.tema_id]=v.url;});}catch(e){}
+}
+
+function getAvatarHtml(p, size=22){
+  if(p?.avatar_url) return `<img src="${p.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;
+  return `<span style="font-size:${size*0.6}px">${p?.avatar||'🙂'}</span>`;
 }
 
 function updateUI(){
   if(!perfil) return;
-  const nom = perfil.nombre||'Alumno';
-  const av = nom.substring(0,2).toUpperCase();
-  document.getElementById('chip-av').textContent = av;
-  document.getElementById('chip-name').textContent = nom.split(' ')[0];
-  document.getElementById('chip-xp').textContent = perfil.xp+' XP';
-  document.getElementById('s-racha').textContent = '🔥'+perfil.racha;
-  document.getElementById('s-nivel').textContent = 'N'+perfil.nivel;
-  document.getElementById('s-xp').textContent = perfil.xp;
-  const xpNext=perfil.nivel*500, xpPrev=(perfil.nivel-1)*500;
-  const pct = Math.min(100,Math.round(((perfil.xp-xpPrev)/(xpNext-xpPrev))*100));
-  document.getElementById('xp-fill').style.width = pct+'%';
-  document.getElementById('xp-lbl').textContent = 'Nivel '+perfil.nivel+' → '+(perfil.nivel+1);
-  document.getElementById('xp-actual').textContent = perfil.xp+' XP';
-  document.getElementById('xp-falta').textContent = (xpNext-perfil.xp)+' para subir';
-  const titulos=['Rookie del ring','Peleador en formación','Campeón en formación','Gladiador matemático','Leyenda del Colorado'];
-  document.getElementById('xp-titulo').textContent = titulos[Math.min(perfil.nivel-1,4)];
-  const msgs=[
-    '¡Bienvenido <strong style="color:var(--red)">'+nom.split(' ')[0]+'</strong>! Hoy empieza tu camino al examen.',
-    '¡Órale <strong style="color:var(--red)">'+nom.split(' ')[0]+'</strong>! Llevas <strong style="color:var(--red)">'+perfil.racha+' días</strong> seguidos. ¡No pares!',
-    '<strong style="color:var(--red)">'+nom.split(' ')[0]+'</strong>, ya tienes <strong style="color:var(--red)">'+perfil.xp+' XP</strong>. ¡Sigue así!'
-  ];
-  document.getElementById('profe-msg').innerHTML = msgs[perfil.racha>0?(perfil.xp>100?2:1):0];
+  const nom=perfil.nombre||'Alumno';
+  // Avatar
+  const avEl=document.getElementById('chip-av');
+  if(avEl){if(perfil.avatar_url){avEl.innerHTML=`<img src="${perfil.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;} else {const sp=document.getElementById('chip-av-inner'); if(sp) sp.textContent=perfil.avatar||'🙂';}}
+  document.getElementById('chip-name').textContent=nom.split(' ')[0];
+  document.getElementById('chip-xp').textContent=perfil.xp+' XP';
+  document.getElementById('s-racha').textContent='🔥'+perfil.racha;
+  document.getElementById('s-nivel').textContent='N'+perfil.nivel;
+  document.getElementById('s-xp').textContent=perfil.xp;
+  const xpNext=perfil.nivel*500,xpPrev=(perfil.nivel-1)*500;
+  const pct=Math.min(100,Math.round(((perfil.xp-xpPrev)/(xpNext-xpPrev))*100));
+  document.getElementById('xp-fill').style.width=pct+'%';
+  document.getElementById('xp-lbl').textContent='Nivel '+perfil.nivel+' → '+(perfil.nivel+1);
+  document.getElementById('xp-actual').textContent=perfil.xp+' XP';
+  document.getElementById('xp-falta').textContent=(xpNext-perfil.xp)+' para subir';
+  const titulos=['Estudiante nuevo','Aprendiz dedicado','Candidato fuerte','Casi listo','¡Listo para el examen!'];
+  document.getElementById('xp-titulo').textContent=titulos[Math.min(perfil.nivel-1,4)];
+  // Profe card avatar
+  cargarAvatarMaestro();
+  const msgs=[`¡Bienvenido <b style="color:var(--azul)">${nom.split(' ')[0]}</b>! Empecemos a preparar el examen.`,
+    `¡Órale <b style="color:var(--azul)">${nom.split(' ')[0]}</b>! Llevas <b style="color:var(--azul)">${perfil.racha} días</b> seguidos. ¡Muy bien!`,
+    `<b style="color:var(--azul)">${nom.split(' ')[0]}</b>, ya tienes <b style="color:var(--azul)">${perfil.xp} XP</b>. ¡Sigue así!`];
+  document.getElementById('profe-msg').innerHTML=msgs[perfil.racha>0?(perfil.xp>100?2:1):0];
   buildRachaGrid();
+  // Compose avatar
+  const cav=document.getElementById('compose-av');
+  if(cav){if(perfil.avatar_url){cav.innerHTML=`<img src="${perfil.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;} else {const sp=document.getElementById('compose-av-inner'); if(sp) sp.textContent=perfil.avatar||'🙂';}}
+}
+
+async function cargarAvatarMaestro(){
+  try{
+    const{data}=await sb.from('perfiles').select('avatar,avatar_url').eq('es_admin',true).limit(1).single();
+    const av=document.getElementById('profe-av-card');
+    if(av&&data){if(data.avatar_url){av.innerHTML=`<img src="${data.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;} else {av.innerHTML=`<span>${data.avatar||'👨‍🏫'}</span>`;}}
+  }catch(e){}
 }
 
 async function updateRacha(){
   if(!perfil||!CU) return;
-  const hoy = new Date().toISOString().split('T')[0];
+  const hoy=new Date().toISOString().split('T')[0];
   if(perfil.ultimo_acceso===hoy) return;
-  const ayer = new Date(Date.now()-86400000).toISOString().split('T')[0];
-  const nuevaRacha = perfil.ultimo_acceso===ayer ? perfil.racha+1 : 1;
+  const ayer=new Date(Date.now()-86400000).toISOString().split('T')[0];
+  const nuevaRacha=perfil.ultimo_acceso===ayer?perfil.racha+1:1;
   await sb.from('perfiles').update({racha:nuevaRacha,ultimo_acceso:hoy}).eq('id',CU.id);
-  perfil.racha=nuevaRacha; perfil.ultimo_acceso=hoy;
-  updateUI();
+  perfil.racha=nuevaRacha; perfil.ultimo_acceso=hoy; updateUI();
 }
 
 function buildRachaGrid(){
   const dias=['LUN','MAR','MIÉ','JUE','VIE','SAB','DOM'];
-  const hoyIdx = (new Date().getDay()+6)%7;
-  const racha = perfil ? Math.min(perfil.racha,7) : 0;
-  document.getElementById('racha-row').innerHTML = dias.map((d,i)=>{
-    const esHoy = i===hoyIdx;
-    const hecho = i<racha && !esHoy;
-    const cls = esHoy?'hoy':hecho?'done':'pend';
-    return '<div class="rday '+cls+'"><div class="rday-icon">'+(esHoy?'🔥':hecho?'✓':'—')+'</div><div class="rday-lbl">'+d+'</div></div>';
+  const hoyIdx=(new Date().getDay()+6)%7;
+  const racha=perfil?Math.min(perfil.racha,7):0;
+  document.getElementById('racha-row').innerHTML=dias.map((d,i)=>{
+    const esHoy=i===hoyIdx, hecho=i<racha&&!esHoy;
+    const cls=esHoy?'hoy':hecho?'done':'pend';
+    return `<div class="rday ${cls}"><div class="rday-icon">${esHoy?'🔥':hecho?'✓':'—'}</div><div class="rday-lbl">${d}</div></div>`;
   }).join('');
 }
 
 async function sumarXP(pts){
   if(!perfil||!CU||enPreview) return;
-  const nuevoXP = perfil.xp+pts;
-  const nuevoNivel = Math.floor(nuevoXP/500)+1;
+  const nuevoXP=perfil.xp+pts;
+  const nuevoNivel=Math.floor(nuevoXP/500)+1;
   await sb.from('perfiles').update({xp:nuevoXP,nivel:nuevoNivel}).eq('id',CU.id);
-  perfil.xp=nuevoXP; perfil.nivel=nuevoNivel;
-  updateUI();
+  perfil.xp=nuevoXP; perfil.nivel=nuevoNivel; updateUI(); buildLogros();
+  showToast(`+${pts} XP ⭐`);
+}
+
+function buildPerfil(){
+  if(!perfil) return;
+  const big=document.getElementById('perfil-av-big');
+  if(big){if(perfil.avatar_url){big.innerHTML=`<img src="${perfil.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;} else {const sp=document.getElementById('perfil-av-inner'); if(sp)sp.textContent=perfil.avatar||'🙂';}}
+  document.getElementById('perfil-nom').textContent=perfil.nombre||'Alumno';
+  document.getElementById('perfil-email').textContent=perfil.email||CU?.email||'';
+  document.getElementById('p-xp').textContent=perfil.xp;
+  document.getElementById('p-nivel').textContent=perfil.nivel;
+  document.getElementById('p-racha').textContent=perfil.racha;
+  buildEmojiPicker('avatar-picker-perfil', true);
+}
+
+async function cambiarFotoPerfil(input){
+  const f=input.files[0]; if(!f||!CU) return;
+  showToast('Subiendo foto...');
+  const ext=f.name.split('.').pop();
+  const path=`avatars/${CU.id}.${ext}`;
+  const{error}=await sb.storage.from('avatars').upload(path,f,{upsert:true});
+  if(error){showToast('Error al subir foto'); return;}
+  const{data:pd}=sb.storage.from('avatars').getPublicUrl(path);
+  await sb.from('perfiles').update({avatar_url:pd.publicUrl}).eq('id',CU.id);
+  perfil.avatar_url=pd.publicUrl; updateUI(); buildPerfil(); showToast('¡Foto actualizada!');
 }
 
 // ══════════════════════════
 // MAPA
 // ══════════════════════════
-const openBloques = new Set([1,2,3,4]);
+const openBloques=new Set([1,2,3,4,5,6]);
 function buildMapa(){
-  const c = document.getElementById('mapa-container');
-  c.innerHTML='';
+  const c=document.getElementById('mapa-container'); c.innerHTML='';
   BLOQUES.forEach(function(b){
-    const isOpen = openBloques.has(b.num);
-    const div = document.createElement('div');
-    div.className='bloque';
+    const isOpen=openBloques.has(b.num);
+    const div=document.createElement('div'); div.className='bloque';
     let temasHTML='';
     if(isOpen){
       temasHTML='<div class="bloque-temas">';
       b.temas.forEach(function(t){
-        temasHTML+='<div class="tema-row active-tema" onclick="abrirTema('+t.id+')">'
-          +'<div class="t-ico" style="background:'+b.color+'22;border:1px solid '+b.color+'44;color:'+b.color+'">'+t.id+'</div>'
-          +'<div class="t-info"><div class="t-nom">'+t.nombre+'</div><div class="t-sub">'+t.sub+'</div></div>'
-          +'<span class="t-badge tb-active">▶</span>'
-          +'</div>';
+        temasHTML+=`<div class="tema-row active-tema" onclick="abrirTema(${t.id})">
+          <div class="t-ico" style="background:${b.color}22;border:1px solid ${b.color}44;color:${b.color}">${t.id}</div>
+          <div class="t-info"><div class="t-nom">${t.nombre}</div><div class="t-sub">${t.sub}</div></div>
+          <span class="t-badge tb-active">▶</span></div>`;
       });
       temasHTML+='</div>';
     }
-    div.innerHTML='<div class="bloque-hdr" onclick="toggleBloque('+b.num+',this)">'
-      +'<div class="bloque-num" style="background:'+b.color+'22;border:1px solid '+b.color+'55;color:'+b.color+'">'+b.num+'</div>'
-      +'<div class="bloque-info"><div class="bloque-nom">'+b.nombre+'</div><div class="bloque-sub">'+b.sub+'</div></div>'
-      +'<span class="bloque-arr '+(isOpen?'open':'')+'">▶</span>'
-      +'</div>'+temasHTML;
+    div.innerHTML=`<div class="bloque-hdr" onclick="toggleBloque(${b.num},this)">
+      <div class="bloque-num" style="background:${b.color}22;border:1px solid ${b.color}55;color:${b.color}">${b.num}</div>
+      <div class="bloque-info"><div class="bloque-nom">${b.nombre}</div><div class="bloque-sub">${b.sub}</div></div>
+      <span class="bloque-arr ${isOpen?'open':''}">▶</span></div>${temasHTML}`;
     c.appendChild(div);
   });
 }
 function toggleBloque(num,el){
-  if(openBloques.has(num)) openBloques.delete(num);
-  else openBloques.add(num);
+  if(openBloques.has(num)) openBloques.delete(num); else openBloques.add(num);
   buildMapa();
 }
+function abrirUltimoTema(){ abrirTema(ultimoTema); }
 
 // ══════════════════════════
 // TEMA DETAIL
@@ -959,255 +1051,171 @@ function toggleBloque(num,el){
 let temaActual=null, ejActual=0, examenData=null;
 
 function abrirTema(id){
-  const tema = TEMAS_CONTENIDO[id];
-  const info = BLOQUES.flatMap(b=>b.temas.map(t=>({...t,bloque:b}))).find(t=>t.id===id);
+  const tema=TEMAS_CONTENIDO[id];
+  const info=BLOQUES.flatMap(b=>b.temas.map(t=>({...t,bloque:b}))).find(t=>t.id===id);
   if(!tema||!info) return;
-  temaActual={id,tema,info};
-  ejActual=0;
+  temaActual={id,tema,info}; ejActual=0; ultimoTema=id;
   document.getElementById('td-title').textContent=info.nombre;
-  buildRound0();
-  buildRound1();
-  buildRound2();
-  buildRound3();
-  mostrar('tema-detail');
-  goRound(0);
+  buildRound0(); buildRound1(); buildRound2(); buildRound3();
+  mostrar('tema-detail'); goRound(0);
 }
-
-function cerrarTema(){
-  if(enPreview||!esAdmin) mostrar('app-screen');
-  else mostrar('app-screen');
-}
-
+function cerrarTema(){ mostrar('app-screen'); }
 function goRound(n){
   document.querySelectorAll('.round-tab').forEach((t,i)=>{
     t.classList.toggle('on',i===n);
-    if(i<n) t.classList.add('done-r'); else t.classList.remove('done-r');
+    if(i<n)t.classList.add('done-r'); else t.classList.remove('done-r');
   });
   document.querySelectorAll('.round-screen').forEach((s,i)=>s.classList.toggle('on',i===n));
 }
-
-// ROUND 0 — VIDEO
 function buildRound0(){
-  const {id,tema,info} = temaActual;
-  const url = videoLinks[id]||'';
-  let videoHTML='';
-  if(url){
-    videoHTML='<div class="video-box">'
-      +'<div class="video-thumb" onclick="abrirVideo(\''+url+'\')">'
-      +'<div class="play-circle"><div class="play-tri"></div></div>'
-      +'<div class="video-info-txt"><p>'+info.nombre+'</p><span>por <em>@elprofecolorado</em></span></div>'
-      +'</div>'
-      +'<div class="video-footer"><span>Video del Profe Colorado</span><a class="video-open-btn" href="'+url+'" target="_blank">Abrir ↗</a></div>'
-      +'</div>';
-  } else {
-    videoHTML='<div class="video-box"><div class="video-no-url">'
-      +'<p>El Profe Colorado aún no ha subido el video de este tema.</p>'
-      +'<p class="link-url">Se agregará pronto en @elprofecolorado</p>'
-      +'</div></div>';
-  }
-  let kpHTML='';
-  tema.puntos.forEach(function(k,i){
-    kpHTML+='<div class="kp-item"><div class="kp-num">'+(i+1)+'</div><div><div class="kp-txt">'+k.t+'</div><div class="kp-sub">'+k.s+'</div></div></div>';
-  });
+  const{id,tema,info}=temaActual;
+  const url=videoLinks[id]||'';
+  let videoHTML=url
+    ?`<div class="video-box"><div class="video-thumb" onclick="window.open('${url}','_blank')"><div class="play-circle"><div class="play-tri"></div></div><div class="video-info-txt"><p>${info.nombre}</p><span>Video del maestro</span></div></div><div class="video-footer"><span>Video explicativo</span><a class="video-open-btn" href="${url}" target="_blank">Abrir ↗</a></div></div>`
+    :`<div class="video-box"><div class="video-no-url"><p>El maestro aún no ha subido el video de este tema.</p><p class="link-url" style="color:var(--azul)">Se agregará pronto</p></div></div>`;
+  let kpHTML=tema.puntos.map((k,i)=>`<div class="kp-item"><div class="kp-num">${i+1}</div><div><div class="kp-txt">${k.t}</div><div class="kp-sub">${k.s}</div></div></div>`).join('');
   document.getElementById('rs0').innerHTML=
-    '<div class="video-section">'+videoHTML+'</div>'
-    +'<div class="cb"><div class="cb-av">CO</div><div class="cb-txt">"Antes de practicar, <b>mira cómo lo explica el profe.</b> Sin trucos — solo el método."</div></div>'
-    +'<div class="kp-lbl">Lo que vas a aprender</div>'
-    +kpHTML
-    +'<button class="rnd-btn" onclick="goRound(1)">Round 2: Ver la demo →</button>';
-}
-
-function abrirVideo(url){
-  window.open(url,'_blank');
-}
-
-// ROUND 1 — DEMO
-function buildRound1(){
-  const {tema} = temaActual;
-  const d = tema.demo;
-  let html='<div class="cb"><div class="cb-av">CO</div><div class="cb-txt">"Paso a paso. <b>Sigue cada movimiento.</b>"</div></div>';
-  html+='<div class="demo-step"><div class="demo-label">Problema</div><div class="demo-expr">'+d.prob+'</div></div>';
-  d.pasos.forEach(function(p){
-    html+='<div class="demo-arrow">↓</div>'
-      +'<div class="demo-step"><div class="demo-label">'+p.n+'</div>'
-      +'<div class="demo-expr'+(p.gold?' gold':'')+'">'+p.e+'</div>'
-      +(p.x?'<div class="demo-exp">'+p.x+'</div>':'')
-      +'</div>';
+    `<div class="video-section">${videoHTML}</div>
+    <div class="cb"><div class="cb-av" id="round-profe-av">👨‍🏫</div><div class="cb-txt">"Antes de practicar, <b>mira cómo se hace.</b> Entiende el método."</div></div>
+    <div class="kp-lbl">Lo que vas a aprender</div>${kpHTML}
+    <button class="rnd-btn" onclick="goRound(1)">Round 2: Ver la demo →</button>`;
+  cargarAvatarMaestro().then(()=>{
+    const av=document.getElementById('round-profe-av');
+    // already handled in cargarAvatarMaestro but for round-profe-av we do it directly
   });
-  html+='<button class="rnd-btn" onclick="goRound(2)">Round 3: Ahora tú →</button>';
+}
+function buildRound1(){
+  const{tema}=temaActual; const d=tema.demo;
+  let html=`<div class="cb"><div class="cb-av">👨‍🏫</div><div class="cb-txt">"Paso a paso. <b>Sigue cada movimiento.</b>"</div></div>`;
+  html+=`<div class="demo-step"><div class="demo-label">Problema</div><div class="demo-expr">${d.prob}</div></div>`;
+  d.pasos.forEach(p=>{
+    html+=`<div class="demo-arrow">↓</div><div class="demo-step"><div class="demo-label">${p.n}</div><div class="demo-expr${p.gold?' gold':''}">${p.e}</div>${p.x?`<div class="demo-exp">${p.x}</div>`:''}</div>`;
+  });
+  html+=`<button class="rnd-btn" onclick="goRound(2)">Round 3: Tu turno →</button>`;
   document.getElementById('rs1').innerHTML=html;
 }
-
-// ROUND 2 — PRÁCTICA
-function buildRound2(){
-  ejActual=0;
-  renderEjercicio();
-}
-
+function buildRound2(){ ejActual=0; renderEjercicio(); }
 function renderEjercicio(){
-  const {tema} = temaActual;
-  const ej = tema.ejs[ejActual];
-  const total = tema.ejs.length;
-  let html='<div class="cb"><div class="cb-av">CO</div><div class="cb-txt">"Tu turno. <b>Sin prisa.</b> Piensa antes de tocar."</div></div>';
-  html+='<div class="ej-progress">Ejercicio '+(ejActual+1)+' de '+total+'</div>';
-  html+='<div class="ej-q">'+ej.q+'</div>';
-  if(ej.ex) html+='<div class="ej-expr">'+ej.ex+'</div>';
-  html+='<div class="ej-opts" id="ej-opts-'+ejActual+'"></div>';
-  html+='<div class="ej-feedback" id="ej-fb-'+ejActual+'"></div>';
-  html+='<div id="ej-next-'+ejActual+'"></div>';
+  const{tema}=temaActual; const ej=tema.ejs[ejActual]; const total=tema.ejs.length;
+  let html=`<div class="cb"><div class="cb-av">👨‍🏫</div><div class="cb-txt">"Tu turno. <b>Piensa antes de elegir.</b>"</div></div>`;
+  html+=`<div class="ej-progress">Ejercicio ${ejActual+1} de ${total}</div>`;
+  html+=`<div class="ej-q">${ej.q}</div>`;
+  if(ej.ex) html+=`<div class="ej-expr">${ej.ex}</div>`;
+  html+=`<div class="ej-opts" id="ej-opts-${ejActual}"></div><div class="ej-feedback" id="ej-fb-${ejActual}"></div><div id="ej-next-${ejActual}"></div>`;
   document.getElementById('rs2').innerHTML=html;
-  // Add options via DOM (avoid inline event issues)
-  const optsEl = document.getElementById('ej-opts-'+ejActual);
-  ej.opts.forEach(function(o,i){
-    const btn = document.createElement('div');
-    btn.className='ej-opt';
-    btn.textContent=o;
-    btn.onclick=function(){ responderEjercicio(i, ej, ejActual); };
-    optsEl.appendChild(btn);
+  const optsEl=document.getElementById('ej-opts-'+ejActual);
+  ej.opts.forEach((o,i)=>{
+    const btn=document.createElement('div'); btn.className='ej-opt'; btn.textContent=o;
+    btn.onclick=()=>responderEjercicio(i,ej,ejActual); optsEl.appendChild(btn);
   });
 }
-
-function responderEjercicio(idx, ej, ejIdx){
-  const opts = document.querySelectorAll('#ej-opts-'+ejIdx+' .ej-opt');
-  opts.forEach(function(o){o.onclick=null;});
-  const fb = document.getElementById('ej-fb-'+ejIdx);
-  const nextEl = document.getElementById('ej-next-'+ejIdx);
-  const esCorrecta = idx===ej.ok;
-  opts[idx].classList.add(esCorrecta?'correct':'wrong');
-  if(!esCorrecta) opts[ej.ok].classList.add('correct');
-  fb.className='ej-feedback on '+(esCorrecta?'ok':'bad');
-  fb.innerHTML='<strong>'+(esCorrecta?'¡Correcto!':'Casi.')+'</strong> '+ej.exp;
-  if(esCorrecta) sumarXP(10);
-  const {tema} = temaActual;
-  const hayMas = ejActual < tema.ejs.length-1;
-  const btn = document.createElement('button');
-  btn.className='rnd-btn';
-  btn.textContent = hayMas?'Siguiente ejercicio →':'Round 4: Al examen →';
-  btn.onclick = function(){
-    if(hayMas){ ejActual++; renderEjercicio(); }
-    else goRound(3);
-  };
+function responderEjercicio(idx,ej,ejIdx){
+  const opts=document.querySelectorAll(`#ej-opts-${ejIdx} .ej-opt`);
+  opts.forEach(o=>o.onclick=null);
+  const fb=document.getElementById('ej-fb-'+ejIdx);
+  const nextEl=document.getElementById('ej-next-'+ejIdx);
+  const ok=idx===ej.ok;
+  opts[idx].classList.add(ok?'correct':'wrong');
+  if(!ok) opts[ej.ok].classList.add('correct');
+  fb.className='ej-feedback on '+(ok?'ok':'bad');
+  fb.innerHTML=`<strong>${ok?'¡Correcto!':'Casi.'}</strong> ${ej.exp}`;
+  if(ok) sumarXP(10);
+  const{tema}=temaActual;
+  const btn=document.createElement('button'); btn.className='rnd-btn';
+  const hayMas=ejActual<tema.ejs.length-1;
+  btn.textContent=hayMas?'Siguiente →':'Round 4: Examen →';
+  btn.onclick=()=>{if(hayMas){ejActual++;renderEjercicio();}else goRound(3);};
   nextEl.appendChild(btn);
 }
-
-// ROUND 3 — EXAMEN
 function buildRound3(){
-  const {info} = temaActual;
   document.getElementById('rs3').innerHTML=
-    '<div class="exam-intro">'
-    +'<div class="exam-big">🥊 EXAMEN</div>'
-    +'<div class="exam-sub">"Todo lo que aprendiste — ahora se demuestra."</div>'
-    +'<div class="exam-stats-row">'
-    +'<div class="exam-stat"><div class="exam-stat-n">10</div><div class="exam-stat-l">Preguntas</div></div>'
-    +'<div class="exam-stat"><div class="exam-stat-n">12</div><div class="exam-stat-l">Minutos</div></div>'
-    +'<div class="exam-stat"><div class="exam-stat-n">70%</div><div class="exam-stat-l">Para pasar</div></div>'
-    +'</div>'
-    +'<div class="cb"><div class="cb-av">CO</div><div class="cb-txt">"<b>Respira, piensa, ejecuta.</b> Ya estás listo."</div></div>'
-    +'<button class="rnd-btn" onclick="iniciarExamen()">INICIAR EXAMEN →</button>'
-    +'</div>';
+    `<div class="exam-intro">
+    <div class="exam-big">📝 EXAMEN</div>
+    <div class="exam-sub">"Demuestra lo que aprendiste. Sin atajos."</div>
+    <div class="exam-stats-row">
+      <div class="exam-stat"><div class="exam-stat-n">10</div><div class="exam-stat-l">Preguntas</div></div>
+      <div class="exam-stat"><div class="exam-stat-n">12</div><div class="exam-stat-l">Minutos</div></div>
+      <div class="exam-stat"><div class="exam-stat-n">70%</div><div class="exam-stat-l">Para pasar</div></div>
+    </div>
+    <div class="cb"><div class="cb-av">👨‍🏫</div><div class="cb-txt">"<b>Respira, piensa, ejecuta.</b> Ya estás listo."</div></div>
+    <button class="rnd-btn" onclick="iniciarExamen()">INICIAR EXAMEN →</button></div>`;
 }
-
 function iniciarExamen(){
-  const {tema,id} = temaActual;
-  // Build 10 questions from exercises (repeat if needed)
-  const base = tema.ejs;
-  examenData = {
-    preguntas: [...base,...base].slice(0,10).map(function(e,i){return {...e,idx:i};}),
-    actual:0, correctas:0, inicio:Date.now(), timerInterval:null
-  };
+  const{tema,id}=temaActual;
+  const base=tema.ejs;
+  examenData={preguntas:[...base,...base].slice(0,10).map((e,i)=>({...e,idx:i})),actual:0,correctas:0,inicio:Date.now(),timerInterval:null};
   renderExamen();
 }
-
 function renderExamen(){
-  const ed = examenData;
-  const p = ed.preguntas[ed.actual];
-  const tiempoTotal = 12*60;
-  let html='<div class="exam-timer" id="exam-timer">12:00</div>';
-  html+='<div class="exam-prog">Pregunta '+(ed.actual+1)+' de '+ed.preguntas.length+'</div>';
-  html+='<div class="exam-prog-bar"><div class="exam-prog-fill" id="exam-prog-fill" style="width:'+(ed.actual/ed.preguntas.length*100)+'%"></div></div>';
-  html+='<div class="ej-q">'+p.q+'</div>';
-  if(p.ex) html+='<div class="ej-expr">'+p.ex+'</div>';
-  html+='<div class="ej-opts" id="exam-opts"></div>';
-  html+='<div class="ej-feedback" id="exam-fb"></div>';
-  html+='<div id="exam-next"></div>';
+  const ed=examenData; const p=ed.preguntas[ed.actual]; const tiempoTotal=12*60;
+  let html=`<div class="exam-timer" id="exam-timer">12:00</div>`;
+  html+=`<div class="exam-prog">Pregunta ${ed.actual+1} de ${ed.preguntas.length}</div>`;
+  html+=`<div class="exam-prog-bar"><div class="exam-prog-fill" id="exam-prog-fill" style="width:${ed.actual/ed.preguntas.length*100}%"></div></div>`;
+  html+=`<div class="ej-q">${p.q}</div>`;
+  if(p.ex) html+=`<div class="ej-expr">${p.ex}</div>`;
+  html+=`<div class="ej-opts" id="exam-opts"></div><div class="ej-feedback" id="exam-fb"></div><div id="exam-next"></div>`;
   document.getElementById('rs3').innerHTML=html;
-  // Timer
   if(ed.timerInterval) clearInterval(ed.timerInterval);
-  ed.timerInterval=setInterval(function(){
+  ed.timerInterval=setInterval(()=>{
     const elapsed=Math.floor((Date.now()-ed.inicio)/1000);
     const left=tiempoTotal-elapsed;
     if(left<=0){clearInterval(ed.timerInterval);mostrarResultadoExamen();return;}
     const m=Math.floor(left/60),s=left%60;
     const el=document.getElementById('exam-timer');
-    if(el){
-      el.textContent=m+':'+String(s).padStart(2,'0');
-      el.className='exam-timer'+(left<=60?' danger':left<=180?' warn':'');
-    }
+    if(el){el.textContent=m+':'+String(s).padStart(2,'0');el.className='exam-timer'+(left<=60?' danger':left<=180?' warn':'');}
   },1000);
-  // Options
   const optsEl=document.getElementById('exam-opts');
-  p.opts.forEach(function(o,i){
-    const btn=document.createElement('div');
-    btn.className='ej-opt';
-    btn.textContent=o;
-    btn.onclick=function(){responderExamen(i,p);};
-    optsEl.appendChild(btn);
+  p.opts.forEach((o,i)=>{
+    const btn=document.createElement('div'); btn.className='ej-opt'; btn.textContent=o;
+    btn.onclick=()=>responderExamen(i,p); optsEl.appendChild(btn);
   });
 }
-
 function responderExamen(idx,p){
   const opts=document.querySelectorAll('#exam-opts .ej-opt');
-  opts.forEach(function(o){o.onclick=null;});
-  const fb=document.getElementById('exam-fb');
-  const esOk=idx===p.ok;
-  opts[idx].classList.add(esOk?'correct':'wrong');
-  if(!esOk) opts[p.ok].classList.add('correct');
-  fb.className='ej-feedback on '+(esOk?'ok':'bad');
-  fb.textContent=(esOk?'✓ Correcto':'✗ ')+' '+p.exp;
-  if(esOk) examenData.correctas++;
+  opts.forEach(o=>o.onclick=null);
+  const fb=document.getElementById('exam-fb'); const ok=idx===p.ok;
+  opts[idx].classList.add(ok?'correct':'wrong');
+  if(!ok) opts[p.ok].classList.add('correct');
+  fb.className='ej-feedback on '+(ok?'ok':'bad');
+  fb.textContent=(ok?'✓ Correcto  ':'✗ ')+p.exp;
+  if(ok) examenData.correctas++;
   const nextEl=document.getElementById('exam-next');
-  const btn=document.createElement('button');
-  btn.className='rnd-btn';
+  const btn=document.createElement('button'); btn.className='rnd-btn';
   examenData.actual++;
   if(examenData.actual<examenData.preguntas.length){
-    btn.textContent='Siguiente pregunta →';
-    btn.onclick=function(){renderExamen();};
+    btn.textContent='Siguiente →'; btn.onclick=()=>renderExamen();
   } else {
-    btn.textContent='Ver resultado →';
-    btn.onclick=function(){
-      clearInterval(examenData.timerInterval);
-      mostrarResultadoExamen();
-    };
+    btn.textContent='Ver resultado →'; btn.onclick=()=>{clearInterval(examenData.timerInterval);mostrarResultadoExamen();};
   }
   nextEl.appendChild(btn);
 }
-
 function mostrarResultadoExamen(){
   if(examenData.timerInterval) clearInterval(examenData.timerInterval);
-  const total=examenData.preguntas.length;
-  const correctas=examenData.correctas;
-  const pct=Math.round((correctas/total)*100);
-  const aprobado=pct>=70;
+  const total=examenData.preguntas.length, correctas=examenData.correctas;
+  const pct=Math.round((correctas/total)*100), aprobado=pct>=70;
   const tiempoSeg=Math.floor((Date.now()-examenData.inicio)/1000);
   const tm=Math.floor(tiempoSeg/60),ts=tiempoSeg%60;
   if(aprobado) sumarXP(50);
-  const circleBg=aprobado?'rgba(45,106,79,.2)':'rgba(161,35,35,.2)';
-  const circleColor=aprobado?'#5fbd8a':'#f09595';
+  const circleBg=aprobado?'rgba(16,185,129,.2)':'rgba(239,68,68,.2)';
+  const circleColor=aprobado?'#6ee7b7':'#fca5a5';
   document.getElementById('rs3').innerHTML=
-    '<div class="exam-result">'
-    +'<div class="result-circle" style="background:'+circleBg+'">'
-    +'<div class="result-score" style="color:'+circleColor+'">'+correctas+'</div>'
-    +'<div class="result-denom">/ '+total+'</div>'
-    +'</div>'
-    +'<div class="result-title">'+(aprobado?'¡Pasaste! 🏆':'Sigue practicando 💪')+'</div>'
-    +'<div class="result-sub">'+(aprobado?'Conseguiste '+pct+'% — ¡arriba del 70% necesario!':'Obtuviste '+pct+'%. Necesitas 70% para pasar. ¡Vuelve a intentarlo!')+'</div>'
-    +'<div class="result-stats">'
-    +'<div class="rs-card"><div class="rs-n" style="color:#5fbd8a">'+correctas+'</div><div class="rs-l">Correctas</div></div>'
-    +'<div class="rs-card"><div class="rs-n" style="color:#f09595">'+(total-correctas)+'</div><div class="rs-l">Incorrectas</div></div>'
-    +'<div class="rs-card"><div class="rs-n">'+tm+':'+String(ts).padStart(2,'0')+'</div><div class="rs-l">Tiempo</div></div>'
-    +'</div>'
-    +(aprobado?'<button class="rnd-btn" onclick="cerrarTema()">Volver al mapa →</button>':'<button class="rnd-btn" onclick="iniciarExamen()">Intentar de nuevo →</button><button class="rnd-btn secondary" style="margin-top:8px" onclick="goRound(0)">Repasar el tema</button>')
-    +'</div>';
+    `<div class="exam-result">
+    <div class="result-circle" style="background:${circleBg}">
+      <div class="result-score" style="color:${circleColor}">${correctas}</div>
+      <div class="result-denom">/ ${total}</div>
+    </div>
+    <div class="result-title">${aprobado?'¡Lo lograste! 🏆':'Sigue practicando 💪'}</div>
+    <div class="result-sub">${aprobado?`Conseguiste ${pct}% — ¡arriba del 70% necesario para el examen UDG!`:`Obtuviste ${pct}%. Necesitas 70% para pasar. ¡Inténtalo de nuevo!`}</div>
+    <div class="result-stats">
+      <div class="rs-card"><div class="rs-n" style="color:#6ee7b7">${correctas}</div><div class="rs-l">Correctas</div></div>
+      <div class="rs-card"><div class="rs-n" style="color:#fca5a5">${total-correctas}</div><div class="rs-l">Incorrectas</div></div>
+      <div class="rs-card"><div class="rs-n">${tm}:${String(ts).padStart(2,'0')}</div><div class="rs-l">Tiempo</div></div>
+    </div>
+    ${aprobado
+      ?`<button class="rnd-btn" onclick="cerrarTema()">Volver al mapa →</button>`
+      :`<button class="rnd-btn" onclick="iniciarExamen()">Intentar de nuevo →</button>
+        <button class="rnd-btn secondary" style="margin-top:8px" onclick="goRound(0)">Repasar tema</button>`}
+    </div>`;
 }
 
 // ══════════════════════════
@@ -1215,19 +1223,18 @@ function mostrarResultadoExamen(){
 // ══════════════════════════
 async function cargarRanking(){
   document.getElementById('ranking-list').innerHTML='<div class="empty-state">Cargando...</div>';
-  const {data} = await sb.from('ranking_semanal').select('*').limit(15);
-  const list = document.getElementById('ranking-list');
-  if(!data||data.length===0){list.innerHTML='<div class="empty-state">¡Sé el primero en el ranking!</div>';document.getElementById('ranking-sub').textContent='Aún no hay alumnos';return;}
+  const{data}=await sb.from('perfiles').select('*').eq('es_admin',false).order('xp',{ascending:false}).limit(20);
+  const list=document.getElementById('ranking-list');
+  if(!data||data.length===0){list.innerHTML='<div class="empty-state">¡Sé el primero en el ranking!</div>';return;}
   document.getElementById('ranking-sub').textContent=data.length+' alumnos compitiendo';
-  list.innerHTML=data.map(function(r,i){
-    const pos=i+1;
-    const esYo=CU&&r.id===CU.id;
-    return '<div class="rk-item'+(esYo?' me':'')+'">'
-      +'<div class="rk-pos">'+(pos===1?'🥇':pos===2?'🥈':pos===3?'🥉':pos)+'</div>'
-      +'<div class="rk-av" style="background:'+(esYo?'var(--red)':'rgba(255,255,255,.1)')+';color:'+(esYo?'white':'#9a9490')+'">'+( r.avatar||'??')+'</div>'
-      +'<div class="rk-info"><div class="rk-nom">'+r.nombre+(esYo?' <span style="color:var(--red);font-size:9px">(tú)</span>':'')+'</div><div class="rk-racha">🔥 '+r.racha+' días</div></div>'
-      +'<div class="rk-xp">'+r.xp+' XP</div>'
-      +'</div>';
+  list.innerHTML=data.map((r,i)=>{
+    const pos=i+1, esYo=CU&&r.id===CU.id;
+    const avHTML=r.avatar_url?`<img src="${r.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`:`<span style="font-size:16px">${r.avatar||'🙂'}</span>`;
+    return `<div class="rk-item${esYo?' me':''}">
+      <div class="rk-pos">${pos===1?'🥇':pos===2?'🥈':pos===3?'🥉':pos}</div>
+      <div class="rk-av" style="background:${esYo?'rgba(26,86,219,.2)':'rgba(255,255,255,.05)'}">${avHTML}</div>
+      <div class="rk-info"><div class="rk-nom">${r.nombre}${esYo?' <span style="color:var(--azul);font-size:9px">(tú)</span>':''}</div><div class="rk-racha">🔥 ${r.racha} días · Nivel ${r.nivel}</div></div>
+      <div class="rk-xp">${r.xp} XP</div></div>`;
   }).join('');
 }
 
@@ -1235,26 +1242,176 @@ async function cargarRanking(){
 // LOGROS
 // ══════════════════════════
 const LOGROS=[
-  {id:'racha5',icon:'🔥',nom:'Racha de fuego',desc:'5 días seguidos',check:function(p){return p.racha>=5;}},
-  {id:'xp500',icon:'⚡',nom:'Energía total',desc:'Llegar a 500 XP',check:function(p){return p.xp>=500;}},
-  {id:'xp1000',icon:'💎',nom:'Mil puntos',desc:'Llegar a 1000 XP',check:function(p){return p.xp>=1000;}},
-  {id:'nivel3',icon:'🎯',nom:'Nivel 3',desc:'Alcanzar el nivel 3',check:function(p){return p.nivel>=3;}},
-  {id:'racha14',icon:'🔥',nom:'Dos semanas',desc:'14 días seguidos',check:function(p){return p.racha>=14;}},
-  {id:'campeon',icon:'🏆',nom:'Campeón UDG',desc:'Pasar un examen con 100%',check:function(p){return p.xp>=200;}},
+  {id:'primer_paso',icon:'🚀',nom:'Primer paso',desc:'Completa tu primer ejercicio',check:p=>p.xp>=10},
+  {id:'racha3',icon:'🔥',nom:'En racha',desc:'3 días seguidos de práctica',check:p=>p.racha>=3},
+  {id:'xp100',icon:'⚡',nom:'Despegando',desc:'Llegar a 100 XP',check:p=>p.xp>=100},
+  {id:'racha7',icon:'📅',nom:'Una semana',desc:'7 días consecutivos',check:p=>p.racha>=7},
+  {id:'xp500',icon:'💎',nom:'Constante',desc:'Llegar a 500 XP',check:p=>p.xp>=500},
+  {id:'nivel3',icon:'🎯',nom:'Nivel 3',desc:'Alcanzar el nivel 3',check:p=>p.nivel>=3},
+  {id:'xp1000',icon:'🏅',nom:'Mil puntos',desc:'Llegar a 1000 XP',check:p=>p.xp>=1000},
+  {id:'racha14',icon:'🌟',nom:'Dos semanas',desc:'14 días consecutivos',check:p=>p.racha>=14},
+  {id:'xp2000',icon:'👑',nom:'Campeón',desc:'2000 XP acumulados',check:p=>p.xp>=2000},
+  {id:'nivel5',icon:'🎓',nom:'Listo para UDG',desc:'Alcanzar el nivel 5',check:p=>p.nivel>=5},
 ];
 function buildLogros(){
   if(!perfil) return;
-  const desbloqueados=LOGROS.filter(function(l){return l.check(perfil);}).length;
-  document.getElementById('logros-sub').textContent=desbloqueados+' de '+LOGROS.length+' desbloqueados';
-  document.getElementById('logros-grid').innerHTML=LOGROS.map(function(l){
+  const desbloqueados=LOGROS.filter(l=>l.check(perfil)).length;
+  document.getElementById('logros-sub').textContent=desbloqueados+' de '+LOGROS.length+' desbloqueadas';
+  document.getElementById('logros-grid').innerHTML=LOGROS.map(l=>{
     const ok=l.check(perfil);
-    return '<div class="logro'+(ok?'':' locked')+'">'
-      +'<div class="logro-icon">'+l.icon+'</div>'
-      +'<div class="logro-nom">'+l.nom+'</div>'
-      +'<div class="logro-desc">'+l.desc+'</div>'
-      +'<span class="logro-badge '+(ok?'lb-ok':'lb-lock')+'">'+(ok?'✓ Desbloqueado':'Bloqueado')+'</span>'
-      +'</div>';
+    return `<div class="logro${ok?'':' locked'}">
+      <div class="logro-icon">${l.icon}</div>
+      <div class="logro-nom">${l.nom}</div>
+      <div class="logro-desc">${l.desc}</div>
+      <span class="logro-badge ${ok?'lb-ok':'lb-lock'}">${ok?'✓ Desbloqueada':'Bloqueada'}</span></div>`;
   }).join('');
+}
+
+// ══════════════════════════
+// CHAT
+// ══════════════════════════
+let postImageFile2=null;
+function previewPostImage(input){
+  const f=input.files[0]; if(!f) return;
+  postImageFile2=f;
+  const url=URL.createObjectURL(f);
+  const wrap=document.getElementById('compose-img-preview');
+  wrap.style.display='block';
+  document.getElementById('compose-preview-img').src=url;
+}
+function quitarImagenPost(){
+  postImageFile2=null;
+  document.getElementById('compose-img-preview').style.display='none';
+  document.getElementById('compose-preview-img').src='';
+  document.getElementById('compose-img-input').value='';
+}
+
+async function publicarPost(){
+  const txt=document.getElementById('compose-txt').value.trim();
+  if(!txt&&!postImageFile2) return;
+  if(!CU||!perfil) return;
+  let imageUrl=null;
+  if(postImageFile2){
+    const ext=postImageFile2.name.split('.').pop();
+    const path=`posts/${CU.id}_${Date.now()}.${ext}`;
+    const{error}=await sb.storage.from('post-images').upload(path,postImageFile2);
+    if(!error){const{data:pd}=sb.storage.from('post-images').getPublicUrl(path);imageUrl=pd.publicUrl;}
+  }
+  const{error}=await sb.from('posts').insert({user_id:CU.id,content:txt,image_url:imageUrl});
+  if(!error){
+    document.getElementById('compose-txt').value='';
+    document.getElementById('compose-txt').style.height='auto';
+    quitarImagenPost();
+    await cargarChat();
+  }
+}
+
+async function cargarChat(){
+  const feed=document.getElementById('chat-feed');
+  feed.innerHTML='<div class="empty-state">Cargando mensajes...</div>';
+  const{data:posts}=await sb.from('posts').select('*').order('created_at',{ascending:false}).limit(30);
+  if(!posts||posts.length===0){feed.innerHTML='<div class="empty-state">Aún no hay mensajes. ¡Sé el primero!</div>';return;}
+  // Load profiles
+  const ids=[...new Set(posts.map(p=>p.user_id))];
+  const{data:perfs}=await sb.from('perfiles').select('id,nombre,avatar,avatar_url,es_admin').in('id',ids);
+  const perfMap={};
+  (perfs||[]).forEach(p=>perfMap[p.id]=p);
+  // Load reactions
+  const postIds=posts.map(p=>p.id);
+  const{data:rxns}=await sb.from('reacciones').select('*').in('post_id',postIds);
+  const{data:cmts}=await sb.from('comentarios').select('*').order('created_at',{ascending:true}).in('post_id',postIds);
+  const cmtPerfs=cmts?[...new Set(cmts.map(c=>c.user_id))]:[];
+  let cmtPerfMap={};
+  if(cmtPerfs.length){
+    const{data:cp}=await sb.from('perfiles').select('id,nombre,avatar,avatar_url').in('id',cmtPerfs);
+    (cp||[]).forEach(p=>cmtPerfMap[p.id]=p);
+  }
+  feed.innerHTML='';
+  posts.forEach(post=>{
+    const author=perfMap[post.user_id]||{nombre:'Usuario',avatar:'🙂'};
+    const isOwn=CU&&post.user_id===CU.id;
+    const myRxn=rxns?rxns.find(r=>r.post_id===post.id&&r.user_id===CU?.id):null;
+    const rxnCount=(rxns||[]).filter(r=>r.post_id===post.id).length;
+    const postCmts=(cmts||[]).filter(c=>c.post_id===post.id);
+    const date=new Date(post.created_at).toLocaleDateString('es-MX',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    const avHTML=author.avatar_url?`<img src="${author.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`:`<span style="font-size:16px">${author.avatar||'🙂'}</span>`;
+    let cmtsHTML='';
+    if(postCmts.length){
+      cmtsHTML=postCmts.map(c=>{
+        const cp=cmtPerfMap[c.user_id]||{nombre:'?',avatar:'🙂'};
+        const cavHTML=cp.avatar_url?`<img src="${cp.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`:`<span style="font-size:10px">${cp.avatar||'🙂'}</span>`;
+        return `<div class="cp-comment"><div class="cc-av">${cavHTML}</div><div class="cc-body"><div class="cc-nom">${cp.nombre}</div><div class="cc-txt">${c.content}</div><div class="cc-time">${new Date(c.created_at).toLocaleDateString('es-MX',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</div></div></div>`;
+      }).join('');
+    }
+    const div=document.createElement('div'); div.className='chat-post';
+    div.innerHTML=`<div class="cp-head">
+      <div class="cp-av">${avHTML}</div>
+      <div class="cp-info"><div class="cp-nom">${author.nombre}${author.es_admin?' <span style="font-size:9px;color:var(--gold);background:rgba(245,158,11,.2);padding:1px 6px;border-radius:8px">Maestro</span>':''}</div><div class="cp-time">${date}${post.edited?' · editado':''}</div></div>
+      ${(isOwn||esAdmin)?`<div class="cp-opts"><button class="cp-menu-btn" onclick="togglePostMenu(${post.id})">⋯</button>
+        <div class="cp-menu" id="pm-${post.id}">
+          ${isOwn?`<div class="cp-menu-item" onclick="editarPost(${post.id},'${(post.content||'').replace(/'/g,"\\'")}')">✏️ Editar</div>`:''}
+          <div class="cp-menu-item danger" onclick="eliminarPost(${post.id})">🗑 Eliminar</div>
+        </div></div>`:''}
+    </div>
+    ${post.content?`<div class="cp-txt">${post.content}</div>`:''}
+    ${post.image_url?`<img class="cp-img" src="${post.image_url}" alt="imagen"/>`:''}
+    <div class="cp-reactions">
+      <button class="cp-react-btn${myRxn?' mine':''}" onclick="toggleReaccion(${post.id}${myRxn?',true':''})">👍 ${rxnCount>0?rxnCount:''}</button>
+      ${rxnCount>0?`<span class="cp-react-who" onclick="verReacciones(${post.id})">${rxnCount} reacción${rxnCount>1?'es':''}</span>`:''}
+    </div>
+    <div class="cp-comments">
+      ${cmtsHTML}
+      <div class="add-comment-row">
+        <input type="text" placeholder="Escribe un comentario..." id="cmt-input-${post.id}" onkeydown="if(event.key==='Enter')enviarComentario(${post.id})"/>
+        <button class="send-comment" onclick="enviarComentario(${post.id})">↑</button>
+      </div>
+    </div>`;
+    feed.appendChild(div);
+  });
+}
+
+function togglePostMenu(id){
+  document.querySelectorAll('.cp-menu').forEach(m=>{if('pm-'+id!==m.id)m.classList.remove('on');});
+  document.getElementById('pm-'+id)?.classList.toggle('on');
+}
+async function editarPost(id, contenidoActual){
+  const nuevo=prompt('Editar mensaje:', contenidoActual);
+  if(nuevo===null) return;
+  await sb.from('posts').update({content:nuevo,edited:true}).eq('id',id);
+  await cargarChat();
+}
+async function eliminarPost(id){
+  if(!confirm('¿Eliminar este mensaje?')) return;
+  await sb.from('posts').delete().eq('id',id);
+  await cargarChat();
+}
+async function toggleReaccion(postId, quitar=false){
+  if(!CU) return;
+  if(quitar){
+    await sb.from('reacciones').delete().eq('post_id',postId).eq('user_id',CU.id);
+  } else {
+    await sb.from('reacciones').upsert({post_id:postId,user_id:CU.id,emoji:'👍'},{onConflict:'post_id,user_id'});
+  }
+  await cargarChat();
+}
+async function verReacciones(postId){
+  const{data}=await sb.from('reacciones').select('*').eq('post_id',postId);
+  const ids=(data||[]).map(r=>r.user_id);
+  const{data:perfs}=await sb.from('perfiles').select('nombre,avatar,avatar_url').in('id',ids);
+  const el=document.getElementById('bs-react-content');
+  el.innerHTML=`<div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;margin-bottom:12px">👍 Reacciones (${(data||[]).length})</div>`+
+    (perfs||[]).map(p=>{
+      const av=p.avatar_url?`<img src="${p.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`:`<span style="font-size:14px">${p.avatar||'🙂'}</span>`;
+      return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:.5px solid rgba(255,255,255,.06)"><div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;overflow:hidden">${av}</div><div style="font-size:13px">${p.nombre}</div></div>`;
+    }).join('');
+  document.getElementById('overlay-reacciones').classList.add('on');
+}
+async function enviarComentario(postId){
+  const input=document.getElementById('cmt-input-'+postId);
+  const txt=input?.value.trim(); if(!txt||!CU) return;
+  await sb.from('comentarios').insert({post_id:postId,user_id:CU.id,content:txt});
+  input.value='';
+  await cargarChat();
 }
 
 // ══════════════════════════
@@ -1263,145 +1420,192 @@ function buildLogros(){
 function verComoAlumno(){
   enPreview=true;
   document.getElementById('btn-volver').style.display='flex';
-  // Setup preview profile
-  perfil = perfil||{nombre:'El Profe Colorado',xp:0,nivel:1,racha:0,ultimo_acceso:null};
-  updateUI();
-  buildMapa();
-  buildLogros();
-  mostrar('app-screen');
-  goTab('inicio', document.querySelector('.bn-item'));
+  perfil=perfil||{nombre:'El Maestro',xp:0,nivel:1,racha:0};
+  updateUI(); buildMapa(); buildLogros(); mostrar('app-screen');
+  goTab('inicio',document.querySelector('.bn-item'));
 }
 function volverAdmin(){
   enPreview=false;
   document.getElementById('btn-volver').style.display='none';
   mostrar('admin-screen');
 }
-
 async function buildAdminInicio(){
   const el=document.getElementById('ap-inicio');
-  el.innerHTML='<div class="admin-hero"><div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Panel del Profe</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:20px;letter-spacing:1px">¡Bienvenido, Profe Colorado! 🥊</div><div style="font-size:11px;color:var(--muted);margin-top:2px">'+new Date().toLocaleDateString('es-MX',{weekday:'long',year:'numeric',month:'long',day:'numeric'})+'</div></div><div class="admin-stats-grid"><div class="adm-stat"><div class="adm-stat-n r" id="adm-total">—</div><div class="adm-stat-l">Total alumnos</div></div><div class="adm-stat"><div class="adm-stat-n" style="color:#5fbd8a" id="adm-activos">—</div><div class="adm-stat-l">Con racha activa</div></div><div class="adm-stat"><div class="adm-stat-n" style="color:var(--gold)" id="adm-xp-total">—</div><div class="adm-stat-l">XP total acumulado</div></div><div class="adm-stat"><div class="adm-stat-n b" id="adm-riesgo">—</div><div class="adm-stat-l">En riesgo</div></div></div><div class="admin-sec" style="margin-top:4px">Resumen rápido</div><div id="adm-resumen" style="padding:0 16px"><div class="empty-state">Cargando datos...</div></div>';
-  const {data:alumnos} = await sb.from('perfiles').select('*').eq('es_admin',false).order('xp',{ascending:false});
+  el.innerHTML=`<div class="admin-hero"><div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Panel del Maestro</div><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px">¡Bienvenido! 🎓</div><div style="font-size:11px;color:var(--muted);margin-top:2px">${new Date().toLocaleDateString('es-MX',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div></div>
+  <div class="admin-stats-grid">
+    <div class="adm-stat"><div class="adm-stat-n r" id="adm-total">—</div><div class="adm-stat-l">Total alumnos</div></div>
+    <div class="adm-stat"><div class="adm-stat-n" style="color:#6ee7b7" id="adm-activos">—</div><div class="adm-stat-l">Con racha activa</div></div>
+    <div class="adm-stat"><div class="adm-stat-n" style="color:var(--gold)" id="adm-xp-total">—</div><div class="adm-stat-l">XP total</div></div>
+    <div class="adm-stat"><div class="adm-stat-n" style="color:var(--blue)" id="adm-riesgo">—</div><div class="adm-stat-l">Sin entrar 3+ días</div></div>
+  </div>
+  <div class="admin-sec">Top 3 esta semana 🏆</div>
+  <div id="adm-resumen" style="padding:0 14px"><div class="empty-state">Cargando...</div></div>`;
+  const{data:alumnos}=await sb.from('perfiles').select('*').eq('es_admin',false).order('xp',{ascending:false});
   if(!alumnos||alumnos.length===0){
-    document.getElementById('adm-resumen').innerHTML='<div class="empty-state">Aún no hay alumnos registrados.<br>¡Comparte el link de la app!</div>';
-    document.getElementById('adm-total').textContent='0';
-    document.getElementById('adm-activos').textContent='0';
-    document.getElementById('adm-xp-total').textContent='0';
-    document.getElementById('adm-riesgo').textContent='0';
+    document.getElementById('adm-resumen').innerHTML='<div class="empty-state">Aún no hay alumnos.<br>Genera códigos y comparte el link.</div>';
+    ['adm-total','adm-activos','adm-xp-total','adm-riesgo'].forEach(id=>document.getElementById(id).textContent='0');
     return;
   }
   const hace3=new Date(Date.now()-3*86400000).toISOString().split('T')[0];
   document.getElementById('adm-total').textContent=alumnos.length;
-  document.getElementById('adm-activos').textContent=alumnos.filter(function(a){return a.racha>0;}).length;
-  document.getElementById('adm-xp-total').textContent=alumnos.reduce(function(s,a){return s+a.xp;},0);
-  document.getElementById('adm-riesgo').textContent=alumnos.filter(function(a){return !a.ultimo_acceso||a.ultimo_acceso<hace3;}).length;
+  document.getElementById('adm-activos').textContent=alumnos.filter(a=>a.racha>0).length;
+  document.getElementById('adm-xp-total').textContent=alumnos.reduce((s,a)=>s+a.xp,0);
+  document.getElementById('adm-riesgo').textContent=alumnos.filter(a=>!a.ultimo_acceso||a.ultimo_acceso<hace3).length;
   const top3=alumnos.slice(0,3);
-  document.getElementById('adm-resumen').innerHTML='<div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Top 3 esta semana 🏆</div>'+top3.map(function(a,i){return '<div class="alumno-item"><div class="alum-av">'+((a.avatar||'??'))+'</div><div class="alum-info"><div class="alum-nom">'+a.nombre+'</div><div class="alum-meta">Nivel '+a.nivel+' · 🔥'+a.racha+' días</div></div><div class="alum-right"><div class="alum-xp">'+a.xp+' XP</div></div></div>';}).join('');
+  document.getElementById('adm-resumen').innerHTML=top3.map((a,i)=>{
+    const avHTML=a.avatar_url?`<img src="${a.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`:`<span style="font-size:16px">${a.avatar||'🙂'}</span>`;
+    return `<div class="alumno-item"><div class="alum-av">${avHTML}</div><div class="alum-info"><div class="alum-nom">${a.nombre}</div><div class="alum-meta">Nivel ${a.nivel} · 🔥${a.racha} días</div></div><div class="alum-right"><div class="alum-xp">${a.xp} XP</div></div></div>`;
+  }).join('');
 }
-
 async function cargarAlumnos(){
   const el=document.getElementById('ap-alumnos');
-  el.innerHTML='<div style="padding:16px 16px 8px"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;letter-spacing:1px">Todos los alumnos</div></div><div id="lista-alumnos"><div class="empty-state">Cargando...</div></div>';
-  const {data:alumnos} = await sb.from('perfiles').select('*').eq('es_admin',false).order('xp',{ascending:false});
+  el.innerHTML=`<div style="padding:14px 14px 8px"><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px">Todos los alumnos</div></div><div id="lista-alumnos"><div class="empty-state">Cargando...</div></div>`;
+  const{data:alumnos}=await sb.from('perfiles').select('*').eq('es_admin',false).order('xp',{ascending:false});
   const lista=document.getElementById('lista-alumnos');
-  if(!alumnos||alumnos.length===0){lista.innerHTML='<div class="empty-state">Aún no hay alumnos registrados.</div>';return;}
+  if(!alumnos||alumnos.length===0){lista.innerHTML='<div class="empty-state">Aún no hay alumnos.</div>';return;}
   const hace3=new Date(Date.now()-3*86400000).toISOString().split('T')[0];
   lista.innerHTML='';
-  alumnos.forEach(function(a){
+  alumnos.forEach(a=>{
     const enRiesgo=!a.ultimo_acceso||a.ultimo_acceso<hace3;
     const esNuevo=a.xp===0;
     const div=document.createElement('div');
     div.className='alumno-item'+(enRiesgo?' riesgo':'');
-    div.innerHTML='<div class="alum-av">'+(a.avatar||'??')+'</div>'
-      +'<div class="alum-info"><div class="alum-nom">'+a.nombre+'</div><div class="alum-meta">'+(a.email||'')+' · Nivel '+a.nivel+'</div></div>'
-      +'<div class="alum-right"><div class="alum-xp">'+a.xp+' XP</div><div class="alum-racha">🔥 '+a.racha+' días</div>'
-      +'<div class="alum-tag '+(enRiesgo?'tag-riesgo':esNuevo?'tag-nuevo':'tag-activo')+'">'+(enRiesgo?'Sin entrar':esNuevo?'Nuevo':'Activo')+'</div></div>';
-    div.onclick=function(){mostrarDetalleAlumno(a);};
+    const avHTML=a.avatar_url?`<img src="${a.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`:`<span style="font-size:16px">${a.avatar||'🙂'}</span>`;
+    div.innerHTML=`<div class="alum-av">${avHTML}</div><div class="alum-info"><div class="alum-nom">${a.nombre}</div><div class="alum-meta">${a.email||''} · Nivel ${a.nivel}</div></div><div class="alum-right"><div class="alum-xp">${a.xp} XP</div><div class="alum-racha">🔥 ${a.racha} días</div><div class="alum-tag ${enRiesgo?'tag-riesgo':esNuevo?'tag-nuevo':'tag-activo'}">${enRiesgo?'Sin entrar':esNuevo?'Nuevo':'Activo'}</div></div>`;
+    div.onclick=()=>mostrarDetalleAlumno(a);
     lista.appendChild(div);
   });
 }
-
 function mostrarDetalleAlumno(a){
+  const avHTML=a.avatar_url?`<img src="${a.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`:`<span style="font-size:20px">${a.avatar||'🙂'}</span>`;
   document.getElementById('bs-content').innerHTML=
-    '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:14px;border-bottom:.5px solid rgba(255,255,255,.07)">'
-    +'<div style="width:44px;height:44px;border-radius:50%;background:rgba(230,57,70,.2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:var(--red)">'+(a.avatar||'??')+'</div>'
-    +'<div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;letter-spacing:1px">'+a.nombre+'</div><div style="font-size:11px;color:var(--muted)">'+a.email+'</div></div>'
-    +'</div>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">'
-    +'<div class="rs-card"><div class="rs-n" style="color:var(--red)">'+a.xp+'</div><div class="rs-l">XP</div></div>'
-    +'<div class="rs-card"><div class="rs-n" style="color:var(--gold)">'+a.racha+'</div><div class="rs-l">Racha</div></div>'
-    +'<div class="rs-card"><div class="rs-n" style="color:var(--blue)">'+a.nivel+'</div><div class="rs-l">Nivel</div></div>'
-    +'</div>'
-    +'<div style="font-size:10px;color:var(--muted);margin-bottom:4px">Último acceso</div>'
-    +'<div style="font-size:12px;color:var(--cream);margin-bottom:14px">'+(a.ultimo_acceso?new Date(a.ultimo_acceso).toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'}):'Nunca')+'</div>';
+    `<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:14px;border-bottom:.5px solid rgba(255,255,255,.07)">
+      <div style="width:44px;height:44px;border-radius:50%;background:rgba(26,86,219,.2);display:flex;align-items:center;justify-content:center;overflow:hidden">${avHTML}</div>
+      <div><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px">${a.nombre}</div><div style="font-size:11px;color:var(--muted)">${a.email||''}</div></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
+      <div class="rs-card"><div class="rs-n" style="color:var(--gold)">${a.xp}</div><div class="rs-l">XP</div></div>
+      <div class="rs-card"><div class="rs-n" style="color:#6ee7b7">${a.racha}</div><div class="rs-l">Racha</div></div>
+      <div class="rs-card"><div class="rs-n" style="color:var(--blue)">${a.nivel}</div><div class="rs-l">Nivel</div></div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);margin-bottom:4px">Último acceso</div>
+    <div style="font-size:12px;margin-bottom:14px">${a.ultimo_acceso?new Date(a.ultimo_acceso).toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'}):'Nunca'}</div>`;
   document.getElementById('overlay-alumno').classList.add('on');
 }
 
+// CÓDIGOS DE ACCESO
+async function cargarCodigos(){
+  const el=document.getElementById('ap-codigos');
+  el.innerHTML=`<div style="padding:14px 14px 8px"><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px">Códigos de acceso 🔑</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Genera y comparte códigos con tus alumnos</div></div>
+  <div style="padding:0 14px 14px">
+    <div style="display:flex;gap:8px">
+      <input id="nuevo-codigo-input" class="config-input" style="margin:0" placeholder="Ej: UDJ-2025-A"/>
+      <button style="background:var(--azul);color:white;border:none;border-radius:8px;padding:9px 16px;font-size:13px;cursor:pointer;white-space:nowrap;font-weight:500" onclick="generarCodigo()">+ Generar</button>
+    </div>
+    <button style="width:100%;margin-top:8px;padding:10px;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);border-radius:8px;color:var(--muted);font-size:12px;cursor:pointer" onclick="generarCodigoAleatorio()">🎲 Generar código aleatorio</button>
+  </div>
+  <div class="admin-sec">Códigos activos</div>
+  <div id="lista-codigos"><div class="empty-state">Cargando...</div></div>`;
+  const{data:codigos}=await sb.from('codigos_acceso').select('*').order('created_at',{ascending:false});
+  const lista=document.getElementById('lista-codigos');
+  if(!codigos||codigos.length===0){lista.innerHTML='<div class="empty-state">Aún no hay códigos. ¡Genera el primero!</div>';return;}
+  lista.innerHTML=codigos.map(c=>`
+    <div class="codigo-item">
+      <div><div class="codigo-val">${c.codigo}</div><div style="font-size:9px;color:var(--muted);margin-top:2px">${new Date(c.created_at).toLocaleDateString('es-MX')}</div></div>
+      <span class="codigo-status ${c.usado?'cs-usado':'cs-libre'}">${c.usado?'Usado':'Disponible'}</span>
+    </div>`).join('');
+}
+async function generarCodigo(){
+  const input=document.getElementById('nuevo-codigo-input');
+  const val=input.value.trim().toUpperCase(); if(!val) return;
+  const{error}=await sb.from('codigos_acceso').insert({codigo:val,usado:false});
+  if(error){showToast('Error: código duplicado'); return;}
+  input.value=''; showToast('Código creado ✓'); cargarCodigos();
+}
+async function generarCodigoAleatorio(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const rand=Array.from({length:6},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
+  const codigo='UDG-'+rand;
+  const{error}=await sb.from('codigos_acceso').insert({codigo,usado:false});
+  if(!error){showToast('Código: '+codigo); cargarCodigos();}
+}
+
+// VIDEOS ADMIN
 function buildAdminVideos(){
   const el=document.getElementById('ap-videos');
-  el.innerHTML='<div style="padding:16px 16px 8px"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;letter-spacing:1px">Videos por tema</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Agrega links de TikTok, YouTube o cualquier red social</div></div>';
-  BLOQUES.forEach(function(b){
+  el.innerHTML=`<div style="padding:14px 14px 8px"><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px">Videos por tema</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Agrega links de YouTube, TikTok o cualquier plataforma</div></div>`;
+  BLOQUES.forEach(b=>{
     const header=document.createElement('div');
-    header.style.cssText='font-size:9px;letter-spacing:2px;text-transform:uppercase;color:'+b.color+';padding:12px 16px 6px';
-    header.textContent='Bloque '+b.num+' — '+b.nombre;
+    header.style.cssText=`font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${b.color};padding:12px 14px 6px`;
+    header.textContent='Tema '+b.num+' — '+b.nombre;
     el.appendChild(header);
-    b.temas.forEach(function(t){
-      const div=document.createElement('div');
-      div.className='video-admin-item';
+    b.temas.forEach(t=>{
+      const div=document.createElement('div'); div.className='video-admin-item';
       const urlActual=videoLinks[t.id]||'';
-      div.innerHTML='<div class="vai-header"><span class="vai-nom">'+t.nombre+'</span><span class="vai-bloque">Tema '+t.id+'</span></div>'
-        +'<div class="vai-input-wrap">'
-        +'<input class="vai-input" id="vid-input-'+t.id+'" placeholder="https://tiktok.com/... o YouTube, Instagram..." value="'+urlActual+'"/>'
-        +'<button class="vai-save" onclick="guardarVideo('+t.id+')">Guardar</button>'
-        +'</div>'
-        +'<div class="vai-current" id="vid-status-'+t.id+'">'+(urlActual?'✅ Video guardado: <a href="'+urlActual+'" target="_blank">ver link</a>':'Sin video aún')+'</div>';
+      div.innerHTML=`<div class="vai-header"><span class="vai-nom">${t.nombre}</span><span class="vai-bloque">Tema ${t.id}</span></div>
+        <div class="vai-input-wrap">
+          <input class="vai-input" id="vid-input-${t.id}" placeholder="https://youtube.com/... o TikTok, Instagram..." value="${urlActual}"/>
+          <button class="vai-save" onclick="guardarVideo(${t.id})">Guardar</button>
+        </div>
+        <div class="vai-current" id="vid-status-${t.id}">${urlActual?'✅ Video guardado: <a href="'+urlActual+'" target="_blank">ver link</a>':'Sin video aún'}</div>`;
       el.appendChild(div);
     });
   });
 }
-
 async function guardarVideo(temaId){
   const input=document.getElementById('vid-input-'+temaId);
   const url=input.value.trim();
   const statusEl=document.getElementById('vid-status-'+temaId);
   statusEl.textContent='Guardando...';
-  try {
-    const {error}=await sb.from('video_links').upsert({tema_id:temaId,url:url},{onConflict:'tema_id'});
+  try{
+    const{error}=await sb.from('video_links').upsert({tema_id:temaId,url},{onConflict:'tema_id'});
     if(error) throw error;
     videoLinks[temaId]=url;
-    statusEl.innerHTML=url?'✅ Video guardado: <a href="'+url+'" target="_blank">ver link</a>':'Sin video';
-  } catch(e){
-    statusEl.textContent='Error al guardar. Intenta de nuevo.';
-  }
+    statusEl.innerHTML=url?`✅ Video guardado: <a href="${url}" target="_blank">ver link</a>`:'Sin video';
+  }catch(e){statusEl.textContent='Error al guardar.';}
 }
 
+// CONFIG ADMIN
 function buildAdminConfig(){
   const el=document.getElementById('ap-config');
-  el.innerHTML='<div style="padding:16px 16px 8px"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;letter-spacing:1px">Configuración</div></div>'
-    +'<div class="config-section">'
-    +'<div class="config-title">Tu perfil de Profe</div>'
-    +'<div class="config-desc">'+CU.email+'</div>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
-    +'<div class="rs-card"><div class="rs-n" style="color:var(--gold)">PROFE</div><div class="rs-l">Rol</div></div>'
-    +'<div class="rs-card"><div class="rs-n" style="font-size:13px">'+new Date(CU.created_at).toLocaleDateString('es-MX',{month:'short',year:'numeric'})+'</div><div class="rs-l">Miembro desde</div></div>'
-    +'</div>'
-    +'</div>'
-    +'<div class="config-section">'
-    +'<div class="config-title">🥊 Tu canal de TikTok</div>'
-    +'<div class="config-desc">@elprofecolorado · 8,200 seguidores<br><br>Cada video de TikTok es el Round 1 de un tema. Cópialo en la sección Videos.</div>'
-    +'</div>'
-    +'<div class="config-section">'
-    +'<div class="config-title">Link de la app</div>'
-    +'<div class="config-desc">Comparte este link en tu bio de TikTok y redes sociales:</div>'
-    +'<div style="background:rgba(255,255,255,.05);border-radius:7px;padding:10px;font-size:11px;color:var(--red);word-break:break-all;margin-bottom:10px">https://elprofecolorado.github.io/colorado-mate-club</div>'
-    +'<button class="config-btn" onclick="navigator.clipboard.writeText(\'https://elprofecolorado.github.io/colorado-mate-club\').then(function(){alert(\'¡Link copiado!\');})">COPIAR LINK</button>'
-    +'</div>'
-    +'<div style="padding:0 16px 24px"><button class="config-btn danger" onclick="doLogout()">Cerrar sesión</button></div>';
+  el.innerHTML=`<div style="padding:14px 14px 8px"><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px">Configuración</div></div>
+  <div class="config-section">
+    <div class="config-title">Tu perfil de Maestro</div>
+    <div class="config-desc">${CU?.email||''}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="rs-card"><div class="rs-n" style="color:var(--gold)">MAESTRO</div><div class="rs-l">Rol</div></div>
+      <div class="rs-card"><div class="rs-n" style="font-size:13px">${CU?new Date(CU.created_at).toLocaleDateString('es-MX',{month:'short',year:'numeric'}):'—'}</div><div class="rs-l">Desde</div></div>
+    </div>
+  </div>
+  <div class="config-section">
+    <div class="config-title">Foto de perfil de Maestro</div>
+    <div class="config-desc">Tu foto aparece en las tarjetas de los alumnos.</div>
+    <label style="display:block;width:100%;padding:10px;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);border-radius:8px;text-align:center;cursor:pointer;font-size:13px;color:var(--muted)">📷 Subir foto<input type="file" accept="image/*" style="display:none" onchange="cambiarFotoPerfil(this)"/></label>
+    <div style="margin-top:8px;font-size:10px;color:var(--muted);margin-bottom:6px">O emoji:</div>
+    <div class="avatar-picker" id="avatar-picker-admin"></div>
+  </div>
+  <div class="config-section">
+    <div class="config-title">Link de la app</div>
+    <div class="config-desc">Comparte este link con tus alumnos:</div>
+    <div style="background:rgba(255,255,255,.05);border-radius:7px;padding:10px;font-size:11px;color:var(--azul);word-break:break-all;margin-bottom:10px" id="app-link">${window.location.href}</div>
+    <button class="config-btn" onclick="navigator.clipboard.writeText(document.getElementById('app-link').textContent).then(()=>showToast('¡Link copiado!'))">COPIAR LINK</button>
+  </div>
+  <div style="padding:0 14px 24px"><button class="config-btn danger" onclick="doLogout()">Cerrar sesión</button></div>`;
+  buildEmojiPicker('avatar-picker-admin', true);
 }
 
 // ══════════════════════════
-// START
+// UTILS
 // ══════════════════════════
-init();
-</script>
-</body>
-</html>
+function showToast(msg){
+  const t=document.getElementById('toast-el');
+  t.textContent=msg; t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),2500);
+}
+// SQL para nuevas tablas (ejecutar en Supabase SQL Editor)
+// create table if not exists codigos_acceso (id serial primary key, codigo text unique not null, usado boolean default false, usado_por uuid references auth.users(id), created_at timestamp default now());
+// create table if not exists reacciones (id serial primary key, post_id int references posts(id) on delete cascade, user_id uuid references auth.users(id), emoji text default '👍', unique(post_id,user_id));
+// create table if not exists comentarios (id serial primary key, post_id int references posts(id) on delete cascade, user_id uuid references auth.users(id), content text, edited boolean default false, created_at timestamp default now());
+// alter table perfiles add column if not exists avatar text default '🙂';
+// alter table perfiles add column if not exists avatar_url text;
+// alter table perfiles add column if not exists codigo_usado text;
+// alter table posts add column if not exists edited bool
