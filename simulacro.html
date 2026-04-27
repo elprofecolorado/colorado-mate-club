@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Simulacro PIENSE II — Prepa UDG</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --azul:#1a56db;--azul2:#1e40af;--dark:#0a0e1a;--dark2:#111827;--dark3:#1f2937;
+  --cream:#f0f4ff;--muted:#6b7280;--gold:#f59e0b;--green:#10b981;
+  --red:#ef4444;--blue:#3b82f6;--purple:#7c3aed;
+}
+html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;color:var(--cream);overflow-x:hidden;}
+
+/* ── LOADING ── */
+#loading{position:fixed;inset:0;background:var(--dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:14px;}
+#loading.hide{display:none;}
+.ld-logo{width:72px;height:72px;background:linear-gradient(135deg,var(--azul),var(--purple));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:36px;animation:pulse 1.2s ease-in-out infinite;}
+.ld-txt{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--muted);}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+
+/* ── PANTALLAS ── */
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
+
+/* ── AUTH ── */
+#s-auth{align-items:center;justify-content:center;padding:24px 20px;background:var(--dark2);}
+.auth-logo{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:24px;}
+.auth-icon{width:72px;height:72px;background:linear-gradient(135deg,var(--azul),var(--purple));border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:36px;}
+.auth-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;}
+.auth-sub{font-size:11px;color:var(--muted);text-align:center;line-height:1.5;}
+.auth-card{width:100%;max-width:380px;background:var(--dark);border:.5px solid rgba(255,255,255,.1);border-radius:16px;padding:22px;}
+.field{margin-bottom:13px;}
+.field label{font-size:10px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;display:block;margin-bottom:5px;}
+.field input{width:100%;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.12);border-radius:9px;padding:12px 14px;font-size:14px;color:var(--cream);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
+.field input:focus{border-color:var(--azul);}
+.field input::placeholder{color:var(--muted);}
+.auth-submit{width:100%;padding:14px;background:var(--azul);color:white;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;cursor:pointer;margin-top:4px;transition:opacity .2s;}
+.auth-submit:disabled{opacity:.5;cursor:not-allowed;}
+.auth-msg{border-radius:8px;padding:9px 12px;font-size:12px;margin-bottom:12px;display:none;}
+.auth-msg.on{display:block;}
+.auth-msg.err{background:rgba(239,68,68,.15);color:#fca5a5;border:.5px solid rgba(239,68,68,.3);}
+.auth-msg.ok{background:rgba(16,185,129,.15);color:#6ee7b7;border:.5px solid rgba(16,185,129,.3);}
+.auth-switch{text-align:center;margin-top:14px;font-size:12px;color:var(--muted);}
+.auth-switch span{color:var(--azul);cursor:pointer;font-weight:500;}
+.back-app{text-align:center;margin-top:10px;}
+.back-app a{font-size:11px;color:var(--muted);text-decoration:none;}
+
+/* ── COVER ── */
+#s-cover{align-items:center;justify-content:center;padding:24px 20px;background:var(--dark);text-align:center;}
+.cover-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(26,86,219,.15);border:.5px solid rgba(26,86,219,.3);border-radius:20px;padding:5px 14px;font-size:11px;color:var(--azul);margin-bottom:20px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;}
+.cover-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,8vw,3rem);letter-spacing:2px;line-height:1.1;margin-bottom:8px;}
+.cover-title span{color:var(--gold);}
+.cover-sub{font-size:13px;color:var(--muted);line-height:1.6;max-width:340px;margin:0 auto 24px;}
+.cover-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:360px;margin:0 auto 24px;}
+.ci-card{background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:11px;padding:14px;}
+.ci-n{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;}
+.ci-l{font-size:10px;color:var(--muted);margin-top:3px;}
+.ci-n.a{color:var(--gold);}
+.ci-n.b{color:var(--green);}
+.ci-n.c{color:var(--blue);}
+.ci-n.d{color:var(--purple);}
+.cover-areas{width:100%;max-width:360px;margin:0 auto 24px;text-align:left;}
+.area-row{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--dark2);border-radius:8px;margin-bottom:6px;border:.5px solid rgba(255,255,255,.06);}
+.area-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.area-nom{font-size:12px;}
+.area-cnt{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);}
+.cover-warning{width:100%;max-width:360px;margin:0 auto 24px;background:rgba(245,158,11,.08);border:.5px solid rgba(245,158,11,.25);border-radius:10px;padding:12px 14px;font-size:12px;color:rgba(245,158,11,.9);line-height:1.6;text-align:left;}
+.btn-start{width:100%;max-width:360px;padding:16px;background:var(--azul);color:white;border:none;border-radius:11px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;cursor:pointer;transition:background .2s,transform .1s;box-shadow:0 4px 20px rgba(26,86,219,.3);}
+.btn-start:hover{background:var(--azul2);transform:translateY(-1px);}
+
+/* ── EXAMEN ── */
+#s-exam{background:var(--dark);}
+.exam-topbar{background:var(--dark2);border-bottom:.5px solid rgba(255,255,255,.07);padding:10px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0;position:sticky;top:0;z-index:10;}
+.et-back{background:none;border:.5px solid rgba(255,255,255,.1);color:var(--muted);padding:5px 10px;border-radius:6px;cursor:pointer;font-size:11px;}
+.et-area{flex:1;text-align:center;}
+.et-area-name{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.et-q{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;}
+.timer-display{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;min-width:64px;text-align:right;}
+.timer-display.warn{color:var(--gold);}
+.timer-display.danger{color:var(--red);animation:blink .8s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+
+.progress-strip{height:3px;background:rgba(255,255,255,.06);flex-shrink:0;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--azul),var(--gold));transition:width .3s;}
+
+.exam-body{flex:1;overflow-y:auto;padding:16px 14px 100px;}
+
+.q-area-tag{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:9px;font-family:'JetBrains Mono',monospace;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;}
+.q-num-label{font-size:10px;color:var(--muted);margin-bottom:8px;font-family:'JetBrains Mono',monospace;}
+.q-text{font-size:15px;line-height:1.65;margin-bottom:18px;font-weight:500;}
+.q-expr{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--gold);background:rgba(245,158,11,.08);border-left:3px solid var(--gold);padding:10px 13px;border-radius:0 8px 8px 0;margin:10px 0;line-height:1.6;}
+
+.opts{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.opt{display:flex;align-items:center;gap:12px;background:var(--dark2);border:.5px solid rgba(255,255,255,.09);border-radius:10px;padding:13px 14px;cursor:pointer;transition:all .18s;}
+.opt:active{transform:scale(.98);}
+.opt.sel{border-color:var(--azul);background:rgba(26,86,219,.12);}
+.opt.correct{border-color:var(--green)!important;background:rgba(16,185,129,.12)!important;}
+.opt.wrong{border-color:var(--red)!important;background:rgba(239,68,68,.1)!important;}
+.opt-letter{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.07);border:.5px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:13px;flex-shrink:0;transition:all .18s;}
+.opt.sel .opt-letter{background:var(--azul);border-color:var(--azul);}
+.opt.correct .opt-letter{background:var(--green);border-color:var(--green);}
+.opt.wrong .opt-letter{background:var(--red);border-color:var(--red);}
+.opt-text{font-size:13px;line-height:1.5;}
+
+.feedback-box{border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.6;margin-bottom:16px;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.feedback-box.ok{background:rgba(16,185,129,.1);border:.5px solid rgba(16,185,129,.3);color:#6ee7b7;}
+.feedback-box.err{background:rgba(239,68,68,.08);border:.5px solid rgba(239,68,68,.25);color:#fca5a5;}
+.feedback-box b{display:block;margin-bottom:4px;font-size:13px;}
+
+.exam-nav{position:fixed;bottom:0;left:0;right:0;background:var(--dark2);border-top:.5px solid rgba(255,255,255,.07);padding:10px 14px;display:flex;gap:10px;z-index:10;}
+.btn-prev{flex:0 0 44px;padding:12px;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);border-radius:9px;color:var(--cream);font-size:16px;cursor:pointer;}
+.btn-next{flex:1;padding:13px;background:var(--azul);color:white;border:none;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;}
+.btn-next:disabled{opacity:.4;cursor:not-allowed;}
+.btn-next.finish{background:var(--green);}
+
+/* mini mapa de preguntas */
+.qmap-btn{flex:0 0 44px;padding:12px;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);border-radius:9px;color:var(--cream);font-size:14px;cursor:pointer;}
+.qmap-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;align-items:flex-end;}
+.qmap-overlay.on{display:flex;}
+.qmap-sheet{background:var(--dark2);border-radius:18px 18px 0 0;width:100%;max-height:70vh;overflow-y:auto;padding:16px;}
+.qmap-handle{width:34px;height:3px;background:rgba(255,255,255,.15);border-radius:2px;margin:0 auto 14px;}
+.qmap-title{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1px;margin-bottom:12px;}
+.qmap-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-bottom:14px;}
+.qmap-dot{width:100%;aspect-ratio:1;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:all .15s;}
+.qmap-dot.pend{background:rgba(255,255,255,.06);border:.5px solid rgba(255,255,255,.1);color:var(--muted);}
+.qmap-dot.answered{background:rgba(26,86,219,.2);border:.5px solid rgba(26,86,219,.4);color:var(--azul);}
+.qmap-dot.current{background:var(--azul);color:white;}
+.qmap-close{width:100%;padding:11px;background:none;border:.5px solid rgba(255,255,255,.1);border-radius:9px;color:var(--muted);font-size:13px;cursor:pointer;}
+
+/* ── RESULTADOS ── */
+#s-results{background:var(--dark);padding:0;}
+.res-hero{background:linear-gradient(180deg,var(--dark2) 0%,var(--dark) 100%);padding:28px 20px 24px;text-align:center;border-bottom:.5px solid rgba(255,255,255,.06);}
+.res-ring-wrap{position:relative;width:140px;height:140px;margin:0 auto 16px;}
+.res-ring-wrap svg{transform:rotate(-90deg);}
+.res-ring-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.res-pct{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;line-height:1;}
+.res-pct-sub{font-size:10px;color:var(--muted);letter-spacing:1px;}
+.res-title{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:1px;margin-bottom:6px;}
+.res-msg{font-size:13px;color:var(--muted);line-height:1.6;max-width:300px;margin:0 auto;}
+
+.res-body{padding:16px 14px 40px;}
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px;}
+.res-stat{background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:11px;padding:14px;text-align:center;}
+.rs-n{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;}
+.rs-l{font-size:9px;color:var(--muted);margin-top:3px;letter-spacing:.5px;}
+
+.area-breakdown{margin-bottom:16px;}
+.ab-title{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.ab-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
+.ab-name{font-size:12px;width:130px;flex-shrink:0;}
+.ab-bar-wrap{flex:1;height:7px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;}
+.ab-bar-fill{height:100%;border-radius:4px;transition:width 1s cubic-bezier(.22,1,.36,1);}
+.ab-score{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);min-width:40px;text-align:right;}
+
+.btn-retry{width:100%;padding:14px;background:var(--azul);color:white;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;cursor:pointer;margin-bottom:10px;}
+.btn-goapp{width:100%;padding:12px;background:rgba(255,255,255,.05);color:var(--cream);border:.5px solid rgba(255,255,255,.1);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;}
+
+/* ── DASHBOARD MAESTRO ── */
+#s-dash{background:var(--dark);}
+.dash-topbar{background:var(--dark2);border-bottom:.5px solid rgba(255,255,255,.07);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.dt-left{display:flex;align-items:center;gap:8px;}
+.dt-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--azul),var(--purple));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.dt-title{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;}
+.dt-badge{background:rgba(245,158,11,.2);border:.5px solid rgba(245,158,11,.4);border-radius:20px;padding:3px 10px;font-size:9px;color:var(--gold);letter-spacing:1px;font-weight:500;}
+.dash-scroll{flex:1;overflow-y:auto;padding:14px;}
+
+.dash-stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px;}
+.ds-card{background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:11px;padding:14px;}
+.ds-n{font-family:'Bebas Neue',sans-serif;font-size:32px;line-height:1;}
+.ds-l{font-size:10px;color:var(--muted);margin-top:3px;}
+.ds-n.gold{color:var(--gold);}
+.ds-n.green{color:var(--green);}
+.ds-n.blue{color:var(--blue);}
+.ds-n.red{color:var(--red);}
+
+.dash-sec{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;margin-top:6px;}
+
+.alumno-row{display:flex;align-items:center;gap:10px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:10px;padding:12px 13px;margin-bottom:8px;cursor:pointer;transition:border-color .2s;}
+.alumno-row:hover{border-color:rgba(26,86,219,.3);}
+.ar-av{width:36px;height:36px;border-radius:50%;background:rgba(26,86,219,.2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.ar-info{flex:1;}
+.ar-name{font-size:13px;font-weight:500;}
+.ar-meta{font-size:10px;color:var(--muted);margin-top:2px;}
+.ar-score{text-align:right;}
+.ar-pct{font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1;}
+.ar-tag{font-size:9px;padding:2px 7px;border-radius:10px;margin-top:3px;display:inline-block;}
+.tag-excelente{background:rgba(16,185,129,.2);color:#6ee7b7;}
+.tag-bien{background:rgba(59,130,246,.2);color:var(--blue);}
+.tag-regular{background:rgba(245,158,11,.2);color:var(--gold);}
+.tag-riesgo{background:rgba(239,68,68,.15);color:var(--red);}
+
+.area-dash-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.adr-name{font-size:12px;width:140px;flex-shrink:0;}
+.adr-bar{flex:1;height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;}
+.adr-fill{height:100%;border-radius:4px;}
+.adr-val{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);min-width:36px;text-align:right;}
+
+/* detalle alumno */
+.alumno-detail{display:none;position:fixed;inset:0;background:var(--dark);z-index:300;overflow-y:auto;padding:0;}
+.alumno-detail.on{display:block;}
+.ad-topbar{background:var(--dark2);padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:.5px solid rgba(255,255,255,.07);position:sticky;top:0;}
+.ad-back{background:none;border:.5px solid rgba(255,255,255,.1);color:var(--muted);padding:6px 12px;border-radius:7px;cursor:pointer;font-size:12px;}
+.ad-body{padding:14px;}
+.ad-hero{text-align:center;padding:16px 0 20px;}
+.ad-av{width:64px;height:64px;border-radius:50%;background:rgba(26,86,219,.2);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 10px;}
+.ad-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;}
+.ad-email{font-size:11px;color:var(--muted);margin-top:2px;}
+
+.btn-refresh{background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);color:var(--muted);padding:6px 12px;border-radius:7px;cursor:pointer;font-size:11px;display:flex;align-items:center;gap:5px;}
+
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--dark2);border:.5px solid rgba(255,255,255,.15);padding:10px 18px;border-radius:20px;font-size:12px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;}
+.toast.on{opacity:1;}
+.empty-state{text-align:center;padding:40px 20px;font-size:13px;color:var(--muted);font-style:italic;}
+</style>
+</head>
+<body>
+
+<div id="loading"><div class="ld-logo">📝</div><div class="ld-txt">Simulacro PIENSE II</div></div>
+
+<!-- AUTH -->
+<div class="screen" id="s-auth">
+  <div class="auth-logo">
+    <div class="auth-icon">📝</div>
+    <div class="auth-title">PIENSE II</div>
+    <div class="auth-sub">Simulacro de admisión Prepa UDG<br>Matemáticas + Habilidad Numérica</div>
+  </div>
+  <div class="auth-card">
+    <div class="auth-msg" id="auth-msg"></div>
+    <div id="auth-login-form">
+      <div class="field"><label>Correo</label><input id="a-email" type="email" placeholder="tucorreo@gmail.com"/></div>
+      <div class="field"><label>Contraseña</label><input id="a-pass" type="password" placeholder="••••••••"/></div>
+      <button class="auth-submit" id="auth-btn" onclick="doAuth()">ENTRAR →</button>
+      <div class="auth-switch">¿No tienes cuenta? <span onclick="toggleAuthMode()">Regístrate</span></div>
+    </div>
+  </div>
+  <div class="back-app"><a href="index.html">← Volver a la app</a></div>
+</div>
+
+<!-- COVER -->
+<div class="screen" id="s-cover">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;overflow-y:auto;">
+    <div class="cover-badge">📝 Simulacro Oficial</div>
+    <div class="cover-title">PIENSE II<br><span>Matemáticas</span></div>
+    <div class="cover-sub">Simulacro completo estilo examen de admisión UDG. 120 reactivos cronometrados.</div>
+    <div class="cover-info-grid">
+      <div class="ci-card"><div class="ci-n a">120</div><div class="ci-l">Reactivos</div></div>
+      <div class="ci-card"><div class="ci-n b">90</div><div class="ci-l">Minutos</div></div>
+      <div class="ci-card"><div class="ci-n c">4</div><div class="ci-l">Áreas</div></div>
+      <div class="ci-card"><div class="ci-n d">4</div><div class="ci-l">Opciones c/u</div></div>
+    </div>
+    <div class="cover-areas">
+      <div class="area-row"><div class="area-dot" style="background:var(--gold)"></div><span class="area-nom">Aritmética y Álgebra</span><span class="area-cnt">40 react.</span></div>
+      <div class="area-row"><div class="area-dot" style="background:var(--green)"></div><span class="area-nom">Geometría</span><span class="area-cnt">25 react.</span></div>
+      <div class="area-row"><div class="area-dot" style="background:var(--blue)"></div><span class="area-nom">Estadística básica</span><span class="area-cnt">15 react.</span></div>
+      <div class="area-row"><div class="area-dot" style="background:var(--purple)"></div><span class="area-nom">Habilidad Numérica</span><span class="area-cnt">40 react.</span></div>
+    </div>
+    <div class="cover-warning">⚠️ Una vez iniciado el examen el cronómetro no se detiene. No cierres la página. Tus respuestas se guardan automáticamente.</div>
+    <button class="btn-start" onclick="startExam()" id="btn-start-exam">INICIAR SIMULACRO →</button>
+    <div style="margin-top:12px;font-size:11px;color:var(--muted);" id="cover-prev-info"></div>
+    <div style="margin-top:10px"><a href="index.html" style="font-size:11px;color:var(--muted);">← Volver a la app</a></div>
+  </div>
+</div>
+
+<!-- EXAMEN -->
+<div class="screen" id="s-exam">
+  <div class="exam-topbar">
+    <button class="et-back" onclick="confirmExit()">✕</button>
+    <div class="et-area">
+      <div class="et-area-name" id="et-area">Área</div>
+      <div class="et-q" id="et-q">Pregunta 1 / 120</div>
+    </div>
+    <div class="timer-display" id="timer">90:00</div>
+  </div>
+  <div class="progress-strip"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+  <div class="exam-body" id="exam-body"></div>
+  <div class="exam-nav">
+    <button class="btn-prev" onclick="navQ(-1)">←</button>
+    <button class="qmap-btn" onclick="openQmap()">⊞</button>
+    <button class="btn-next" id="btn-next" onclick="navQ(1)">SIGUIENTE →</button>
+  </div>
+</div>
+
+<!-- RESULTADOS ALUMNO -->
+<div class="screen" id="s-results">
+  <div class="res-hero">
+    <div class="res-ring-wrap">
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r="60" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="10"/>
+        <circle id="ring-fill" cx="70" cy="70" r="60" fill="none" stroke="#10b981" stroke-width="10"
+          stroke-linecap="round" stroke-dasharray="377" stroke-dashoffset="377"
+          style="transition:stroke-dashoffset 1.4s cubic-bezier(.22,1,.36,1)"/>
+      </svg>
+      <div class="res-ring-inner">
+        <div class="res-pct" id="res-pct">0%</div>
+        <div class="res-pct-sub">ACIERTOS</div>
+      </div>
+    </div>
+    <div class="res-title" id="res-title">Completado</div>
+    <div class="res-msg" id="res-msg"></div>
+  </div>
+  <div class="res-body">
+    <div class="res-grid">
+      <div class="res-stat"><div class="rs-n" style="color:var(--green)" id="rs-ok">0</div><div class="rs-l">Correctas</div></div>
+      <div class="res-stat"><div class="rs-n" style="color:var(--red)" id="rs-bad">0</div><div class="rs-l">Incorrectas</div></div>
+      <div class="res-stat"><div class="rs-n" style="color:var(--gold)" id="rs-time">—</div><div class="rs-l">Tiempo usado</div></div>
+      <div class="res-stat"><div class="rs-n" style="color:var(--blue)" id="rs-blank">0</div><div class="rs-l">Sin responder</div></div>
+    </div>
+    <div class="area-breakdown">
+      <div class="ab-title">Desempeño por área</div>
+      <div id="ab-rows"></div>
+    </div>
+    <button class="btn-retry" onclick="location.reload()">🔄 Repetir simulacro</button>
+    <button class="btn-goapp" onclick="window.location.href='index.html'">← Volver a la app</button>
+  </div>
+</div>
+
+<!-- DASHBOARD MAESTRO -->
+<div class="screen" id="s-dash">
+  <div class="dash-topbar">
+    <div class="dt-left">
+      <div class="dt-icon">📊</div>
+      <div class="dt-title">Dashboard — Maestro</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="btn-refresh" onclick="loadDash()">↻ Actualizar</button>
+      <span class="dt-badge">MAESTRO</span>
+    </div>
+  </div>
+  <div class="dash-scroll" id="dash-scroll">
+    <div class="empty-state">Cargando datos...</div>
+  </div>
+  <!-- Detalle alumno -->
+  <div class="alumno-detail" id="alumno-detail">
+    <div class="ad-topbar">
+      <button class="ad-back" onclick="closeDetail()">← Volver</button>
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px">Detalle del alumno</span>
+    </div>
+    <div class="ad-body" id="ad-body"></div>
+  </div>
+</div>
+
+<!-- Q MAP -->
+<div class="qmap-overlay" id="qmap-overlay" onclick="if(event.target===this)closeQmap()">
+  <div class="qmap-sheet">
+    <div class="qmap-handle"></div>
+    <div class="qmap-title">Mapa de preguntas</div>
+    <div class="qmap-grid" id="qmap-grid"></div>
+    <button class="qmap-close" onclick="closeQmap()">Cerrar</button>
+  </div>
+</div>
+
+<div id="toast-el" class="toast"></div>
+
+<script>
+// ════════════════════════════════════════
+// SUPABASE
+// ════════════════════════════════════════
+const SURL='https://yjoapzwkjsdphutyzxcg.supabase.co';
+const SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlqb2FwendranNkcGh1dHl6eGNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NzUyODksImV4cCI6MjA4OTA1MTI4OX0.Bz5zjBTq1bA-0cNFLUegTfVi3_Yh8yaQiOUILU445Rw';
+const sb=supabase.createClient(SURL,SKEY);
+let CU=null, perfil=null, esAdmin=false;
+
+// ════════════════════════════════════════
+// BANCO DE 120 REACTIVOS
+// ════════════════════════════════════════
+const AREAS={
+  aritmetica:{nombre:'Aritmética y Álgebra',color:'#f59e0b',colorSoft:'rgba(245,158,11,.15)'},
+  geometria:{nombre:'Geometría',color:'#10b981',colorSoft:'rgba(16,185,129,.15)'},
+  estadistica:{nombre:'Estadística',color:'#3b82f6',colorSoft:'rgba(59,130,246,.15)'},
+  habilidad:{nombre:'Habilidad Numérica',color:'#7c3aed',colorSoft:'rgba(124,58,237,.15)'}
+};
+
+const REACTIVOS=[
+// ═══ ARITMÉTICA Y ÁLGEBRA (40) ═══
+{a:'aritmetica',q:'¿Cuál es el resultado de 3/4 + 5/6?',e:null,opts:['19/12','8/10','2/3','1/2'],c:0,ex:'MCM(4,6)=12. 9/12+10/12=19/12'},
+{a:'aritmetica',q:'Simplifica la fracción 36/48.',e:null,opts:['3/4','2/3','4/5','5/6'],c:0,ex:'MCD(36,48)=12. 36÷12=3, 48÷12=4 → 3/4'},
+{a:'aritmetica',q:'¿Cuánto es el 30% de 250?',e:null,opts:['75','70','80','65'],c:0,ex:'250×0.30=75'},
+{a:'aritmetica',q:'Un artículo cuesta $480 con 20% de descuento. ¿Cuál era el precio original?',e:null,opts:['$600','$576','$550','$620'],c:0,ex:'P×0.8=480 → P=480÷0.8=600'},
+{a:'aritmetica',q:'¿Cuál es el MCM de 12 y 18?',e:null,opts:['36','24','6','72'],c:0,ex:'12=2²×3, 18=2×3². MCM=2²×3²=36'},
+{a:'aritmetica',q:'Resuelve: 2³ × 2⁴',e:null,opts:['2⁷','2¹²','4⁷','2⁶'],c:0,ex:'Misma base: suma exponentes. 2^(3+4)=2⁷'},
+{a:'aritmetica',q:'¿Cuánto es √144?',e:null,opts:['12','11','13','14'],c:0,ex:'12×12=144'},
+{a:'aritmetica',q:'Si x = 3, ¿cuánto vale 4x² − 2x + 1?',e:'4x² − 2x + 1',opts:['31','33','25','29'],c:0,ex:'4(9)−2(3)+1=36−6+1=31'},
+{a:'aritmetica',q:'Resuelve la ecuación:',e:'5x − 3 = 2x + 9',opts:['x=4','x=3','x=5','x=6'],c:0,ex:'3x=12 → x=4'},
+{a:'aritmetica',q:'Simplifica la expresión:',e:'(3x + 2) + (5x − 7)',opts:['8x−5','8x+9','6x−5','8x−9'],c:0,ex:'3x+5x=8x, 2−7=−5 → 8x−5'},
+{a:'aritmetica',q:'¿Cuánto es (−3)³?',e:null,opts:['−27','27','−9','9'],c:0,ex:'(−3)(−3)(−3)=−27'},
+{a:'aritmetica',q:'Resuelve:',e:'2(x − 4) = 3x + 1',opts:['x=−9','x=9','x=−3','x=3'],c:0,ex:'2x−8=3x+1 → −x=9 → x=−9'},
+{a:'aritmetica',q:'¿Cuántos minutos hay en 3.5 horas?',e:null,opts:['210','200','180','240'],c:0,ex:'3.5×60=210 minutos'},
+{a:'aritmetica',q:'Efectúa la multiplicación:',e:'(x + 3)(x − 5)',opts:['x²−2x−15','x²+2x−15','x²−2x+15','x²+8x−15'],c:0,ex:'x²−5x+3x−15=x²−2x−15'},
+{a:'aritmetica',q:'Factoriza:',e:'x² − 9',opts:['(x+3)(x−3)','(x−3)²','(x+3)²','(x−9)(x+1)'],c:0,ex:'Diferencia de cuadrados: (x+3)(x−3)'},
+{a:'aritmetica',q:'Si a = 2 y b = −3, ¿cuánto es a² − b²?',e:null,opts:['−5','5','−4','13'],c:0,ex:'4−9=−5'},
+{a:'aritmetica',q:'¿Cuánto es 2/3 de 90?',e:null,opts:['60','45','30','75'],c:0,ex:'90×(2/3)=60'},
+{a:'aritmetica',q:'Un tren recorre 360 km en 4 horas. ¿Cuál es su velocidad promedio?',e:null,opts:['90 km/h','80 km/h','100 km/h','85 km/h'],c:0,ex:'v=d/t=360/4=90 km/h'},
+{a:'aritmetica',q:'Resuelve el sistema:',e:'x + y = 7\n2x − y = 2',opts:['x=3, y=4','x=4, y=3','x=2, y=5','x=5, y=2'],c:0,ex:'Sumando: 3x=9 → x=3, y=4'},
+{a:'aritmetica',q:'¿Cuánto es (2x³)²?',e:null,opts:['4x⁶','2x⁶','4x⁵','8x⁶'],c:0,ex:'2²=4, (x³)²=x⁶ → 4x⁶'},
+{a:'aritmetica',q:'Divide el polinomio entre el monomio:',e:'(12x³ − 8x² + 4x) ÷ 4x',opts:['3x²−2x+1','3x²+2x−1','3x−2+1/x','4x²−2x'],c:0,ex:'12x³/4x=3x², 8x²/4x=2x, 4x/4x=1'},
+{a:'aritmetica',q:'¿Cuál es el valor de la expresión?',e:'3² + 4² − 5²',opts:['0','2','−2','10'],c:0,ex:'9+16−25=0'},
+{a:'aritmetica',q:'Si el perímetro de un cuadrado es 52 cm, ¿cuánto mide su lado?',e:null,opts:['13 cm','14 cm','12 cm','15 cm'],c:0,ex:'P=4L → L=52/4=13 cm'},
+{a:'aritmetica',q:'Resuelve:',e:'|−8| + |−5| − |3|',opts:['10','6','16','0'],c:0,ex:'8+5−3=10'},
+{a:'aritmetica',q:'¿Cuánto es 0.0045 × 10⁴?',e:null,opts:['45','4.5','450','0.45'],c:0,ex:'0.0045×10000=45'},
+{a:'aritmetica',q:'Expresa en notación científica: 0.000372',e:null,opts:['3.72×10⁻⁴','3.72×10⁴','37.2×10⁻³','0.372×10⁻³'],c:0,ex:'Se mueve el punto 4 lugares a la derecha'},
+{a:'aritmetica',q:'¿Cuánto es (x+y)² si x=3 y y=−1?',e:null,opts:['4','8','16','−4'],c:0,ex:'(3+(−1))²=2²=4'},
+{a:'aritmetica',q:'Un grifo llena un tanque en 6 horas y otro en 3 horas. Juntos, ¿en cuánto tiempo llenan el tanque?',e:null,opts:['2 horas','1.5 horas','4 horas','2.5 horas'],c:0,ex:'1/6+1/3=1/2 tanque/hora → 2 horas'},
+{a:'aritmetica',q:'¿Cuánto es la raíz cuadrada de 225?',e:null,opts:['15','14','16','12'],c:0,ex:'15²=225'},
+{a:'aritmetica',q:'Si 4 obreros terminan un trabajo en 15 días, ¿cuántos días tardarán 6 obreros?',e:null,opts:['10 días','12 días','8 días','6 días'],c:0,ex:'Razón inversa: 4×15=6×d → d=10'},
+{a:'aritmetica',q:'Evalúa:',e:'(−2)⁴ − (−3)²',opts:['7','25','−7','1'],c:0,ex:'16−9=7'},
+{a:'aritmetica',q:'Resuelve:',e:'x/4 + x/3 = 7',opts:['12','9','6','15'],c:0,ex:'MCM=12: 3x+4x=84 → 7x=84 → x=12'},
+{a:'aritmetica',q:'¿Cuánto es (3a²b)(−2ab³)?',e:null,opts:['−6a³b⁴','−6a²b⁴','6a³b⁴','−6a³b³'],c:0,ex:'Coef: 3×(−2)=−6, a²×a=a³, b×b³=b⁴'},
+{a:'aritmetica',q:'¿Cuál es el término independiente en?',e:'5x³ − 2x + 8',opts:['8','5','−2','3'],c:0,ex:'El término independiente es el que no tiene variable: 8'},
+{a:'aritmetica',q:'Resuelve la inecuación:',e:'3x − 6 > 0',opts:['x>2','x<2','x>6','x>−2'],c:0,ex:'3x>6 → x>2'},
+{a:'aritmetica',q:'¿Cuánto es 5! (factorial)?',e:null,opts:['120','60','24','720'],c:0,ex:'5!=5×4×3×2×1=120'},
+{a:'aritmetica',q:'Si un auto consume 8 litros por cada 100 km, ¿cuántos litros necesita para recorrer 350 km?',e:null,opts:['28 L','32 L','24 L','30 L'],c:0,ex:'(8/100)×350=28 litros'},
+{a:'aritmetica',q:'¿Cuánto es log₁₀(1000)?',e:null,opts:['3','2','4','10'],c:0,ex:'10³=1000 → log₁₀(1000)=3'},
+{a:'aritmetica',q:'Calcula el producto notable:',e:'(2x + 5)²',opts:['4x²+20x+25','4x²+10x+25','4x²+25','2x²+20x+25'],c:0,ex:'(a+b)²=a²+2ab+b²: 4x²+2(2x)(5)+25=4x²+20x+25'},
+{a:'aritmetica',q:'¿Cuánto es la suma de los ángulos interiores de un hexágono?',e:null,opts:['720°','540°','360°','900°'],c:0,ex:'(n−2)×180=(6−2)×180=720°'},
+
+// ═══ GEOMETRÍA (25) ═══
+{a:'geometria',q:'¿Cuánto mide el área de un triángulo con base 10 cm y altura 6 cm?',e:null,opts:['30 cm²','60 cm²','20 cm²','15 cm²'],c:0,ex:'A=base×altura/2=10×6/2=30 cm²'},
+{a:'geometria',q:'¿Cuánto mide el perímetro de un rectángulo de 8 cm × 5 cm?',e:null,opts:['26 cm','20 cm','40 cm','13 cm'],c:0,ex:'P=2(8+5)=2×13=26 cm'},
+{a:'geometria',q:'¿Cuánto mide el área de un círculo con radio 7 cm? (π≈3.14)',e:null,opts:['153.86 cm²','43.96 cm²','154 cm²','21.98 cm²'],c:0,ex:'A=πr²=3.14×49=153.86 cm²'},
+{a:'geometria',q:'En un triángulo rectángulo, los catetos miden 6 y 8 cm. ¿Cuánto mide la hipotenusa?',e:'a² + b² = c²',opts:['10 cm','12 cm','14 cm','7 cm'],c:0,ex:'6²+8²=36+64=100 → c=10 cm'},
+{a:'geometria',q:'¿Cuánto mide el volumen de un cubo con arista de 4 cm?',e:null,opts:['64 cm³','16 cm³','48 cm³','96 cm³'],c:0,ex:'V=a³=4³=64 cm³'},
+{a:'geometria',q:'Dos ángulos son suplementarios. Uno mide 65°. ¿Cuánto mide el otro?',e:null,opts:['115°','25°','90°','125°'],c:0,ex:'Suplementarios suman 180°: 180−65=115°'},
+{a:'geometria',q:'¿Cuánto mide el área de un trapecio con bases 8 y 12 cm y altura 5 cm?',e:'A = (B+b)×h/2',opts:['50 cm²','40 cm²','100 cm²','25 cm²'],c:0,ex:'(8+12)×5/2=20×5/2=50 cm²'},
+{a:'geometria',q:'¿Cuánto mide la circunferencia de un círculo con diámetro 14 cm? (π≈3.14)',e:null,opts:['43.96 cm','87.92 cm','21.98 cm','153.86 cm'],c:0,ex:'C=πd=3.14×14=43.96 cm'},
+{a:'geometria',q:'Un ángulo mide 40°. ¿Cuánto mide su ángulo complementario?',e:null,opts:['50°','140°','60°','80°'],c:0,ex:'Complementarios suman 90°: 90−40=50°'},
+{a:'geometria',q:'¿Cuánto mide el volumen de un cilindro con radio 3 cm y altura 10 cm? (π≈3.14)',e:null,opts:['282.6 cm³','94.2 cm³','188.4 cm³','565.2 cm³'],c:0,ex:'V=πr²h=3.14×9×10=282.6 cm³'},
+{a:'geometria',q:'¿Cuántos grados tiene cada ángulo interior de un triángulo equilátero?',e:null,opts:['60°','45°','90°','72°'],c:0,ex:'La suma es 180° y son iguales: 180/3=60°'},
+{a:'geometria',q:'Un terreno rectangular mide 25 m × 16 m. ¿Cuánto mide su área?',e:null,opts:['400 m²','82 m²','200 m²','480 m²'],c:0,ex:'A=25×16=400 m²'},
+{a:'geometria',q:'¿Cuánto mide la diagonal de un cuadrado con lado 5 cm?',e:null,opts:['5√2 cm','10 cm','7 cm','5 cm'],c:0,ex:'d=l√2=5√2≈7.07 cm'},
+{a:'geometria',q:'¿Cuántas caras tiene un prisma triangular?',e:null,opts:['5','4','6','8'],c:0,ex:'2 bases triangulares + 3 caras laterales = 5'},
+{a:'geometria',q:'Si el radio de una esfera es 6 cm, ¿cuánto mide su volumen? (π≈3.14)',e:'V = (4/3)πr³',opts:['904.32 cm³','452.16 cm³','226.08 cm³','1130.4 cm³'],c:0,ex:'(4/3)×3.14×216=904.32 cm³'},
+{a:'geometria',q:'¿Cuánto mide el área lateral de un cubo con arista 3 cm?',e:null,opts:['36 cm²','54 cm²','9 cm²','18 cm²'],c:0,ex:'Área lateral=4 caras×3²=4×9=36 cm²'},
+{a:'geometria',q:'En un triángulo rectángulo, si un cateto mide 5 y la hipotenusa 13, ¿cuánto mide el otro cateto?',e:null,opts:['12','8','10','11'],c:0,ex:'c²=13²−5²=169−25=144 → c=12'},
+{a:'geometria',q:'¿Cuánto mide el área de un rombo con diagonales de 10 cm y 6 cm?',e:'A = (d₁ × d₂)/2',opts:['30 cm²','60 cm²','16 cm²','15 cm²'],c:0,ex:'A=(10×6)/2=30 cm²'},
+{a:'geometria',q:'Un ángulo central de 90° corresponde a un arco que es:',e:null,opts:['1/4 del círculo','1/2 del círculo','1/3 del círculo','3/4 del círculo'],c:0,ex:'90°/360°=1/4'},
+{a:'geometria',q:'¿Cuánto mide el perímetro de un triángulo equilátero con lado 9 cm?',e:null,opts:['27 cm','18 cm','36 cm','81 cm'],c:0,ex:'P=3×9=27 cm'},
+{a:'geometria',q:'¿Cuánto mide el área total de un cubo con arista 5 cm?',e:null,opts:['150 cm²','100 cm²','125 cm²','50 cm²'],c:0,ex:'6 caras × 5²=6×25=150 cm²'},
+{a:'geometria',q:'¿Cuánto mide el volumen de una pirámide cuadrada con base 6 cm y altura 9 cm?',e:'V = (base × h)/3',opts:['108 cm³','162 cm³','54 cm³','324 cm³'],c:0,ex:'V=(6²×9)/3=36×9/3=108 cm³'},
+{a:'geometria',q:'Si dos triángulos son semejantes y sus lados correspondientes tienen razón 2:3, ¿cuál es la razón de sus áreas?',e:null,opts:['4:9','2:3','1:3','8:27'],c:0,ex:'La razón de áreas es el cuadrado de la razón de lados: 2²:3²=4:9'},
+{a:'geometria',q:'¿Cuánto mide el seno de 30°?',e:null,opts:['0.5','0.866','1','0.707'],c:0,ex:'sen(30°)=1/2=0.5'},
+{a:'geometria',q:'Un sector circular tiene radio 10 cm y ángulo central 72°. ¿Cuánto mide su área? (π≈3.14)',e:null,opts:['62.8 cm²','314 cm²','31.4 cm²','125.6 cm²'],c:0,ex:'A=(72/360)×π×100=(1/5)×314=62.8 cm²'},
+
+// ═══ ESTADÍSTICA (15) ═══
+{a:'estadistica',q:'Las calificaciones de 5 alumnos son: 8, 7, 9, 6, 10. ¿Cuál es la media?',e:null,opts:['8','7','9','7.5'],c:0,ex:'(8+7+9+6+10)/5=40/5=8'},
+{a:'estadistica',q:'¿Cuál es la moda del conjunto: 3, 5, 7, 5, 2, 5, 8?',e:null,opts:['5','3','7','2'],c:0,ex:'El 5 aparece 3 veces (más frecuente)'},
+{a:'estadistica',q:'¿Cuál es la mediana del conjunto: 4, 7, 2, 9, 5?',e:null,opts:['5','4','7','6'],c:0,ex:'Ordenados: 2,4,5,7,9 → el del centro es 5'},
+{a:'estadistica',q:'En una bolsa hay 3 rojas, 5 azules y 2 verdes. ¿Cuál es la probabilidad de sacar una roja?',e:null,opts:['3/10','1/3','3/7','1/5'],c:0,ex:'P=3/(3+5+2)=3/10'},
+{a:'estadistica',q:'¿Cuál es el rango del conjunto: 12, 5, 18, 3, 25, 9?',e:null,opts:['22','20','25','15'],c:0,ex:'Rango=máximo−mínimo=25−3=22'},
+{a:'estadistica',q:'Se lanzan 2 monedas. ¿Cuál es la probabilidad de obtener 2 caras?',e:null,opts:['1/4','1/2','1/3','3/4'],c:0,ex:'Espacio muestral:{CC,CS,SC,SS}. P(CC)=1/4'},
+{a:'estadistica',q:'La media de 4 números es 15. Si se agrega un 5° número y la nueva media es 14, ¿cuánto vale el 5° número?',e:null,opts:['10','8','12','6'],c:0,ex:'Suma original=60. Nueva suma=70. 5°=70−60=10'},
+{a:'estadistica',q:'¿Cuántas combinaciones posibles hay al lanzar un dado?',e:null,opts:['6','12','36','3'],c:0,ex:'Un dado tiene 6 caras'},
+{a:'estadistica',q:'En un grupo de 30 alumnos, 18 aprobaron. ¿Qué porcentaje aprobó?',e:null,opts:['60%','40%','55%','65%'],c:0,ex:'18/30×100=60%'},
+{a:'estadistica',q:'¿Cuál es la probabilidad de NO sacar un 6 al lanzar un dado?',e:null,opts:['5/6','1/6','4/6','1/2'],c:0,ex:'P(no 6)=1−1/6=5/6'},
+{a:'estadistica',q:'La varianza de un conjunto de datos mide:',e:null,opts:['La dispersión respecto a la media','El valor central','El valor más frecuente','La diferencia entre max y min'],c:0,ex:'La varianza mide qué tan dispersos están los datos respecto a la media'},
+{a:'estadistica',q:'¿Cuántas permutaciones hay de 4 elementos distintos?',e:null,opts:['24','12','16','8'],c:0,ex:'4!=4×3×2×1=24'},
+{a:'estadistica',q:'En una encuesta a 200 personas, 80 prefieren el azul. ¿Cuál es la frecuencia relativa?',e:null,opts:['0.4','0.8','40','0.2'],c:0,ex:'80/200=0.4'},
+{a:'estadistica',q:'¿Cuál es la mediana de: 10, 20, 30, 40?',e:null,opts:['25','20','30','15'],c:0,ex:'Con número par de datos: (20+30)/2=25'},
+{a:'estadistica',q:'Se elige al azar una carta de una baraja de 52. ¿Cuál es la P de que sea un As?',e:null,opts:['1/13','4/52','1/4','1/52'],c:0,ex:'Hay 4 ases en 52 cartas: 4/52=1/13'},
+
+// ═══ HABILIDAD NUMÉRICA (40) ═══
+{a:'habilidad',q:'¿Cuál es el siguiente número en la serie?',e:'2, 4, 8, 16, 32, ___',opts:['64','48','56','72'],c:0,ex:'Se multiplica por 2 cada vez: 32×2=64'},
+{a:'habilidad',q:'¿Cuál es el siguiente número en la serie?',e:'3, 7, 11, 15, 19, ___',opts:['23','21','25','22'],c:0,ex:'Se suma 4 cada vez: 19+4=23'},
+{a:'habilidad',q:'¿Cuál es el siguiente número en la serie?',e:'1, 1, 2, 3, 5, 8, ___',opts:['13','11','12','10'],c:0,ex:'Fibonacci: cada número es la suma de los dos anteriores: 5+8=13'},
+{a:'habilidad',q:'¿Cuál es el número que falta?',e:'2, 6, 18, 54, ___',opts:['162','108','72','216'],c:0,ex:'Se multiplica por 3: 54×3=162'},
+{a:'habilidad',q:'¿Cuál es el número que falta?',e:'100, 50, 25, ___, 6.25',opts:['12.5','10','15','12'],c:0,ex:'Se divide entre 2: 25÷2=12.5'},
+{a:'habilidad',q:'¿Cuál sigue en la serie?',e:'1, 4, 9, 16, 25, ___',opts:['36','30','32','40'],c:0,ex:'Cuadrados perfectos: 6²=36'},
+{a:'habilidad',q:'¿Cuál es el número que falta?',e:'5, 10, 20, ___, 80',opts:['40','30','50','60'],c:0,ex:'Se multiplica por 2: 20×2=40'},
+{a:'habilidad',q:'¿Cuál es el número que falta?',e:'1, 3, 7, 15, 31, ___',opts:['63','47','55','61'],c:0,ex:'Se multiplica por 2 y se suma 1: 31×2+1=63'},
+{a:'habilidad',q:'¿Cuál sigue en la serie?',e:'729, 243, 81, 27, ___',opts:['9','3','6','18'],c:0,ex:'Se divide entre 3: 27÷3=9'},
+{a:'habilidad',q:'¿Cuál es el número que falta?',e:'2, 5, 10, 17, 26, ___',opts:['37','33','35','39'],c:0,ex:'Las diferencias son 3,5,7,9,11: 26+11=37'},
+{a:'habilidad',q:'¿Cuál sigue en la serie?',e:'1, 2, 6, 24, 120, ___',opts:['720','600','360','840'],c:0,ex:'Factoriales: 6!=720'},
+{a:'habilidad',q:'¿Cuál es el número que falta?',e:'7, 14, 28, ___, 112',opts:['56','42','64','70'],c:0,ex:'Se multiplica por 2: 28×2=56'},
+{a:'habilidad',q:'¿Cuál es el número faltante?',e:'3, 6, 11, 18, 27, ___',opts:['38','36','40','33'],c:0,ex:'Diferencias: 3,5,7,9,11 → 27+11=38'},
+{a:'habilidad',q:'Si A→3, B→6, C→9, ¿cuánto vale F?',e:null,opts:['18','15','12','21'],c:0,ex:'Cada letra vale su posición×3. F=6°letra×3=18'},
+{a:'habilidad',q:'¿Cuál es el número que falta?',e:'144, 121, 100, 81, ___',opts:['64','49','72','56'],c:0,ex:'Cuadrados decrecientes: 8²=64'},
+{a:'habilidad',q:'En la serie: 2, 3, 5, 7, 11, 13, ___ ¿cuál sigue?',e:null,opts:['17','15','19','16'],c:0,ex:'Son números primos consecutivos: el siguiente es 17'},
+{a:'habilidad',q:'¿Cuál es el número que falta?',e:'1, 8, 27, 64, ___',opts:['125','100','81','216'],c:0,ex:'Cubos perfectos: 5³=125'},
+{a:'habilidad',q:'¿Cuál sigue?',e:'10, 9, 7, 4, 0, ___',opts:['−5','−4','−6','−3'],c:0,ex:'Diferencias: −1,−2,−3,−4,−5 → 0−5=−5'},
+{a:'habilidad',q:'¿Cuál es el número que falta en el centro?',e:'3   12\n6   ?\n9   36',opts:['24','18','30','27'],c:0,ex:'El patrón es multiplicar por 4: 6×4=24'},
+{a:'habilidad',q:'Si 3 lápices cuestan $12, ¿cuánto cuestan 7 lápices?',e:null,opts:['$28','$21','$35','$24'],c:0,ex:'Precio unitario=12/3=$4. 7×4=$28'},
+{a:'habilidad',q:'¿Cuánto es 15% de 80 más 20% de 50?',e:null,opts:['22','20','24','18'],c:0,ex:'12+10=22'},
+{a:'habilidad',q:'Si hoy es miércoles, ¿qué día será dentro de 100 días?',e:null,opts:['Viernes','Jueves','Sábado','Domingo'],c:0,ex:'100÷7=14 semanas y 2 días. Miércoles+2=Viernes'},
+{a:'habilidad',q:'¿Cuál es el número que falta?',e:'2, 4, 3, 9, 4, 16, 5, ___',opts:['25','20','15','30'],c:0,ex:'Patrón: número, su cuadrado. 5²=25'},
+{a:'habilidad',q:'Un reloj marca las 3:00. ¿Cuántos grados hay entre los manecillas?',e:null,opts:['90°','60°','120°','45°'],c:0,ex:'El reloj se divide en 12 partes de 30° cada una. Las 3:00 → 3×30=90°'},
+{a:'habilidad',q:'¿Cuál es el número que falta?',e:'16, 4, 4, 2, 1, ___',opts:['0.5','1','0.25','2'],c:0,ex:'Patrón: ÷4, ÷1, ÷2, ÷2, ÷2 → 1÷2=0.5'},
+{a:'habilidad',q:'Si en 4 días 5 personas hacen 20 mesas, ¿cuántas mesas hacen 3 personas en 6 días?',e:null,opts:['18','15','12','24'],c:0,ex:'Mesas/persona/día=1. 3×6×1=18'},
+{a:'habilidad',q:'¿Cuántos cuadrados hay en una figura de 3×3?',e:null,opts:['14','9','12','16'],c:0,ex:'9 de 1×1, 4 de 2×2, 1 de 3×3 = 14'},
+{a:'habilidad',q:'¿Cuál es el número que falta?',e:'1, 2, 4, 7, 11, 16, ___',opts:['22','20','24','18'],c:0,ex:'Diferencias: 1,2,3,4,5,6 → 16+6=22'},
+{a:'habilidad',q:'Si A=1, B=2,...Z=26, ¿cuánto vale la suma de HOLA?',e:null,opts:['36','32','40','44'],c:0,ex:'H=8, O=15, L=12, A=1 → 8+15+12+1=36'},
+{a:'habilidad',q:'¿Cuánto es 1+2+3+...+20?',e:null,opts:['210','200','190','220'],c:0,ex:'n(n+1)/2=20×21/2=210'},
+{a:'habilidad',q:'¿Cuál sigue en la serie?',e:'31, 29, 26, 22, 17, ___',opts:['11','12','13','10'],c:0,ex:'Diferencias: −2,−3,−4,−5,−6 → 17−6=11'},
+{a:'habilidad',q:'¿Cuál es el número que falta?',e:'2, 6, 12, 20, 30, ___',opts:['42','40','44','36'],c:0,ex:'n(n+1): 6×7=42'},
+{a:'habilidad',q:'Si el doble de un número menos 5 es 19, ¿cuál es el número?',e:null,opts:['12','14','10','7'],c:0,ex:'2x−5=19 → 2x=24 → x=12'},
+{a:'habilidad',q:'¿Cuánto es 1/2 + 1/4 + 1/8 + 1/16?',e:null,opts:['15/16','7/8','3/4','1'],c:0,ex:'8/16+4/16+2/16+1/16=15/16'},
+{a:'habilidad',q:'¿Cuál es el número que falta?',e:'5, 11, 23, 47, ___',opts:['95','93','97','91'],c:0,ex:'×2+1: 47×2+1=95'},
+{a:'habilidad',q:'Un número aumentado en su mitad es 18. ¿Cuál es el número?',e:null,opts:['12','9','15','6'],c:0,ex:'x+x/2=18 → 3x/2=18 → x=12'},
+{a:'habilidad',q:'¿Cuántos triángulos hay en una figura con 5 líneas que parten de un punto?',e:null,opts:['10','5','8','15'],c:0,ex:'C(5,2)=10 triángulos'},
+{a:'habilidad',q:'¿Cuál sigue en la serie?',e:'2, 3, 5, 8, 13, 21, ___',opts:['34','32','36','28'],c:0,ex:'Fibonacci: 13+21=34'},
+{a:'habilidad',q:'Si 60% de un número es 90, ¿cuál es el número?',e:null,opts:['150','120','180','100'],c:0,ex:'0.6×n=90 → n=90/0.6=150'},
+{a:'habilidad',q:'¿Cuál es el número que falta?',e:'4, 9, 16, 25, 36, ___',opts:['49','42','45','50'],c:0,ex:'Son cuadrados: 2²,3²,4²,5²,6²,7²=49'},
+];
+
+// ════════════════════════════════════════
+// ESTADO DEL EXAMEN
+// ════════════════════════════════════════
+let qIdx=0, answers=new Array(REACTIVOS.length).fill(null);
+let timerSeg=90*60, timerIv=null, examStarted=false, examFinished=false;
+let startTime=null, usedSeg=0;
+let isRegMode=false;
+
+// ════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════
+window.onload=async()=>{
+  const{data:{session}}=await sb.auth.getSession();
+  if(session){
+    CU=session.user;
+    await loadPerfil();
+  }
+  document.getElementById('loading').classList.add('hide');
+  if(!CU) showScreen('s-auth');
+  else if(esAdmin) showScreen('s-dash'), loadDash();
+  else showScreen('s-cover'), checkPrevResults();
+};
+
+async function loadPerfil(){
+  const{data}=await sb.from('perfiles').select('*').eq('id',CU.id).single();
+  perfil=data;
+  esAdmin=data?.es_admin||false;
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ════════════════════════════════════════
+// AUTH
+// ════════════════════════════════════════
+async function doAuth(){
+  const email=document.getElementById('a-email').value.trim();
+  const pass=document.getElementById('a-pass').value;
+  const btn=document.getElementById('auth-btn');
+  const msg=document.getElementById('auth-msg');
+  if(!email||!pass){showMsg(msg,'Llena todos los campos','err');return;}
+  btn.disabled=true; btn.textContent='Procesando...';
+  let error,data;
+  if(isRegMode){
+    ({data,error}=await sb.auth.signUp({email,password:pass}));
+    if(!error&&data.user){
+      await sb.from('perfiles').upsert({id:data.user.id,nombre:email.split('@')[0],email,es_admin:false});
+    }
+  }else{
+    ({data,error}=await sb.auth.signInWithPassword({email,password:pass}));
+  }
+  btn.disabled=false; btn.textContent=isRegMode?'REGISTRAR →':'ENTRAR →';
+  if(error){showMsg(msg,error.message,'err');return;}
+  CU=data.user;
+  await loadPerfil();
+  if(esAdmin){showScreen('s-dash');loadDash();}
+  else{showScreen('s-cover');checkPrevResults();}
+}
+
+function toggleAuthMode(){
+  isRegMode=!isRegMode;
+  document.getElementById('auth-btn').textContent=isRegMode?'REGISTRAR →':'ENTRAR →';
+  document.querySelector('.auth-switch').innerHTML=isRegMode
+    ?'¿Ya tienes cuenta? <span onclick="toggleAuthMode()">Inicia sesión</span>'
+    :'¿No tienes cuenta? <span onclick="toggleAuthMode()">Regístrate</span>';
+}
+
+function showMsg(el,txt,type){
+  el.textContent=txt; el.className='auth-msg on '+type;
+}
+
+async function checkPrevResults(){
+  const{data}=await sb.from('simulacros_resultados').select('*').eq('alumno_id',CU.id).order('created_at',{ascending:false}).limit(1);
+  if(data&&data.length>0){
+    const r=data[0];
+    const pct=Math.round(r.correctas/r.total*100);
+    document.getElementById('cover-prev-info').textContent=`Último intento: ${pct}% (${r.correctas}/${r.total}) — ${new Date(r.created_at).toLocaleDateString('es-MX')}`;
+    document.getElementById('btn-start-exam').textContent='REPETIR SIMULACRO →';
+  }
+}
+
+// ════════════════════════════════════════
+// EXAMEN
+// ════════════════════════════════════════
+function startExam(){
+  if(examStarted) return;
+  examStarted=true; startTime=Date.now();
+  showScreen('s-exam');
+  renderQ();
+  timerIv=setInterval(tickTimer,1000);
+}
+
+function tickTimer(){
+  timerSeg--; usedSeg++;
+  const m=Math.floor(timerSeg/60).toString().padStart(2,'0');
+  const s=(timerSeg%60).toString().padStart(2,'0');
+  const el=document.getElementById('timer');
+  el.textContent=`${m}:${s}`;
+  el.className='timer-display'+(timerSeg<=300?' danger':timerSeg<=600?' warn':'');
+  if(timerSeg<=0){clearInterval(timerIv);finishExam(true);}
+}
+
+function renderQ(){
+  const q=REACTIVOS[qIdx];
+  const area=AREAS[q.a];
+  document.getElementById('et-area').textContent=area.nombre;
+  document.getElementById('et-q').textContent=`Pregunta ${qIdx+1} / ${REACTIVOS.length}`;
+  const pct=((qIdx)/REACTIVOS.length*100).toFixed(1);
+  document.getElementById('prog-fill').style.width=pct+'%';
+
+  const btnNext=document.getElementById('btn-next');
+  btnNext.textContent=qIdx===REACTIVOS.length-1?'TERMINAR ✓':'SIGUIENTE →';
+  btnNext.className='btn-next'+(qIdx===REACTIVOS.length-1?' finish':'');
+
+  const sel=answers[qIdx];
+  const isAnswered=sel!==null;
+
+  let html=`<div class="q-area-tag" style="background:${area.colorSoft};color:${area.color};border:.5px solid ${area.color}40">${area.nombre}</div>
+    <div class="q-num-label">Reactivo ${qIdx+1} de ${REACTIVOS.length}</div>
+    <div class="q-text">${q.q}</div>`;
+  if(q.e) html+=`<div class="q-expr">${q.e.replace(/\n/g,'<br>')}</div>`;
+  html+=`<div class="opts">`;
+  ['A','B','C','D'].forEach((l,i)=>{
+    let cls='opt';
+    if(isAnswered){
+      if(i===q.c) cls+=' correct';
+      else if(i===sel&&sel!==q.c) cls+=' wrong';
+      else if(i===sel) cls+=' sel';
+    } else if(i===sel) cls+=' sel';
+    const dis=isAnswered?'onclick=""':'onclick="selectOpt('+i+')"';
+    html+=`<div class="${cls}" ${dis}><div class="opt-letter">${l}</div><div class="opt-text">${q.opts[i]}</div></div>`;
+  });
+  html+=`</div>`;
+  if(isAnswered){
+    const ok=sel===q.c;
+    html+=`<div class="feedback-box ${ok?'ok':'err'}"><b>${ok?'✓ Correcto':'✗ Incorrecto'}</b>${q.ex}</div>`;
+  }
+  document.getElementById('exam-body').innerHTML=html;
+  document.getElementById('exam-body').scrollTop=0;
+}
+
+function selectOpt(i){
+  if(answers[qIdx]!==null) return;
+  answers[qIdx]=i;
+  renderQ();
+}
+
+function navQ(dir){
+  if(dir===1&&qIdx===REACTIVOS.length-1){
+    finishExam(false); return;
+  }
+  qIdx=Math.max(0,Math.min(REACTIVOS.length-1,qIdx+dir));
+  renderQ();
+}
+
+function confirmExit(){
+  if(confirm('¿Seguro que quieres salir? Tu progreso en este intento se perderá.'))
+    window.location.href='index.html';
+}
+
+// ════════════════════════════════════════
+// Q MAP
+// ════════════════════════════════════════
+function openQmap(){
+  const grid=document.getElementById('qmap-grid');
+  grid.innerHTML='';
+  REACTIVOS.forEach((_,i)=>{
+    const d=document.createElement('div');
+    let cls='qmap-dot ';
+    cls+=i===qIdx?'current':answers[i]!==null?'answered':'pend';
+    d.className=cls; d.textContent=i+1;
+    d.onclick=()=>{qIdx=i;renderQ();closeQmap();};
+    grid.appendChild(d);
+  });
+  document.getElementById('qmap-overlay').classList.add('on');
+}
+function closeQmap(){document.getElementById('qmap-overlay').classList.remove('on');}
+
+// ════════════════════════════════════════
+// TERMINAR EXAMEN
+// ════════════════════════════════════════
+async function finishExam(porTiempo){
+  if(examFinished) return;
+  examFinished=true;
+  clearInterval(timerIv);
+
+  // calcular resultados por área
+  const areaStats={};
+  Object.keys(AREAS).forEach(k=>areaStats[k]={total:0,correctas:0});
+  let totalOk=0, totalBlank=0;
+  REACTIVOS.forEach((q,i)=>{
+    areaStats[q.a].total++;
+    if(answers[i]===null) totalBlank++;
+    else if(answers[i]===q.c){areaStats[q.a].correctas++;totalOk++;}
+  });
+
+  const pct=Math.round(totalOk/REACTIVOS.length*100);
+  const tiempoUsado=usedSeg;
+
+  // guardar en Supabase
+  if(CU){
+    try{
+      await sb.from('simulacros_resultados').insert({
+        alumno_id:CU.id,
+        correctas:totalOk,
+        incorrectas:REACTIVOS.length-totalOk-totalBlank,
+        sin_responder:totalBlank,
+        total:REACTIVOS.length,
+        porcentaje:pct,
+        tiempo_segundos:tiempoUsado,
+        respuestas:JSON.stringify(answers),
+        area_stats:JSON.stringify(areaStats),
+      });
+    }catch(e){console.log('Error guardando:',e);}
+  }
+
+  showResults(totalOk,totalBlank,pct,tiempoUsado,areaStats);
+}
+
+function showResults(ok,blank,pct,seg,areaStats){
+  showScreen('s-results');
+  // anillo
+  const circ=2*Math.PI*60;
+  const ring=document.getElementById('ring-fill');
+  ring.style.strokeDasharray=circ;
+  ring.style.strokeDashoffset=circ;
+  if(pct<40) ring.style.stroke='#ef4444';
+  else if(pct<60) ring.style.stroke='#f59e0b';
+  setTimeout(()=>{ring.style.strokeDashoffset=circ*(1-pct/100);},100);
+
+  document.getElementById('res-pct').textContent=pct+'%';
+  document.getElementById('rs-ok').textContent=ok;
+  document.getElementById('rs-bad').textContent=REACTIVOS.length-ok-blank;
+  document.getElementById('rs-blank').textContent=blank;
+  const m=Math.floor(seg/60).toString().padStart(2,'0');
+  const s=(seg%60).toString().padStart(2,'0');
+  document.getElementById('rs-time').textContent=`${m}:${s}`;
+
+  let title,msg;
+  if(pct>=80){title='¡Excelente! 🏆';msg='Muy buen desempeño. Tienes grandes posibilidades de ingresar.';}
+  else if(pct>=60){title='¡Bien!';msg='Estás en el rango de aprobación. Refuerza tus áreas débiles.';}
+  else if(pct>=40){title='Necesitas practicar más';msg='Sigue estudiando. Enfócate en los temas donde más fallaste.';}
+  else{title='Hay mucho por aprender 💪';msg='No te rindas. Estudia con constancia y vuelve a intentarlo.';}
+  document.getElementById('res-title').textContent=title;
+  document.getElementById('res-msg').textContent=msg;
+
+  // breakdown por área
+  let abHtml='';
+  Object.entries(areaStats).forEach(([k,v])=>{
+    const ar=AREAS[k];
+    const p=v.total>0?Math.round(v.correctas/v.total*100):0;
+    abHtml+=`<div class="ab-row">
+      <div class="ab-name" style="color:${ar.color}">${ar.nombre}</div>
+      <div class="ab-bar-wrap"><div class="ab-bar-fill" style="width:${p}%;background:${ar.color}"></div></div>
+      <div class="ab-score">${v.correctas}/${v.total}</div>
+    </div>`;
+  });
+  document.getElementById('ab-rows').innerHTML=abHtml;
+}
+
+// ════════════════════════════════════════
+// DASHBOARD MAESTRO
+// ════════════════════════════════════════
+async function loadDash(){
+  const el=document.getElementById('dash-scroll');
+  el.innerHTML='<div class="empty-state">Cargando...</div>';
+
+  // traer todos los resultados con datos del alumno
+  const{data:results,error}=await sb.from('simulacros_resultados')
+    .select('*, perfiles(nombre,email,avatar)')
+    .order('created_at',{ascending:false});
+
+  if(error||!results){el.innerHTML='<div class="empty-state">Error cargando datos.</div>';return;}
+
+  // calcular stats globales
+  const alumnos={};
+  results.forEach(r=>{
+    if(!alumnos[r.alumno_id]||new Date(r.created_at)>new Date(alumnos[r.alumno_id].created_at))
+      alumnos[r.alumno_id]=r;
+  });
+  const alumnosList=Object.values(alumnos);
+  const totalAlumnos=alumnosList.length;
+  const totalIntentos=results.length;
+  const avgPct=alumnosList.length?Math.round(alumnosList.reduce((a,r)=>a+r.porcentaje,0)/alumnosList.length):0;
+  const aprobados=alumnosList.filter(r=>r.porcentaje>=60).length;
+
+  // promedios por área
+  const areaGlobal={};
+  Object.keys(AREAS).forEach(k=>areaGlobal[k]={total:0,correctas:0,count:0});
+  results.forEach(r=>{
+    if(r.area_stats){
+      try{
+        const as=typeof r.area_stats==='string'?JSON.parse(r.area_stats):r.area_stats;
+        Object.entries(as).forEach(([k,v])=>{
+          if(areaGlobal[k]){
+            areaGlobal[k].total+=v.total;
+            areaGlobal[k].correctas+=v.correctas;
+            areaGlobal[k].count++;
+          }
+        });
+      }catch(e){}
+    }
+  });
+
+  let html=`
+  <div class="dash-sec" style="margin-top:0">Resumen general</div>
+  <div class="dash-stats">
+    <div class="ds-card"><div class="ds-n gold">${totalAlumnos}</div><div class="ds-l">Alumnos</div></div>
+    <div class="ds-card"><div class="ds-n green">${avgPct}%</div><div class="ds-l">Promedio general</div></div>
+    <div class="ds-card"><div class="ds-n blue">${totalIntentos}</div><div class="ds-l">Intentos totales</div></div>
+    <div class="ds-card"><div class="ds-n red">${aprobados}</div><div class="ds-l">Sobre 60%</div></div>
+  </div>
+
+  <div class="dash-sec">Desempeño por área (promedio grupal)</div>
+  <div style="background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:11px;padding:14px;margin-bottom:16px;">`;
+
+  Object.entries(areaGlobal).forEach(([k,v])=>{
+    const ar=AREAS[k];
+    const p=v.total>0?Math.round(v.correctas/v.total*100):0;
+    html+=`<div class="area-dash-row">
+      <div class="adr-name" style="color:${ar.color}">${ar.nombre}</div>
+      <div class="adr-bar"><div class="adr-fill" style="width:${p}%;background:${ar.color}"></div></div>
+      <div class="adr-val">${p}%</div>
+    </div>`;
+  });
+  html+=`</div>`;
+
+  if(alumnosList.length===0){
+    html+=`<div class="empty-state">Aún no hay alumnos que hayan presentado el simulacro.</div>`;
+  } else {
+    html+=`<div class="dash-sec">Resultados por alumno (mejor intento)</div>`;
+    // ordenar por porcentaje desc
+    alumnosList.sort((a,b)=>b.porcentaje-a.porcentaje);
+    alumnosList.forEach((r,rank)=>{
+      const nom=r.perfiles?.nombre||r.perfiles?.email||'Alumno';
+      const av=r.perfiles?.avatar||'🙂';
+      const p=r.porcentaje;
+      let tag,tagCls;
+      if(p>=80){tag='Excelente';tagCls='tag-excelente';}
+      else if(p>=60){tag='Aprobado';tagCls='tag-bien';}
+      else if(p>=40){tag='Regular';tagCls='tag-regular';}
+      else{tag='En riesgo';tagCls='tag-riesgo';}
+      const fecha=new Date(r.created_at).toLocaleDateString('es-MX',{day:'numeric',month:'short'});
+      const mins=Math.floor((r.tiempo_segundos||0)/60);
+      html+=`<div class="alumno-row" onclick="openDetail('${r.alumno_id}')">
+        <div class="ar-av">${av}</div>
+        <div class="ar-info">
+          <div class="ar-name">${rank+1}. ${nom}</div>
+          <div class="ar-meta">${fecha} · ${mins} min · ${r.correctas}/${r.total} correctas</div>
+        </div>
+        <div class="ar-score">
+          <div class="ar-pct" style="color:${p>=60?'#10b981':p>=40?'#f59e0b':'#ef4444'}">${p}%</div>
+          <div class="${tagCls} ar-tag">${tag}</div>
+        </div>
+      </div>`;
+    });
+  }
+
+  el.innerHTML=html;
+}
+
+async function openDetail(alumnoId){
+  const{data:results}=await sb.from('simulacros_resultados')
+    .select('*, perfiles(nombre,email,avatar)')
+    .eq('alumno_id',alumnoId)
+    .order('created_at',{ascending:false});
+
+  if(!results||results.length===0) return;
+  const perfil=results[0].perfiles;
+  const nom=perfil?.nombre||perfil?.email||'Alumno';
+  const av=perfil?.avatar||'🙂';
+
+  const mejor=results.reduce((a,b)=>b.porcentaje>a.porcentaje?b:a,results[0]);
+  const ultimo=results[0];
+
+  let html=`<div class="ad-hero">
+    <div class="ad-av">${av}</div>
+    <div class="ad-name">${nom}</div>
+    <div class="ad-email">${perfil?.email||''}</div>
+  </div>
+  <div class="res-grid">
+    <div class="res-stat"><div class="rs-n" style="color:var(--gold)">${mejor.porcentaje}%</div><div class="rs-l">Mejor intento</div></div>
+    <div class="res-stat"><div class="rs-n" style="color:var(--blue)">${results.length}</div><div class="rs-l">Intentos</div></div>
+    <div class="res-stat"><div class="rs-n" style="color:var(--green)">${mejor.correctas}</div><div class="rs-l">Máx. correctas</div></div>
+    <div class="res-stat"><div class="rs-n" style="color:var(--muted)">${Math.floor((mejor.tiempo_segundos||0)/60)}'</div><div class="rs-l">Tiempo mejor</div></div>
+  </div>
+  <div class="dash-sec">Desempeño por área (mejor intento)</div>
+  <div style="background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:11px;padding:14px;margin-bottom:16px;">`;
+
+  if(mejor.area_stats){
+    try{
+      const as=typeof mejor.area_stats==='string'?JSON.parse(mejor.area_stats):mejor.area_stats;
+      Object.entries(as).forEach(([k,v])=>{
+        const ar=AREAS[k];
+        if(!ar) return;
+        const p=v.total>0?Math.round(v.correctas/v.total*100):0;
+        html+=`<div class="area-dash-row">
+          <div class="adr-name" style="color:${ar.color}">${ar.nombre}</div>
+          <div class="adr-bar"><div class="adr-fill" style="width:${p}%;background:${ar.color}"></div></div>
+          <div class="adr-val">${v.correctas}/${v.total}</div>
+        </div>`;
+      });
+    }catch(e){}
+  }
+
+  html+=`</div><div class="dash-sec">Historial de intentos</div>`;
+  results.forEach((r,i)=>{
+    const fecha=new Date(r.created_at).toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'numeric'});
+    const mins=Math.floor((r.tiempo_segundos||0)/60);
+    html+=`<div style="background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:9px;padding:11px 13px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:12px;font-weight:500;">Intento ${results.length-i}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px">${fecha} · ${mins} min</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:${r.porcentaje>=60?'#10b981':r.porcentaje>=40?'#f59e0b':'#ef4444'}">${r.porcentaje}%</div>
+        <div style="font-size:10px;color:var(--muted)">${r.correctas}/${r.total}</div>
+      </div>
+    </div>`;
+  });
+
+  document.getElementById('ad-body').innerHTML=html;
+  document.getElementById('alumno-detail').classList.add('on');
+}
+
+function closeDetail(){
+  document.getElementById('alumno-detail').classList.remove('on');
+}
+
+// Toast
+function showToast(msg){
+  const t=document.getElementById('toast-el');
+  t.textContent=msg; t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),2500);
+}
+</script>
+
+<!-- SQL para ejecutar en Supabase:
+CREATE TABLE IF NOT EXISTS simulacros_resultados (
+  id BIGSERIAL PRIMARY KEY,
+  alumno_id UUID REFERENCES auth.users(id),
+  correctas INT,
+  incorrectas INT,
+  sin_responder INT,
+  total INT,
+  porcentaje INT,
+  tiempo_segundos INT,
+  respuestas TEXT,
+  area_stats JSONB,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+ALTER TABLE simulacros_resultados ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Alumnos insertan sus resultados" ON simulacros_resultados FOR INSERT WITH CHECK (auth.uid() = alumno_id);
+CREATE POLICY "Alumnos ven sus resultados" ON simulacros_resultados FOR SELECT USING (auth.uid() = alumno_id);
+CREATE POLICY "Admin ve todo" ON simulacros_resultados FOR SELECT USING (
+  EXISTS (SELECT 1 FROM perfiles WHERE id = auth.uid() AND es_admin = true)
+);
+-->
+</body>
+</html>
