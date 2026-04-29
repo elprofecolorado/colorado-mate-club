@@ -427,6 +427,117 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
 .slideup{animation:slideUp .3s ease;}
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--dark2);border:.5px solid rgba(255,255,255,.15);padding:10px 18px;border-radius:20px;font-size:12px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;}
 .toast.on{opacity:1;}
+
+/* ══ SIMULACRO INTEGRADO ══ */
+/* Cover simulacro */
+.sim-cover{padding:16px 14px 100px;overflow-y:auto;flex:1;}
+.sim-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(26,86,219,.12);border:.5px solid rgba(26,86,219,.3);border-radius:20px;padding:4px 12px;font-size:9px;color:var(--azul);margin-bottom:14px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;}
+.sim-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px;line-height:1.1;margin-bottom:6px;}
+.sim-title span{color:var(--gold);}
+.sim-sub{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px;}
+.sim-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.sic{background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:10px;padding:12px;text-align:center;}
+.sic-n{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;}
+.sic-l{font-size:9px;color:var(--muted);margin-top:2px;}
+.sim-areas{margin-bottom:14px;}
+.sim-area-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--dark2);border-radius:7px;margin-bottom:5px;border:.5px solid rgba(255,255,255,.05);}
+.sim-area-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.sim-area-nom{font-size:11px;flex:1;}
+.sim-area-cnt{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);}
+.sim-warning{background:rgba(245,158,11,.07);border:.5px solid rgba(245,158,11,.2);border-radius:9px;padding:11px 13px;font-size:11px;color:rgba(245,158,11,.9);line-height:1.6;margin-bottom:16px;}
+.sim-prev-result{background:rgba(16,185,129,.07);border:.5px solid rgba(16,185,129,.2);border-radius:9px;padding:11px 13px;font-size:11px;color:#6ee7b7;margin-bottom:12px;display:none;}
+.btn-sim-start{width:100%;padding:14px;background:var(--azul);color:white;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;box-shadow:0 4px 20px rgba(26,86,219,.25);transition:background .2s;}
+.btn-sim-start:hover{background:var(--azul2);}
+
+/* Examen en curso */
+.sim-exam-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.sim-topbar{background:var(--dark2);border-bottom:.5px solid rgba(255,255,255,.07);padding:9px 14px;display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.sim-area-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;flex:1;text-align:center;}
+.sim-timer{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;min-width:58px;text-align:right;}
+.sim-timer.warn{color:var(--gold);}
+.sim-timer.danger{color:var(--red);animation:blink .8s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.sim-prog{height:2px;background:rgba(255,255,255,.05);flex-shrink:0;}
+.sim-prog-fill{height:100%;background:linear-gradient(90deg,var(--azul),var(--gold));transition:width .3s;}
+.sim-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px 90px;}
+.sim-q-area{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:8px;font-family:'JetBrains Mono',monospace;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
+.sim-q-num{font-size:9px;color:var(--muted);margin-bottom:7px;font-family:'JetBrains Mono',monospace;}
+.sim-q-text{font-size:14px;line-height:1.65;margin-bottom:14px;font-weight:500;}
+.sim-q-expr{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);background:rgba(245,158,11,.07);border-left:3px solid var(--gold);padding:9px 12px;border-radius:0 7px 7px 0;margin:8px 0;line-height:1.6;white-space:pre-wrap;}
+.sim-opts{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
+.sim-opt{display:flex;align-items:center;gap:10px;background:var(--dark2);border:.5px solid rgba(255,255,255,.08);border-radius:9px;padding:11px 13px;cursor:pointer;transition:all .15s;}
+.sim-opt.sel{border-color:var(--azul);background:rgba(26,86,219,.1);}
+.sim-opt.correct{border-color:var(--green)!important;background:rgba(16,185,129,.1)!important;}
+.sim-opt.wrong{border-color:var(--red)!important;background:rgba(239,68,68,.08)!important;}
+.sim-opt-l{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.06);border:.5px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:12px;flex-shrink:0;transition:all .15s;}
+.sim-opt.sel .sim-opt-l{background:var(--azul);border-color:var(--azul);}
+.sim-opt.correct .sim-opt-l{background:var(--green);border-color:var(--green);}
+.sim-opt.wrong .sim-opt-l{background:var(--red);border-color:var(--red);}
+.sim-opt-txt{font-size:12px;line-height:1.5;}
+.sim-feedback{border-radius:9px;padding:10px 12px;font-size:11px;line-height:1.6;margin-bottom:12px;animation:fadeIn .25s;}
+.sim-feedback.ok{background:rgba(16,185,129,.08);border:.5px solid rgba(16,185,129,.25);color:#6ee7b7;}
+.sim-feedback.err{background:rgba(239,68,68,.07);border:.5px solid rgba(239,68,68,.2);color:#fca5a5;}
+.sim-feedback b{display:block;margin-bottom:3px;font-size:12px;}
+.sim-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--dark2);border-top:.5px solid rgba(255,255,255,.07);padding:8px 14px;display:none;gap:8px;z-index:50;}
+.sim-nav.on{display:flex;}
+.sim-btn-prev{flex:0 0 40px;padding:11px;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);border-radius:8px;color:var(--cream);font-size:14px;cursor:pointer;}
+.sim-btn-map{flex:0 0 40px;padding:11px;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);border-radius:8px;color:var(--cream);font-size:12px;cursor:pointer;}
+.sim-btn-next{flex:1;padding:12px;background:var(--azul);color:white;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;}
+.sim-btn-next.finish{background:var(--green);}
+
+/* Resultados */
+.sim-results{flex:1;overflow-y:auto;padding-bottom:40px;}
+.sim-res-hero{background:linear-gradient(180deg,var(--dark2),var(--dark));padding:24px 16px 20px;text-align:center;border-bottom:.5px solid rgba(255,255,255,.06);}
+.sim-ring-wrap{position:relative;width:130px;height:130px;margin:0 auto 14px;}
+.sim-ring-wrap svg{transform:rotate(-90deg);}
+.sim-ring-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.sim-pct{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;line-height:1;}
+.sim-pct-sub{font-size:9px;color:var(--muted);letter-spacing:1px;}
+.sim-res-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:1px;margin-bottom:4px;}
+.sim-res-msg{font-size:12px;color:var(--muted);line-height:1.6;max-width:280px;margin:0 auto;}
+.sim-res-body{padding:14px;}
+.sim-res-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.sim-rs{background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:10px;padding:12px;text-align:center;}
+.sim-rs-n{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;}
+.sim-rs-l{font-size:9px;color:var(--muted);margin-top:2px;}
+.sim-ab-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.sim-ab-name{font-size:11px;width:100px;flex-shrink:0;}
+.sim-ab-bar{flex:1;height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;}
+.sim-ab-fill{height:100%;border-radius:3px;}
+.sim-ab-score{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);min-width:36px;text-align:right;}
+.btn-sim-retry{width:100%;padding:13px;background:var(--azul);color:white;border:none;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-bottom:8px;}
+.btn-sim-home{width:100%;padding:11px;background:rgba(255,255,255,.05);color:var(--cream);border:.5px solid rgba(255,255,255,.1);border-radius:9px;font-size:12px;cursor:pointer;}
+
+/* Qmap */
+.sim-qmap-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;align-items:flex-end;}
+.sim-qmap-ov.on{display:flex;}
+.sim-qmap-sheet{background:var(--dark2);border-radius:18px 18px 0 0;width:100%;max-width:430px;max-height:65vh;overflow-y:auto;padding:14px;}
+.sim-qmap-handle{width:30px;height:3px;background:rgba(255,255,255,.12);border-radius:2px;margin:0 auto 12px;}
+.sim-qmap-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;margin-bottom:12px;}
+.sim-qd{width:100%;aspect-ratio:1;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:9px;font-family:'JetBrains Mono',monospace;cursor:pointer;}
+.sim-qd.pend{background:rgba(255,255,255,.05);color:var(--muted);}
+.sim-qd.done{background:rgba(26,86,219,.2);color:var(--azul);}
+.sim-qd.cur{background:var(--azul);color:white;}
+
+/* Admin simulacro panel */
+.adm-sim-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 14px 12px;}
+.adm-sim-card{background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:10px;padding:12px;}
+.adm-sim-n{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;}
+.adm-sim-l{font-size:9px;color:var(--muted);margin-top:2px;}
+.sim-alumno-row{display:flex;align-items:center;gap:9px;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:9px;padding:11px 12px;margin:0 14px 7px;cursor:pointer;transition:border-color .2s;}
+.sim-alumno-row:hover{border-color:rgba(26,86,219,.3);}
+.sar-av{width:34px;height:34px;border-radius:50%;background:rgba(26,86,219,.15);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.sar-info{flex:1;}
+.sar-name{font-size:12px;font-weight:500;}
+.sar-meta{font-size:10px;color:var(--muted);margin-top:1px;}
+.sar-score{text-align:right;}
+.sar-pct{font-family:'Bebas Neue',sans-serif;font-size:20px;line-height:1;}
+.sar-tag{font-size:9px;padding:2px 6px;border-radius:8px;margin-top:2px;display:inline-block;}
+.sim-area-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.sabr-name{font-size:11px;width:110px;flex-shrink:0;}
+.sabr-bar{flex:1;height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;}
+.sabr-fill{height:100%;border-radius:3px;}
+.sabr-val{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);min-width:32px;text-align:right;}
 </style>
 </head>
 <body>
@@ -621,13 +732,85 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
     </div>
 
   </div>
+  <!-- SIMULACRO PIENSE II -->
+  <div class="tab" id="tab-simulacro" style="flex-direction:column;overflow:hidden;">
+    <div id="sim-state-cover" class="sim-cover">
+      <div class="sim-badge">📝 Examen oficial</div>
+      <div class="sim-title">PIENSE II<br><span>Simulacro</span></div>
+      <div class="sim-sub">120 reactivos cronometrados al estilo del examen de admisión Prepa UDG.</div>
+      <div class="sim-info-grid">
+        <div class="sic"><div class="sic-n" style="color:var(--gold)">120</div><div class="sic-l">Reactivos</div></div>
+        <div class="sic"><div class="sic-n" style="color:var(--green)">90</div><div class="sic-l">Minutos</div></div>
+        <div class="sic"><div class="sic-n" style="color:#3b82f6">4</div><div class="sic-l">Áreas</div></div>
+        <div class="sic"><div class="sic-n" style="color:#7c3aed">4</div><div class="sic-l">Opciones</div></div>
+      </div>
+      <div class="sim-areas">
+        <div class="sim-area-row"><div class="sim-area-dot" style="background:#f59e0b"></div><span class="sim-area-nom">Aritmética y Álgebra</span><span class="sim-area-cnt">40</span></div>
+        <div class="sim-area-row"><div class="sim-area-dot" style="background:#10b981"></div><span class="sim-area-nom">Geometría</span><span class="sim-area-cnt">25</span></div>
+        <div class="sim-area-row"><div class="sim-area-dot" style="background:#3b82f6"></div><span class="sim-area-nom">Estadística</span><span class="sim-area-cnt">15</span></div>
+        <div class="sim-area-row"><div class="sim-area-dot" style="background:#7c3aed"></div><span class="sim-area-nom">Habilidad Numérica</span><span class="sim-area-cnt">40</span></div>
+      </div>
+      <div class="sim-prev-result" id="sim-prev-result"></div>
+      <div class="sim-warning">⚠️ Una vez iniciado el cronómetro no se detiene. Tus respuestas se guardan al terminar.</div>
+      <button class="btn-sim-start" onclick="simStart()">INICIAR SIMULACRO →</button>
+    </div>
+    <div id="sim-state-exam" style="display:none;flex:1;flex-direction:column;overflow:hidden;">
+      <div class="sim-topbar">
+        <button style="background:none;border:.5px solid rgba(255,255,255,.1);color:var(--muted);padding:4px 9px;border-radius:6px;cursor:pointer;font-size:10px;" onclick="simConfirmExit()">✕</button>
+        <div class="sim-area-tag" id="sim-et-area">Área</div>
+        <div class="sim-timer" id="sim-timer">90:00</div>
+      </div>
+      <div class="sim-prog"><div class="sim-prog-fill" id="sim-prog-fill" style="width:0%"></div></div>
+      <div class="sim-body" id="sim-body"></div>
+    </div>
+    <div id="sim-state-results" style="display:none;flex:1;overflow-y:auto;">
+      <div class="sim-res-hero">
+        <div class="sim-ring-wrap">
+          <svg width="130" height="130" viewBox="0 0 130 130">
+            <circle cx="65" cy="65" r="55" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="9"/>
+            <circle id="sim-ring" cx="65" cy="65" r="55" fill="none" stroke="#10b981" stroke-width="9"
+              stroke-linecap="round" stroke-dasharray="345" stroke-dashoffset="345"
+              style="transition:stroke-dashoffset 1.4s cubic-bezier(.22,1,.36,1)"/>
+          </svg>
+          <div class="sim-ring-inner">
+            <div class="sim-pct" id="sim-res-pct">0%</div>
+            <div class="sim-pct-sub">ACIERTOS</div>
+          </div>
+        </div>
+        <div class="sim-res-title" id="sim-res-title">Completado</div>
+        <div class="sim-res-msg" id="sim-res-msg"></div>
+      </div>
+      <div class="sim-res-body">
+        <div class="sim-res-grid">
+          <div class="sim-rs"><div class="sim-rs-n" style="color:var(--green)" id="sim-rs-ok">0</div><div class="sim-rs-l">Correctas</div></div>
+          <div class="sim-rs"><div class="sim-rs-n" style="color:var(--red)" id="sim-rs-bad">0</div><div class="sim-rs-l">Incorrectas</div></div>
+          <div class="sim-rs"><div class="sim-rs-n" style="color:var(--gold)" id="sim-rs-time">—</div><div class="sim-rs-l">Tiempo</div></div>
+          <div class="sim-rs"><div class="sim-rs-n" style="color:var(--muted)" id="sim-rs-blank">0</div><div class="sim-rs-l">Sin resp.</div></div>
+        </div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Por área</div>
+        <div id="sim-ab-rows"></div>
+        <button class="btn-sim-retry" onclick="simReset()">🔄 Repetir simulacro</button>
+        <button class="btn-sim-home" onclick="goTab('inicio',document.querySelector('.bn-item'))">← Volver al inicio</button>
+      </div>
+    </div>
+  </div>
+
   <div class="bottom-nav">
     <div class="bn-item on" onclick="goTab('inicio',this)"><div class="bn-icon">🏠</div><div class="bn-lbl">Inicio</div></div>
     <div class="bn-item" onclick="goTab('mapa',this)"><div class="bn-icon">🗺️</div><div class="bn-lbl">Temas</div></div>
+    <div class="bn-item" onclick="goTab('simulacro',this);simCheckPrev()"><div class="bn-icon">📝</div><div class="bn-lbl">Simulacro</div></div>
     <div class="bn-item" onclick="goTab('ranking',this)"><div class="bn-icon">🏆</div><div class="bn-lbl">Ranking</div></div>
-    <div class="bn-item" onclick="goTab('logros',this)"><div class="bn-icon">⭐</div><div class="bn-lbl">Insignias</div></div>
-    <div class="bn-item" onclick="goTab('chat',this);cargarChat()"><div class="bn-icon">💬</div><div class="bn-lbl">Chat</div></div>
     <div class="bn-item" onclick="goTab('perfil',this);buildPerfil()"><div class="bn-icon">👤</div><div class="bn-lbl">Perfil</div></div>
+  </div>
+</div>
+
+<!-- Q-MAP del simulacro -->
+<div class="sim-qmap-ov" id="sim-qmap-ov" onclick="if(event.target===this)simCloseMap()">
+  <div class="sim-qmap-sheet">
+    <div class="sim-qmap-handle"></div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:10px;">Mapa de preguntas</div>
+    <div class="sim-qmap-grid" id="sim-qmap-grid"></div>
+    <button style="width:100%;padding:10px;background:none;border:.5px solid rgba(255,255,255,.1);border-radius:8px;color:var(--muted);font-size:12px;cursor:pointer;" onclick="simCloseMap()">Cerrar</button>
   </div>
 </div>
 
@@ -662,12 +845,14 @@ html,body{height:100%;background:var(--dark);font-family:'DM Sans',sans-serif;co
   <div class="admin-tabs">
     <div class="admin-tab on" onclick="goAdmin('inicio',this)"><div class="at-icon">🏠</div><div class="at-lbl">Inicio</div></div>
     <div class="admin-tab" onclick="goAdmin('alumnos',this)"><div class="at-icon">👥</div><div class="at-lbl">Alumnos</div></div>
+    <div class="admin-tab" onclick="goAdmin('simulacro',this)"><div class="at-icon">📝</div><div class="at-lbl">Simulacro</div></div>
     <div class="admin-tab" onclick="goAdmin('codigos',this)"><div class="at-icon">🔑</div><div class="at-lbl">Códigos</div></div>
     <div class="admin-tab" onclick="goAdmin('videos',this)"><div class="at-icon">🎥</div><div class="at-lbl">Videos</div></div>
     <div class="admin-tab" onclick="goAdmin('config',this)"><div class="at-icon">⚙️</div><div class="at-lbl">Config</div></div>
   </div>
   <div class="admin-panel on" id="ap-inicio"></div>
   <div class="admin-panel" id="ap-alumnos"></div>
+  <div class="admin-panel" id="ap-simulacro"></div>
   <div class="admin-panel" id="ap-codigos"></div>
   <div class="admin-panel" id="ap-videos"></div>
   <div class="admin-panel" id="ap-config"></div>
@@ -806,6 +991,7 @@ function goAdmin(id,el){
   document.getElementById('ap-'+id)?.classList.add('on');
   if(el) el.classList.add('on');
   if(id==='alumnos') cargarAlumnos();
+  if(id==='simulacro') buildAdminSimulacro();
   if(id==='videos') buildAdminVideos();
   if(id==='config') buildAdminConfig();
   if(id==='codigos') cargarCodigos();
@@ -1591,6 +1777,463 @@ function buildAdminConfig(){
   </div>
   <div style="padding:0 14px 24px"><button class="config-btn danger" onclick="doLogout()">Cerrar sesión</button></div>`;
   buildEmojiPicker('avatar-picker-admin', true);
+}
+
+// ══════════════════════════
+// ADMIN SIMULACRO DASHBOARD
+// ══════════════════════════
+async function buildAdminSimulacro(){
+  const el=document.getElementById('ap-simulacro');
+  el.innerHTML=`<div style="padding:14px 14px 8px;display:flex;justify-content:space-between;align-items:center;">
+    <div><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px">Simulacro PIENSE II 📝</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:2px">Resultados de tus alumnos</div></div>
+    <button onclick="buildAdminSimulacro()" style="background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);color:var(--muted);padding:6px 12px;border-radius:7px;cursor:pointer;font-size:11px;">↻ Actualizar</button>
+  </div>
+  <div class="adm-sim-stats" id="adm-sim-stats"><div style="padding:14px;color:var(--muted);font-size:11px">Cargando...</div></div>
+  <div class="admin-sec">Desempeño por área (promedio grupal)</div>
+  <div style="background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:10px;margin:0 14px 14px;padding:13px;" id="adm-sim-areas"></div>
+  <div class="admin-sec">Resultados por alumno</div>
+  <div id="adm-sim-alumnos"><div class="empty-state">Cargando...</div></div>`;
+
+  const SIM_AREAS={
+    aritmetica:{nombre:'Aritmética y Álgebra',color:'#f59e0b'},
+    geometria:{nombre:'Geometría',color:'#10b981'},
+    estadistica:{nombre:'Estadística',color:'#3b82f6'},
+    habilidad:{nombre:'Habilidad Numérica',color:'#7c3aed'}
+  };
+
+  const{data:results}=await sb.from('simulacros_resultados')
+    .select('*, perfiles(nombre,email,avatar,avatar_url)')
+    .order('created_at',{ascending:false});
+
+  if(!results||results.length===0){
+    document.getElementById('adm-sim-stats').innerHTML='<div style="grid-column:span 2;padding:20px;text-align:center;color:var(--muted);font-size:12px">Aún no hay alumnos que hayan presentado el simulacro.</div>';
+    document.getElementById('adm-sim-areas').innerHTML='<div style="color:var(--muted);font-size:11px">Sin datos aún.</div>';
+    document.getElementById('adm-sim-alumnos').innerHTML='<div class="empty-state">Esperando resultados...</div>';
+    return;
+  }
+
+  // mejor intento por alumno
+  const mejores={};
+  results.forEach(r=>{
+    if(!mejores[r.alumno_id]||r.porcentaje>mejores[r.alumno_id].porcentaje) mejores[r.alumno_id]=r;
+  });
+  const lista=Object.values(mejores);
+  const avg=Math.round(lista.reduce((a,r)=>a+r.porcentaje,0)/lista.length);
+  const aprobados=lista.filter(r=>r.porcentaje>=60).length;
+
+  document.getElementById('adm-sim-stats').innerHTML=`
+    <div class="adm-sim-card"><div class="adm-sim-n" style="color:var(--gold)">${lista.length}</div><div class="adm-sim-l">Alumnos</div></div>
+    <div class="adm-sim-card"><div class="adm-sim-n" style="color:var(--green)">${avg}%</div><div class="adm-sim-l">Promedio</div></div>
+    <div class="adm-sim-card"><div class="adm-sim-n" style="color:#3b82f6">${results.length}</div><div class="adm-sim-l">Intentos</div></div>
+    <div class="adm-sim-card"><div class="adm-sim-n" style="color:var(--red)">${aprobados}</div><div class="adm-sim-l">Sobre 60%</div></div>`;
+
+  // áreas globales
+  const areaGlobal={aritmetica:{c:0,t:0},geometria:{c:0,t:0},estadistica:{c:0,t:0},habilidad:{c:0,t:0}};
+  results.forEach(r=>{
+    if(r.area_stats){try{const as=typeof r.area_stats==='string'?JSON.parse(r.area_stats):r.area_stats;
+      Object.entries(as).forEach(([k,v])=>{if(areaGlobal[k]){areaGlobal[k].c+=v.correctas;areaGlobal[k].t+=v.total;}});
+    }catch(e){}}
+  });
+  let areasHTML='';
+  Object.entries(SIM_AREAS).forEach(([k,ar])=>{
+    const v=areaGlobal[k];
+    const p=v.t>0?Math.round(v.c/v.t*100):0;
+    areasHTML+=`<div class="sim-area-bar-row">
+      <div class="sabr-name" style="color:${ar.color}">${ar.nombre}</div>
+      <div class="sabr-bar"><div class="sabr-fill" style="width:${p}%;background:${ar.color}"></div></div>
+      <div class="sabr-val">${p}%</div></div>`;
+  });
+  document.getElementById('adm-sim-areas').innerHTML=areasHTML;
+
+  // lista alumnos
+  lista.sort((a,b)=>b.porcentaje-a.porcentaje);
+  const alumnosEl=document.getElementById('adm-sim-alumnos');
+  alumnosEl.innerHTML='';
+  lista.forEach((r,i)=>{
+    const nom=r.perfiles?.nombre||r.perfiles?.email||'Alumno';
+    const av=r.perfiles?.avatar||'🙂';
+    const p=r.porcentaje;
+    const tag=p>=80?'Excelente':p>=60?'Aprobado':p>=40?'Regular':'En riesgo';
+    const tagCls=p>=80?'tag-excelente':p>=60?'tag-bien':p>=40?'tag-regular':'tag-riesgo';
+    const fecha=new Date(r.created_at).toLocaleDateString('es-MX',{day:'numeric',month:'short'});
+    const mins=Math.floor((r.tiempo_segundos||0)/60);
+    const nIntentos=results.filter(x=>x.alumno_id===r.alumno_id).length;
+    const div=document.createElement('div');
+    div.className='sim-alumno-row';
+    div.innerHTML=`<div class="sar-av">${av}</div>
+      <div class="sar-info"><div class="sar-name">${i+1}. ${nom}</div>
+      <div class="sar-meta">${fecha} · ${mins}min · ${r.correctas}/120 · ${nIntentos} intento${nIntentos>1?'s':''}</div></div>
+      <div class="sar-score">
+        <div class="sar-pct" style="color:${p>=60?'#10b981':p>=40?'#f59e0b':'#ef4444'}">${p}%</div>
+        <div class="sar-tag ${tagCls}">${tag}</div>
+      </div>`;
+    div.onclick=()=>mostrarDetalleSimulacro(r,results.filter(x=>x.alumno_id===r.alumno_id),SIM_AREAS);
+    alumnosEl.appendChild(div);
+  });
+}
+
+function mostrarDetalleSimulacro(mejor,todos,SIM_AREAS){
+  const nom=mejor.perfiles?.nombre||mejor.perfiles?.email||'Alumno';
+  const av=mejor.perfiles?.avatar||'🙂';
+  let areasHTML='';
+  if(mejor.area_stats){try{
+    const as=typeof mejor.area_stats==='string'?JSON.parse(mejor.area_stats):mejor.area_stats;
+    Object.entries(SIM_AREAS).forEach(([k,ar])=>{
+      const v=as[k]||{correctas:0,total:0};
+      const p=v.total>0?Math.round(v.correctas/v.total*100):0;
+      areasHTML+=`<div class="sim-area-bar-row"><div class="sabr-name" style="color:${ar.color}">${ar.nombre}</div>
+        <div class="sabr-bar"><div class="sabr-fill" style="width:${p}%;background:${ar.color}"></div></div>
+        <div class="sabr-val">${v.correctas}/${v.total}</div></div>`;
+    });
+  }catch(e){}}
+  let intentosHTML=todos.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at)).map((r,i)=>{
+    const f=new Date(r.created_at).toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'numeric'});
+    const m=Math.floor((r.tiempo_segundos||0)/60);
+    return `<div style="display:flex;justify-content:space-between;align-items:center;background:var(--dark2);border:.5px solid rgba(255,255,255,.07);border-radius:8px;padding:10px 12px;margin:0 14px 7px;">
+      <div><div style="font-size:12px;font-weight:500">Intento ${todos.length-i}</div><div style="font-size:10px;color:var(--muted)">${f} · ${m} min</div></div>
+      <div style="text-align:right"><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:${r.porcentaje>=60?'#10b981':r.porcentaje>=40?'#f59e0b':'#ef4444'}">${r.porcentaje}%</div>
+      <div style="font-size:10px;color:var(--muted)">${r.correctas}/120</div></div></div>`;
+  }).join('');
+
+  document.getElementById('bs-content').innerHTML=`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:12px;border-bottom:.5px solid rgba(255,255,255,.07)">
+      <div style="width:44px;height:44px;border-radius:50%;background:rgba(26,86,219,.2);display:flex;align-items:center;justify-content:center;font-size:22px;">${av}</div>
+      <div><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px">${nom}</div>
+      <div style="font-size:11px;color:var(--muted)">${mejor.perfiles?.email||''}</div></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+      <div class="rs-card"><div class="rs-n" style="color:var(--gold)">${mejor.porcentaje}%</div><div class="rs-l">Mejor</div></div>
+      <div class="rs-card"><div class="rs-n" style="color:#6ee7b7">${mejor.correctas}</div><div class="rs-l">Máx. correct.</div></div>
+      <div class="rs-card"><div class="rs-n" style="color:#3b82f6">${todos.length}</div><div class="rs-l">Intentos</div></div>
+    </div>
+    <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding:0 2px;">Áreas (mejor intento)</div>
+    <div style="background:var(--dark2);border-radius:9px;padding:12px;margin-bottom:12px;">${areasHTML}</div>
+    <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding:0 2px;">Historial</div>
+    ${intentosHTML}`;
+  document.getElementById('overlay-alumno').classList.add('on');
+}
+
+// ══════════════════════════
+// SIMULACRO — ALUMNO JS
+// ══════════════════════════
+const SIM_AREAS={
+  aritmetica:{nombre:'Aritmética y Álgebra',color:'#f59e0b',soft:'rgba(245,158,11,.1)'},
+  geometria:{nombre:'Geometría',color:'#10b981',soft:'rgba(16,185,129,.1)'},
+  estadistica:{nombre:'Estadística',color:'#3b82f6',soft:'rgba(59,130,246,.1)'},
+  habilidad:{nombre:'Habilidad Numérica',color:'#7c3aed',soft:'rgba(124,58,237,.1)'}
+};
+const SIM_R=[
+  {a:'aritmetica',q:'¿Cuál es el resultado de 3/4 + 5/6?',e:null,opts:['19/12','8/10','2/3','1/2'],c:0,ex:'MCM(4,6)=12. 9/12+10/12=19/12'},
+  {a:'aritmetica',q:'Simplifica la fracción 36/48.',e:null,opts:['3/4','2/3','4/5','5/6'],c:0,ex:'MCD=12. 36÷12=3, 48÷12=4 → 3/4'},
+  {a:'aritmetica',q:'¿Cuánto es el 30% de 250?',e:null,opts:['75','70','80','65'],c:0,ex:'250×0.30=75'},
+  {a:'aritmetica',q:'Un artículo cuesta $480 con 20% de descuento. ¿Cuál era el precio original?',e:null,opts:['$600','$576','$550','$620'],c:0,ex:'P×0.8=480 → P=600'},
+  {a:'aritmetica',q:'¿Cuál es el MCM de 12 y 18?',e:null,opts:['36','24','6','72'],c:0,ex:'MCM=2²×3²=36'},
+  {a:'aritmetica',q:'Resuelve: 2³ × 2⁴',e:null,opts:['2⁷','2¹²','4⁷','2⁶'],c:0,ex:'Suma exponentes: 2⁷'},
+  {a:'aritmetica',q:'¿Cuánto es √144?',e:null,opts:['12','11','13','14'],c:0,ex:'12×12=144'},
+  {a:'aritmetica',q:'Si x=3, ¿cuánto vale 4x² − 2x + 1?',e:'4x² − 2x + 1',opts:['31','33','25','29'],c:0,ex:'4(9)−2(3)+1=31'},
+  {a:'aritmetica',q:'Resuelve la ecuación:',e:'5x − 3 = 2x + 9',opts:['x=4','x=3','x=5','x=6'],c:0,ex:'3x=12 → x=4'},
+  {a:'aritmetica',q:'Simplifica:',e:'(3x + 2) + (5x − 7)',opts:['8x−5','8x+9','6x−5','8x−9'],c:0,ex:'8x−5'},
+  {a:'aritmetica',q:'¿Cuánto es (−3)³?',e:null,opts:['−27','27','−9','9'],c:0,ex:'(−3)³=−27'},
+  {a:'aritmetica',q:'Resuelve:',e:'2(x − 4) = 3x + 1',opts:['x=−9','x=9','x=−3','x=3'],c:0,ex:'2x−8=3x+1 → x=−9'},
+  {a:'aritmetica',q:'¿Cuántos minutos hay en 3.5 horas?',e:null,opts:['210','200','180','240'],c:0,ex:'3.5×60=210'},
+  {a:'aritmetica',q:'Multiplica los binomios:',e:'(x + 3)(x − 5)',opts:['x²−2x−15','x²+2x−15','x²−2x+15','x²+8x−15'],c:0,ex:'x²−5x+3x−15=x²−2x−15'},
+  {a:'aritmetica',q:'Factoriza:',e:'x² − 9',opts:['(x+3)(x−3)','(x−3)²','(x+3)²','(x−9)(x+1)'],c:0,ex:'Diferencia de cuadrados'},
+  {a:'aritmetica',q:'Si a=2 y b=−3, ¿cuánto es a² − b²?',e:null,opts:['−5','5','−4','13'],c:0,ex:'4−9=−5'},
+  {a:'aritmetica',q:'¿Cuánto es 2/3 de 90?',e:null,opts:['60','45','30','75'],c:0,ex:'90×(2/3)=60'},
+  {a:'aritmetica',q:'Un tren recorre 360 km en 4 horas. ¿Velocidad promedio?',e:null,opts:['90 km/h','80 km/h','100 km/h','85 km/h'],c:0,ex:'360/4=90'},
+  {a:'aritmetica',q:'Resuelve el sistema:',e:'x + y = 7\n2x − y = 2',opts:['x=3, y=4','x=4, y=3','x=2, y=5','x=5, y=2'],c:0,ex:'3x=9 → x=3, y=4'},
+  {a:'aritmetica',q:'¿Cuánto es (2x³)²?',e:null,opts:['4x⁶','2x⁶','4x⁵','8x⁶'],c:0,ex:'2²=4, (x³)²=x⁶'},
+  {a:'aritmetica',q:'Divide:',e:'(12x³ − 8x² + 4x) ÷ 4x',opts:['3x²−2x+1','3x²+2x−1','3x−2+1/x','4x²−2x'],c:0,ex:'3x²−2x+1'},
+  {a:'aritmetica',q:'¿Cuánto vale?',e:'3² + 4² − 5²',opts:['0','2','−2','10'],c:0,ex:'9+16−25=0'},
+  {a:'aritmetica',q:'Si el perímetro de un cuadrado es 52 cm, ¿cuánto mide su lado?',e:null,opts:['13 cm','14 cm','12 cm','15 cm'],c:0,ex:'P=4L → L=13'},
+  {a:'aritmetica',q:'Resuelve:',e:'|−8| + |−5| − |3|',opts:['10','6','16','0'],c:0,ex:'8+5−3=10'},
+  {a:'aritmetica',q:'¿Cuánto es 0.0045 × 10⁴?',e:null,opts:['45','4.5','450','0.45'],c:0,ex:'0.0045×10000=45'},
+  {a:'aritmetica',q:'Notación científica de 0.000372:',e:null,opts:['3.72×10⁻⁴','3.72×10⁴','37.2×10⁻³','0.372×10⁻³'],c:0,ex:'4 lugares a la derecha'},
+  {a:'aritmetica',q:'¿Cuánto es (x+y)² si x=3 y y=−1?',e:null,opts:['4','8','16','−4'],c:0,ex:'(2)²=4'},
+  {a:'aritmetica',q:'Un grifo llena un tanque en 6h y otro en 3h. Juntos, ¿cuánto tardan?',e:null,opts:['2 horas','1.5 horas','4 horas','2.5 horas'],c:0,ex:'1/6+1/3=1/2 → 2h'},
+  {a:'aritmetica',q:'¿Cuánto es √225?',e:null,opts:['15','14','16','12'],c:0,ex:'15²=225'},
+  {a:'aritmetica',q:'4 obreros terminan en 15 días. ¿Cuántos días tardan 6 obreros?',e:null,opts:['10 días','12 días','8 días','6 días'],c:0,ex:'4×15=6×d → d=10'},
+  {a:'aritmetica',q:'Evalúa:',e:'(−2)⁴ − (−3)²',opts:['7','25','−7','1'],c:0,ex:'16−9=7'},
+  {a:'aritmetica',q:'Resuelve:',e:'x/4 + x/3 = 7',opts:['12','9','6','15'],c:0,ex:'7x=84 → x=12'},
+  {a:'aritmetica',q:'¿Cuánto es (3a²b)(−2ab³)?',e:null,opts:['−6a³b⁴','−6a²b⁴','6a³b⁴','−6a³b³'],c:0,ex:'−6a³b⁴'},
+  {a:'aritmetica',q:'¿Cuál es el término independiente en 5x³ − 2x + 8?',e:null,opts:['8','5','−2','3'],c:0,ex:'El que no tiene variable: 8'},
+  {a:'aritmetica',q:'Resuelve la inecuación:',e:'3x − 6 > 0',opts:['x>2','x<2','x>6','x>−2'],c:0,ex:'3x>6 → x>2'},
+  {a:'aritmetica',q:'¿Cuánto es 5! (factorial)?',e:null,opts:['120','60','24','720'],c:0,ex:'5×4×3×2×1=120'},
+  {a:'aritmetica',q:'Auto: 8L/100km. ¿Litros para 350 km?',e:null,opts:['28 L','32 L','24 L','30 L'],c:0,ex:'(8/100)×350=28'},
+  {a:'aritmetica',q:'¿Cuánto es log₁₀(1000)?',e:null,opts:['3','2','4','10'],c:0,ex:'10³=1000'},
+  {a:'aritmetica',q:'Calcula:',e:'(2x + 5)²',opts:['4x²+20x+25','4x²+10x+25','4x²+25','2x²+20x+25'],c:0,ex:'4x²+20x+25'},
+  {a:'aritmetica',q:'¿Suma de ángulos interiores de un hexágono?',e:null,opts:['720°','540°','360°','900°'],c:0,ex:'(6−2)×180=720°'},
+  {a:'geometria',q:'Área de un triángulo con base 10 cm y altura 6 cm:',e:null,opts:['30 cm²','60 cm²','20 cm²','15 cm²'],c:0,ex:'10×6/2=30'},
+  {a:'geometria',q:'Perímetro de un rectángulo de 8 × 5 cm:',e:null,opts:['26 cm','20 cm','40 cm','13 cm'],c:0,ex:'2(8+5)=26'},
+  {a:'geometria',q:'Área de un círculo con radio 7 cm (π≈3.14):',e:null,opts:['153.86 cm²','43.96 cm²','154 cm²','21.98 cm²'],c:0,ex:'3.14×49=153.86'},
+  {a:'geometria',q:'Catetos 6 y 8 cm. ¿Cuánto mide la hipotenusa?',e:'a² + b² = c²',opts:['10 cm','12 cm','14 cm','7 cm'],c:0,ex:'√(36+64)=10'},
+  {a:'geometria',q:'Volumen de un cubo con arista 4 cm:',e:null,opts:['64 cm³','16 cm³','48 cm³','96 cm³'],c:0,ex:'4³=64'},
+  {a:'geometria',q:'Dos ángulos suplementarios. Uno mide 65°. ¿El otro?',e:null,opts:['115°','25°','90°','125°'],c:0,ex:'180−65=115'},
+  {a:'geometria',q:'Área de un trapecio con bases 8 y 12 cm, altura 5 cm:',e:'A=(B+b)×h/2',opts:['50 cm²','40 cm²','100 cm²','25 cm²'],c:0,ex:'(8+12)×5/2=50'},
+  {a:'geometria',q:'Circunferencia de un círculo con diámetro 14 cm (π≈3.14):',e:null,opts:['43.96 cm','87.92 cm','21.98 cm','153.86 cm'],c:0,ex:'3.14×14=43.96'},
+  {a:'geometria',q:'Ángulo complementario de 40°:',e:null,opts:['50°','140°','60°','80°'],c:0,ex:'90−40=50'},
+  {a:'geometria',q:'Volumen de un cilindro r=3 cm, h=10 cm (π≈3.14):',e:null,opts:['282.6 cm³','94.2 cm³','188.4 cm³','565.2 cm³'],c:0,ex:'3.14×9×10=282.6'},
+  {a:'geometria',q:'¿Grados de cada ángulo interior de un triángulo equilátero?',e:null,opts:['60°','45°','90°','72°'],c:0,ex:'180/3=60'},
+  {a:'geometria',q:'Área de un terreno de 25 m × 16 m:',e:null,opts:['400 m²','82 m²','200 m²','480 m²'],c:0,ex:'25×16=400'},
+  {a:'geometria',q:'Diagonal de un cuadrado con lado 5 cm:',e:null,opts:['5√2 cm','10 cm','7 cm','5 cm'],c:0,ex:'d=l√2=5√2'},
+  {a:'geometria',q:'¿Cuántas caras tiene un prisma triangular?',e:null,opts:['5','4','6','8'],c:0,ex:'2 bases + 3 laterales = 5'},
+  {a:'geometria',q:'Volumen de una esfera r=6 cm (π≈3.14):',e:'V=(4/3)πr³',opts:['904.32 cm³','452.16 cm³','226.08 cm³','1130.4 cm³'],c:0,ex:'(4/3)×3.14×216=904.32'},
+  {a:'geometria',q:'Área lateral de un cubo con arista 3 cm:',e:null,opts:['36 cm²','54 cm²','9 cm²','18 cm²'],c:0,ex:'4×9=36'},
+  {a:'geometria',q:'Cateto=5, hipotenusa=13. ¿El otro cateto?',e:null,opts:['12','8','10','11'],c:0,ex:'√(169−25)=12'},
+  {a:'geometria',q:'Área de un rombo con diagonales 10 y 6 cm:',e:'A=(d₁×d₂)/2',opts:['30 cm²','60 cm²','16 cm²','15 cm²'],c:0,ex:'(10×6)/2=30'},
+  {a:'geometria',q:'Un ángulo central de 90° corresponde a un arco que es:',e:null,opts:['1/4 del círculo','1/2','1/3','3/4'],c:0,ex:'90/360=1/4'},
+  {a:'geometria',q:'Perímetro de un triángulo equilátero con lado 9 cm:',e:null,opts:['27 cm','18 cm','36 cm','81 cm'],c:0,ex:'3×9=27'},
+  {a:'geometria',q:'Área total de un cubo con arista 5 cm:',e:null,opts:['150 cm²','100 cm²','125 cm²','50 cm²'],c:0,ex:'6×25=150'},
+  {a:'geometria',q:'Volumen de una pirámide cuadrada base 6 cm, altura 9 cm:',e:'V=base×h/3',opts:['108 cm³','162 cm³','54 cm³','324 cm³'],c:0,ex:'36×9/3=108'},
+  {a:'geometria',q:'Triángulos semejantes con razón de lados 2:3. ¿Razón de áreas?',e:null,opts:['4:9','2:3','1:3','8:27'],c:0,ex:'2²:3²=4:9'},
+  {a:'geometria',q:'¿Cuánto mide sen(30°)?',e:null,opts:['0.5','0.866','1','0.707'],c:0,ex:'sen(30°)=1/2'},
+  {a:'geometria',q:'Sector circular r=10 cm, ángulo 72°. ¿Área? (π≈3.14)',e:null,opts:['62.8 cm²','314 cm²','31.4 cm²','125.6 cm²'],c:0,ex:'(72/360)×314=62.8'},
+  {a:'estadistica',q:'Calificaciones: 8,7,9,6,10. ¿Cuál es la media?',e:null,opts:['8','7','9','7.5'],c:0,ex:'40/5=8'},
+  {a:'estadistica',q:'¿Cuál es la moda de: 3,5,7,5,2,5,8?',e:null,opts:['5','3','7','2'],c:0,ex:'El 5 aparece 3 veces'},
+  {a:'estadistica',q:'¿Cuál es la mediana de: 4,7,2,9,5?',e:null,opts:['5','4','7','6'],c:0,ex:'Ordenados: 2,4,5,7,9 → mediana=5'},
+  {a:'estadistica',q:'Bolsa: 3 rojas, 5 azules, 2 verdes. P(sacar roja):',e:null,opts:['3/10','1/3','3/7','1/5'],c:0,ex:'3/10'},
+  {a:'estadistica',q:'Rango de: 12,5,18,3,25,9:',e:null,opts:['22','20','25','15'],c:0,ex:'25−3=22'},
+  {a:'estadistica',q:'Se lanzan 2 monedas. P(2 caras):',e:null,opts:['1/4','1/2','1/3','3/4'],c:0,ex:'P(CC)=1/4'},
+  {a:'estadistica',q:'Media de 4 números es 15. Se agrega un 5° y la nueva media es 14. ¿Cuánto vale el 5°?',e:null,opts:['10','8','12','6'],c:0,ex:'70−60=10'},
+  {a:'estadistica',q:'¿Cuántas combinaciones posibles al lanzar un dado?',e:null,opts:['6','12','36','3'],c:0,ex:'6 caras'},
+  {a:'estadistica',q:'30 alumnos, 18 aprobaron. ¿Qué porcentaje aprobó?',e:null,opts:['60%','40%','55%','65%'],c:0,ex:'18/30=60%'},
+  {a:'estadistica',q:'P(NO sacar un 6 al lanzar un dado):',e:null,opts:['5/6','1/6','4/6','1/2'],c:0,ex:'1−1/6=5/6'},
+  {a:'estadistica',q:'La varianza mide:',e:null,opts:['Dispersión respecto a la media','El valor central','El valor más frecuente','La diferencia max−min'],c:0,ex:'Qué tan dispersos están los datos'},
+  {a:'estadistica',q:'¿Cuántas permutaciones hay de 4 elementos distintos?',e:null,opts:['24','12','16','8'],c:0,ex:'4!=24'},
+  {a:'estadistica',q:'Encuesta a 200 personas, 80 prefieren azul. Frecuencia relativa:',e:null,opts:['0.4','0.8','40','0.2'],c:0,ex:'80/200=0.4'},
+  {a:'estadistica',q:'Mediana de: 10,20,30,40:',e:null,opts:['25','20','30','15'],c:0,ex:'(20+30)/2=25'},
+  {a:'estadistica',q:'P(elegir un As de una baraja de 52 cartas):',e:null,opts:['1/13','4/52','1/4','1/52'],c:0,ex:'4/52=1/13'},
+  {a:'habilidad',q:'¿Cuál sigue en la serie?',e:'2, 4, 8, 16, 32, ___',opts:['64','48','56','72'],c:0,ex:'×2: 32×2=64'},
+  {a:'habilidad',q:'¿Cuál sigue en la serie?',e:'3, 7, 11, 15, 19, ___',opts:['23','21','25','22'],c:0,ex:'+4: 19+4=23'},
+  {a:'habilidad',q:'¿Cuál sigue en la serie?',e:'1, 1, 2, 3, 5, 8, ___',opts:['13','11','12','10'],c:0,ex:'Fibonacci: 5+8=13'},
+  {a:'habilidad',q:'¿Cuál es el número que falta?',e:'2, 6, 18, 54, ___',opts:['162','108','72','216'],c:0,ex:'×3: 54×3=162'},
+  {a:'habilidad',q:'¿Cuál falta?',e:'100, 50, 25, ___, 6.25',opts:['12.5','10','15','12'],c:0,ex:'÷2: 25÷2=12.5'},
+  {a:'habilidad',q:'¿Cuál sigue?',e:'1, 4, 9, 16, 25, ___',opts:['36','30','32','40'],c:0,ex:'Cuadrados: 6²=36'},
+  {a:'habilidad',q:'¿Cuál falta?',e:'5, 10, 20, ___, 80',opts:['40','30','50','60'],c:0,ex:'×2: 20×2=40'},
+  {a:'habilidad',q:'¿Cuál falta?',e:'1, 3, 7, 15, 31, ___',opts:['63','47','55','61'],c:0,ex:'×2+1: 31×2+1=63'},
+  {a:'habilidad',q:'¿Cuál sigue?',e:'729, 243, 81, 27, ___',opts:['9','3','6','18'],c:0,ex:'÷3: 27÷3=9'},
+  {a:'habilidad',q:'¿Cuál falta?',e:'2, 5, 10, 17, 26, ___',opts:['37','33','35','39'],c:0,ex:'Difs: 3,5,7,9,11 → 26+11=37'},
+  {a:'habilidad',q:'¿Cuál sigue?',e:'1, 2, 6, 24, 120, ___',opts:['720','600','360','840'],c:0,ex:'Factoriales: 6!=720'},
+  {a:'habilidad',q:'¿Cuál falta?',e:'7, 14, 28, ___, 112',opts:['56','42','64','70'],c:0,ex:'×2: 28×2=56'},
+  {a:'habilidad',q:'¿Cuál falta?',e:'3, 6, 11, 18, 27, ___',opts:['38','36','40','33'],c:0,ex:'Difs: 3,5,7,9,11 → 27+11=38'},
+  {a:'habilidad',q:'Si A→3, B→6, C→9, ¿cuánto vale F?',e:null,opts:['18','15','12','21'],c:0,ex:'F=6×3=18'},
+  {a:'habilidad',q:'¿Cuál falta?',e:'144, 121, 100, 81, ___',opts:['64','49','72','56'],c:0,ex:'8²=64'},
+  {a:'habilidad',q:'Serie de números primos: 2,3,5,7,11,13, ___',e:null,opts:['17','15','19','16'],c:0,ex:'El siguiente primo es 17'},
+  {a:'habilidad',q:'¿Cuál falta?',e:'1, 8, 27, 64, ___',opts:['125','100','81','216'],c:0,ex:'5³=125'},
+  {a:'habilidad',q:'¿Cuál sigue?',e:'10, 9, 7, 4, 0, ___',opts:['−5','−4','−6','−3'],c:0,ex:'Difs −1,−2,−3,−4,−5 → 0−5=−5'},
+  {a:'habilidad',q:'¿Cuál falta en el centro?',e:'3→12 / 6→? / 9→36',opts:['24','18','30','27'],c:0,ex:'×4: 6×4=24'},
+  {a:'habilidad',q:'3 lápices cuestan $12. ¿Cuánto cuestan 7?',e:null,opts:['$28','$21','$35','$24'],c:0,ex:'$4 c/u. 7×4=$28'},
+  {a:'habilidad',q:'15% de 80 más 20% de 50:',e:null,opts:['22','20','24','18'],c:0,ex:'12+10=22'},
+  {a:'habilidad',q:'Si hoy es miércoles, ¿qué día será en 100 días?',e:null,opts:['Viernes','Jueves','Sábado','Domingo'],c:0,ex:'100÷7=14r2. Miér+2=Viernes'},
+  {a:'habilidad',q:'¿Cuál falta?',e:'2, 4, 3, 9, 4, 16, 5, ___',opts:['25','20','15','30'],c:0,ex:'5²=25'},
+  {a:'habilidad',q:'Un reloj marca las 3:00. ¿Grados entre las manecillas?',e:null,opts:['90°','60°','120°','45°'],c:0,ex:'3×30=90°'},
+  {a:'habilidad',q:'¿Cuál falta?',e:'16, 4, 4, 2, 1, ___',opts:['0.5','1','0.25','2'],c:0,ex:'÷2: 1÷2=0.5'},
+  {a:'habilidad',q:'5 personas hacen 20 mesas en 4 días. ¿Cuántas hacen 3 personas en 6 días?',e:null,opts:['18','15','12','24'],c:0,ex:'1 mesa/pers/día. 3×6=18'},
+  {a:'habilidad',q:'¿Cuántos cuadrados hay en una figura 3×3?',e:null,opts:['14','9','12','16'],c:0,ex:'9+4+1=14'},
+  {a:'habilidad',q:'¿Cuál falta?',e:'1, 2, 4, 7, 11, 16, ___',opts:['22','20','24','18'],c:0,ex:'+1,+2,+3,+4,+5,+6 → 22'},
+  {a:'habilidad',q:'Si A=1, B=2...Z=26, ¿suma de HOLA?',e:null,opts:['36','32','40','44'],c:0,ex:'8+15+12+1=36'},
+  {a:'habilidad',q:'¿Cuánto es 1+2+3+...+20?',e:null,opts:['210','200','190','220'],c:0,ex:'n(n+1)/2=210'},
+  {a:'habilidad',q:'¿Cuál sigue?',e:'31, 29, 26, 22, 17, ___',opts:['11','12','13','10'],c:0,ex:'−2,−3,−4,−5,−6 → 11'},
+  {a:'habilidad',q:'¿Cuál falta?',e:'2, 6, 12, 20, 30, ___',opts:['42','40','44','36'],c:0,ex:'n(n+1): 6×7=42'},
+  {a:'habilidad',q:'El doble de un número menos 5 es 19. ¿Cuál es el número?',e:null,opts:['12','14','10','7'],c:0,ex:'2x−5=19 → x=12'},
+  {a:'habilidad',q:'¿Cuánto es 1/2 + 1/4 + 1/8 + 1/16?',e:null,opts:['15/16','7/8','3/4','1'],c:0,ex:'8+4+2+1=15/16'},
+  {a:'habilidad',q:'¿Cuál falta?',e:'5, 11, 23, 47, ___',opts:['95','93','97','91'],c:0,ex:'×2+1: 47×2+1=95'},
+  {a:'habilidad',q:'Un número aumentado en su mitad es 18. ¿Cuál es?',e:null,opts:['12','9','15','6'],c:0,ex:'3x/2=18 → x=12'},
+  {a:'habilidad',q:'¿Cuál sigue?',e:'2, 3, 5, 8, 13, 21, ___',opts:['34','32','36','28'],c:0,ex:'Fibonacci: 13+21=34'},
+  {a:'habilidad',q:'60% de un número es 90. ¿Cuál es el número?',e:null,opts:['150','120','180','100'],c:0,ex:'0.6×n=90 → n=150'},
+  {a:'habilidad',q:'¿Cuál falta?',e:'4, 9, 16, 25, 36, ___',opts:['49','42','45','50'],c:0,ex:'7²=49'},
+];
+
+let simIdx=0, simAnswers=new Array(SIM_R.length).fill(null);
+let simSeg=90*60, simIv=null, simStarted=false, simFinished=false, simUsedSeg=0;
+
+async function simCheckPrev(){
+  if(!CU) return;
+  const{data}=await sb.from('simulacros_resultados').select('porcentaje,correctas,total,created_at').eq('alumno_id',CU.id).order('created_at',{ascending:false}).limit(1);
+  const el=document.getElementById('sim-prev-result');
+  if(data&&data.length>0){
+    const r=data[0];
+    const f=new Date(r.created_at).toLocaleDateString('es-MX',{day:'numeric',month:'short'});
+    el.style.display='block';
+    el.textContent=`Último intento: ${r.porcentaje}% · ${r.correctas}/${r.total} correctas · ${f}`;
+  }
+}
+
+function simStart(){
+  if(simStarted) return;
+  simStarted=true;
+  document.getElementById('sim-state-cover').style.display='none';
+  const ex=document.getElementById('sim-state-exam');
+  ex.style.display='flex'; ex.style.flex='1';
+  document.querySelector('.sim-nav')?.classList.add('on');
+  simRenderQ();
+  simIv=setInterval(simTick,1000);
+}
+
+function simTick(){
+  simSeg--; simUsedSeg++;
+  const m=String(Math.floor(simSeg/60)).padStart(2,'0');
+  const s=String(simSeg%60).padStart(2,'0');
+  const el=document.getElementById('sim-timer');
+  if(el){
+    el.textContent=`${m}:${s}`;
+    el.className='sim-timer'+(simSeg<=300?' danger':simSeg<=600?' warn':'');
+  }
+  if(simSeg<=0){clearInterval(simIv);simFinish(true);}
+}
+
+function simRenderQ(){
+  const q=SIM_R[simIdx];
+  const ar=SIM_AREAS[q.a];
+  const el=document.getElementById('sim-et-area');
+  if(el){el.textContent=ar.nombre;el.style.color=ar.color;}
+  const pct=(simIdx/SIM_R.length*100).toFixed(1);
+  const pf=document.getElementById('sim-prog-fill');
+  if(pf) pf.style.width=pct+'%';
+  const sel=simAnswers[simIdx];
+  const answered=sel!==null;
+  let html=`<div class="sim-q-area" style="background:${ar.soft};color:${ar.color};border:.5px solid ${ar.color}40">${ar.nombre}</div>
+    <div class="sim-q-num">Reactivo ${simIdx+1} de ${SIM_R.length}</div>
+    <div class="sim-q-text">${q.q}</div>`;
+  if(q.e) html+=`<div class="sim-q-expr">${q.e.replace(/\n/g,'<br>')}</div>`;
+  html+=`<div class="sim-opts">`;
+  ['A','B','C','D'].forEach((l,i)=>{
+    let cls='sim-opt';
+    if(answered){if(i===q.c)cls+=' correct';else if(i===sel)cls+=' wrong';}
+    else if(i===sel) cls+=' sel';
+    const click=answered?'':'onclick="simSelect('+i+')"';
+    html+=`<div class="${cls}" ${click}><div class="sim-opt-l">${l}</div><div class="sim-opt-txt">${q.opts[i]}</div></div>`;
+  });
+  html+=`</div>`;
+  if(answered){
+    const ok=sel===q.c;
+    html+=`<div class="sim-feedback ${ok?'ok':'err'}"><b>${ok?'✓ Correcto':'✗ Incorrecto'}</b>${q.ex}</div>`;
+  }
+  // botones de nav inline
+  const isLast=simIdx===SIM_R.length-1;
+  html+=`<div style="display:flex;gap:8px;margin-top:4px;">
+    ${simIdx>0?'<button onclick="simNav(-1)" style="flex:0 0 40px;padding:11px;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);border-radius:8px;color:white;cursor:pointer;">←</button>':''}
+    <button onclick="simOpenMap()" style="flex:0 0 40px;padding:11px;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.1);border-radius:8px;color:white;cursor:pointer;font-size:12px;">⊞</button>
+    <button onclick="simNav(1)" style="flex:1;padding:12px;background:${isLast?'#10b981':'var(--azul)'};color:white;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;">
+      ${isLast?'TERMINAR ✓':'SIGUIENTE →'}</button>
+  </div>`;
+  const body=document.getElementById('sim-body');
+  if(body){body.innerHTML=html;body.scrollTop=0;}
+}
+
+function simSelect(i){
+  if(simAnswers[simIdx]!==null) return;
+  simAnswers[simIdx]=i;
+  simRenderQ();
+}
+
+function simNav(dir){
+  if(dir===1&&simIdx===SIM_R.length-1){simFinish(false);return;}
+  simIdx=Math.max(0,Math.min(SIM_R.length-1,simIdx+dir));
+  simRenderQ();
+}
+
+function simConfirmExit(){
+  if(confirm('¿Salir del simulacro? Perderás tu progreso en este intento.'))
+    simReset();
+}
+
+function simOpenMap(){
+  const grid=document.getElementById('sim-qmap-grid');
+  if(!grid) return;
+  grid.innerHTML='';
+  SIM_R.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='sim-qd '+(i===simIdx?'cur':simAnswers[i]!==null?'done':'pend');
+    d.textContent=i+1;
+    d.onclick=()=>{simIdx=i;simRenderQ();simCloseMap();};
+    grid.appendChild(d);
+  });
+  document.getElementById('sim-qmap-ov').classList.add('on');
+}
+function simCloseMap(){document.getElementById('sim-qmap-ov').classList.remove('on');}
+
+async function simFinish(porTiempo){
+  if(simFinished) return;
+  simFinished=true;
+  clearInterval(simIv);
+  const areaStats={aritmetica:{correctas:0,total:0},geometria:{correctas:0,total:0},estadistica:{correctas:0,total:0},habilidad:{correctas:0,total:0}};
+  let ok=0,blank=0;
+  SIM_R.forEach((q,i)=>{
+    areaStats[q.a].total++;
+    if(simAnswers[i]===null) blank++;
+    else if(simAnswers[i]===q.c){areaStats[q.a].correctas++;ok++;}
+  });
+  const pct=Math.round(ok/SIM_R.length*100);
+  if(CU){
+    try{
+      await sb.from('simulacros_resultados').insert({
+        alumno_id:CU.id,correctas:ok,incorrectas:SIM_R.length-ok-blank,
+        sin_responder:blank,total:SIM_R.length,porcentaje:pct,
+        tiempo_segundos:simUsedSeg,respuestas:JSON.stringify(simAnswers),
+        area_stats:areaStats,
+      });
+      // Dar XP al alumno por completar simulacro
+      if(perfil){
+        const xpExtra=pct>=60?150:50;
+        await sb.from('perfiles').update({xp:(perfil.xp||0)+xpExtra}).eq('id',CU.id);
+        showToast(`+${xpExtra} XP por completar el simulacro!`);
+      }
+    }catch(e){console.log(e);}
+  }
+  simShowResults(ok,blank,pct,simUsedSeg,areaStats);
+}
+
+function simShowResults(ok,blank,pct,seg,areaStats){
+  document.getElementById('sim-state-exam').style.display='none';
+  const res=document.getElementById('sim-state-results');
+  res.style.display='block';
+  // anillo
+  const circ=2*Math.PI*55;
+  const ring=document.getElementById('sim-ring');
+  if(ring){
+    ring.style.strokeDasharray=circ;ring.style.strokeDashoffset=circ;
+    if(pct<40) ring.style.stroke='#ef4444';
+    else if(pct<60) ring.style.stroke='#f59e0b';
+    setTimeout(()=>{ring.style.strokeDashoffset=circ*(1-pct/100);},100);
+  }
+  document.getElementById('sim-res-pct').textContent=pct+'%';
+  document.getElementById('sim-rs-ok').textContent=ok;
+  document.getElementById('sim-rs-bad').textContent=SIM_R.length-ok-blank;
+  document.getElementById('sim-rs-blank').textContent=blank;
+  const m=String(Math.floor(seg/60)).padStart(2,'0');
+  const s=String(seg%60).padStart(2,'0');
+  document.getElementById('sim-rs-time').textContent=`${m}:${s}`;
+  let title,msg;
+  if(pct>=80){title='¡Excelente! 🏆';msg='Muy buen desempeño. Tienes posibilidades reales de ingresar a la Prepa UDG.';}
+  else if(pct>=60){title='¡Bien!';msg='Estás en el rango de aprobación. Refuerza tus áreas débiles.';}
+  else if(pct>=40){title='Sigue practicando';msg='Repasa los temas donde más fallaste y vuelve a intentarlo.';}
+  else{title='Hay mucho por aprender 💪';msg='No te rindas. Estudia los temas del bloque y vuelve a intentarlo.';}
+  document.getElementById('sim-res-title').textContent=title;
+  document.getElementById('sim-res-msg').textContent=msg;
+  let abHTML='';
+  Object.entries(SIM_AREAS).forEach(([k,ar])=>{
+    const v=areaStats[k]||{correctas:0,total:0};
+    const p=v.total>0?Math.round(v.correctas/v.total*100):0;
+    abHTML+=`<div class="sim-ab-row">
+      <div class="sim-ab-name" style="color:${ar.color}">${ar.nombre}</div>
+      <div class="sim-ab-bar"><div class="sim-ab-fill" style="width:${p}%;background:${ar.color}"></div></div>
+      <div class="sim-ab-score">${v.correctas}/${v.total}</div></div>`;
+  });
+  document.getElementById('sim-ab-rows').innerHTML=abHTML;
+}
+
+function simReset(){
+  simIdx=0;simAnswers=new Array(SIM_R.length).fill(null);
+  simSeg=90*60;simUsedSeg=0;simStarted=false;simFinished=false;
+  clearInterval(simIv);
+  document.getElementById('sim-state-cover').style.display='block';
+  document.getElementById('sim-state-exam').style.display='none';
+  document.getElementById('sim-state-results').style.display='none';
+  const timer=document.getElementById('sim-timer');
+  if(timer) timer.textContent='90:00';
+  const pf=document.getElementById('sim-prog-fill');
+  if(pf) pf.style.width='0%';
 }
 
 // ══════════════════════════
